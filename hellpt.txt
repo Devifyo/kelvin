@@ -1,0 +1,8 @@
+# 1. Completely destroy the containers (this clears Docker's memory of the old empty key)
+docker compose down
+
+# 2. Rebuild them (Docker reads the .env file and sees your new base64 key)
+docker compose up -d
+
+# 3. Clear any lingering Laravel cache just to be absolutely certain
+docker exec -it kevin_app php artisan optimize:clear
