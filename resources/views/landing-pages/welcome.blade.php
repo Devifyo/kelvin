@@ -1,149 +1,7 @@
-@if(request()->has('visible'))
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Kevin Thompson Ph.D. Consulting</title>
+@extends('layouts.app')
+
+@push('styles')
 <style>
-/* ─────────────────────────────────────────
-   RESET
-───────────────────────────────────────── */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth}
-body{overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-ul{list-style:none}
-button{cursor:pointer;border:none;background:none;font-family:inherit}
-img{max-width:100%;display:block}
-
-/* ─────────────────────────────────────────
-   DESIGN TOKENS
-───────────────────────────────────────── */
-:root{
-  /* palette */
-  --slate:      #1a2332;
-  --slate2:     #243345;
-  --slate3:     #2f4259;
-  --copper:     #b5722a;
-  --copper2:    #d4924e;
-  --copper3:    #edb97a;
-  --copper4:    #f7ddb0;
-  --ivory:      #faf7f2;
-  --ivory2:     #f2ece3;
-  --ivory3:     #e8dfd2;
-  --charcoal:   #2c3a4a;
-  --body-text:  #4a5968;
-  --muted:      #7a8fa0;
-  --white:      #ffffff;
-
-  /* effects */
-  --glow: 0 0 60px rgba(181,114,42,.08);
-  --card-shadow: 0 4px 32px rgba(26,35,50,.1);
-  --hover-shadow: 0 12px 56px rgba(26,35,50,.18);
-}
-
-/* ─────────────────────────────────────────
-   BASE TYPOGRAPHY
-───────────────────────────────────────── */
-body{
-  font-family: 'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
-  background: var(--ivory);
-  color: var(--charcoal);
-  line-height: 1.6;
-}
-.sans{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif}
-
-/* scrollbar */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--ivory2)}
-::-webkit-scrollbar-thumb{background:var(--copper);border-radius:2px}
-
-/* ─────────────────────────────────────────
-   NAV
-───────────────────────────────────────── */
-#nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:1.6rem 4rem;
-  transition:padding .45s cubic-bezier(.4,0,.2,1),background .45s,box-shadow .45s;
-}
-#nav.pinned{
-  background:rgba(26,35,50,.97);
-  backdrop-filter:blur(18px);
-  padding:1rem 4rem;
-  box-shadow:0 1px 0 rgba(181,114,42,.12),0 4px 24px rgba(0,0,0,.22);
-}
-
-/* logo */
-.logo{
-  display:flex;align-items:center;gap:.65rem;
-  font-size:1.05rem;font-weight:700;letter-spacing:.015em;
-  color:var(--white);
-}
-.logo-mark{
-  width:32px;height:32px;flex-shrink:0;
-  border:1.5px solid var(--copper2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.62rem;font-weight:900;letter-spacing:.05em;
-  color:var(--copper2);
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-}
-.logo-text{line-height:1.2}
-.logo-name{display:block;font-size:.95rem;font-weight:700;color:var(--white)}
-.logo-sub{
-  display:block;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--copper3);
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-weight:600;margin-top:.15rem;
-}
-
-/* nav links */
-.nav-menu{display:flex;align-items:center;gap:2.25rem}
-.nav-menu a{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(250,247,242,.65);transition:color .3s;position:relative;
-}
-.nav-menu a::after{
-  content:'';position:absolute;bottom:-4px;left:0;
-  width:0;height:1px;background:var(--copper3);transition:width .35s;
-}
-.nav-menu a:hover{color:var(--copper3)}
-.nav-menu a:hover::after{width:100%}
-.nav-contact{
-  margin-left:.5rem;
-  padding:.55rem 1.5rem;
-  border:1.5px solid var(--copper);
-  color:var(--copper3)!important;
-  font-weight:700!important;
-  transition:all .3s!important;
-}
-.nav-contact::after{display:none!important}
-.nav-contact:hover{background:var(--copper)!important;color:var(--white)!important;border-color:var(--copper)!important}
-
-/* hamburger */
-.burger{display:none;flex-direction:column;gap:5px;padding:4px;z-index:201}
-.burger span{display:block;width:24px;height:1.5px;background:var(--white);transition:all .3s;transform-origin:center}
-.burger.x span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.burger.x span:nth-child(2){opacity:0;transform:scaleX(0)}
-.burger.x span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-
-/* mobile drawer */
-.drawer{
-  display:none;position:fixed;inset:0;z-index:199;
-  background:var(--slate);
-  flex-direction:column;align-items:center;justify-content:center;gap:2.75rem;
-}
-.drawer.show{display:flex}
-.drawer a{
-  font-family:'Palatino Linotype',Palatino,Georgia,serif;
-  font-size:1.9rem;font-style:italic;font-weight:400;
-  color:var(--ivory);transition:color .3s;
-}
-.drawer a:hover{color:var(--copper3)}
-.drawer-line{width:1px;height:48px;background:rgba(181,114,42,.3)}
-
 /* ─────────────────────────────────────────
    HERO
 ───────────────────────────────────────── */
@@ -153,8 +11,6 @@ body{
   display:grid;grid-template-columns:52% 48%;
   position:relative;overflow:hidden;
 }
-
-/* diagonal split */
 .hero-l{
   padding:9rem 3.5rem 6rem 4.5rem;
   display:flex;flex-direction:column;justify-content:center;
@@ -165,8 +21,6 @@ body{
   padding:9rem 4rem 6rem 3rem;
   position:relative;z-index:1;
 }
-
-/* decorative elements */
 #hero::before{
   content:'';position:absolute;inset:0;
   background:
@@ -174,16 +28,12 @@ body{
     radial-gradient(ellipse 70% 70% at 100% 0%, rgba(181,114,42,.05) 0%,transparent 55%);
   z-index:0;
 }
-
-/* large angled accent line */
 .hero-accent-line{
   position:absolute;
   top:0;right:35%;bottom:0;width:1px;
   background:linear-gradient(to bottom,transparent,rgba(181,114,42,.18) 20%,rgba(181,114,42,.18) 80%,transparent);
   z-index:0;
 }
-
-/* grid dots */
 .hero-dots{
   position:absolute;right:0;top:0;width:50%;height:100%;
   background-image:radial-gradient(circle,rgba(181,114,42,.12) 1px,transparent 1px);
@@ -191,8 +41,6 @@ body{
   mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,black 20%,transparent 80%);
   z-index:0;
 }
-
-/* large decorative numeral */
 .hero-numeral{
   position:absolute;bottom:-4rem;left:-.5rem;
   font-size:clamp(22rem,35vw,42rem);
@@ -201,8 +49,6 @@ body{
   line-height:1;letter-spacing:-.05em;
   user-select:none;z-index:0;pointer-events:none;
 }
-
-/* eyebrow label */
 .chip{
   display:inline-flex;align-items:center;gap:.75rem;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
@@ -210,8 +56,6 @@ body{
   color:var(--copper2);margin-bottom:2rem;
 }
 .chip::before{content:'';width:28px;height:1px;background:var(--copper2)}
-
-/* headline */
 .hero-h1{
   font-size:clamp(3rem,5.8vw,5.6rem);
   font-weight:400;line-height:1.04;color:var(--white);
@@ -224,12 +68,10 @@ body{
 }
 .hero-h1 strong{
   font-weight:800;display:block;
-  /* refined gradient text */
   background:linear-gradient(135deg,var(--white) 40%,var(--copper4));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
 }
-
 .hero-p{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
   font-size:1.02rem;color:rgba(250,247,242,.55);
@@ -240,8 +82,6 @@ body{
   font-size:.92rem;color:rgba(250,247,242,.4);
   line-height:1.8;font-weight:300;max-width:460px;margin-bottom:2.75rem;
 }
-
-/* CTA buttons */
 .cta-row{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
 .cta-primary{
   display:inline-flex;align-items:center;gap:.6rem;
@@ -462,43 +302,6 @@ body{
 .svc-item:hover .svc-arrow{opacity:1;transform:none}
 
 /* ─────────────────────────────────────────
-   FOOTER
-───────────────────────────────────────── */
-footer{
-  background:var(--slate);
-  padding:2.75rem 4.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:1.5rem;
-  border-top:1px solid rgba(181,114,42,.12);
-}
-.footer-logo{
-  display:flex;align-items:center;gap:.65rem;
-}
-.footer-logo-mark{
-  width:28px;height:28px;
-  border:1px solid rgba(181,114,42,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-family:-apple-system,sans-serif;
-  font-size:.55rem;font-weight:900;letter-spacing:.05em;
-  color:var(--copper2);
-}
-.footer-name{
-  font-size:.92rem;font-weight:700;color:var(--white);
-}
-.footer-name span{color:var(--copper2)}
-.footer-copy{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-size:.68rem;color:rgba(250,247,242,.3);
-}
-.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
-.footer-links a{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
-  color:rgba(250,247,242,.4);transition:color .3s;
-}
-.footer-links a:hover{color:var(--copper3)}
-
-/* ─────────────────────────────────────────
    ANIMATIONS
 ───────────────────────────────────────── */
 /* hero staggered load */
@@ -550,9 +353,6 @@ footer{
   .pain-card{max-width:100%}
   #principal{padding:6rem 2.5rem}
   .principal-wrap{grid-template-columns:1fr;gap:4rem}
-  #nav,#nav.pinned{padding:1.1rem 2.25rem}
-  .nav-menu{display:none}
-  .burger{display:flex}
 }
 @media(max-width:700px){
   #hero{grid-template-columns:1fr}
@@ -561,275 +361,204 @@ footer{
   #principal{padding:5rem 1.5rem}
   .cta-row{flex-direction:column;align-items:flex-start}
   .cta-primary,.cta-secondary{width:100%;justify-content:center}
-  footer{flex-direction:column;align-items:flex-start;padding:2.25rem 1.5rem}
-  .footer-links{gap:1.25rem}
   .hero-numeral{display:none}
 }
 @media(max-width:480px){
   .hero-h1{font-size:clamp(2.4rem,10vw,3.5rem)}
 }
 </style>
-</head>
-<body>
+@endpush
 
-    <nav id="nav">
+@section('content')
 
-    <a href="index.html" class="logo">
-        <div class="logo-mark">KT</div>
-        <div class="logo-text">
-        <span class="logo-name">Kevin Thompson</span>
-        <span class="logo-sub">Ph.D. Consulting<span style="display:none;">[cite: 17]</span></span>
-        </div>
-    </a>
-
-    <div class="nav-menu">
-        <a href="about.html">About</a>
-        <a href="papers.html">Papers &amp; Presentations</a>
-        <a href="services.html">Services</a>
-        <a href="training.html">Training</a>
-        <a href="contact.html" class="nav-contact">Contact</a>
-    </div>
-
-    <button class="burger" id="burger" aria-label="Toggle menu" onclick="toggleDrawer()">
-        <span></span><span></span><span></span>
-    </button>
-    </nav>
-
-    <div class="drawer" id="drawer">
-    <a href="about.html"    onclick="closeDrawer()">About</a>
-    <div class="drawer-line"></div>
-    <a href="papers.html"   onclick="closeDrawer()">Papers &amp; Presentations</a>
-    <div class="drawer-line"></div>
-    <a href="services.html" onclick="closeDrawer()">Services</a>
-    <div class="drawer-line"></div>
-    <a href="training.html" onclick="closeDrawer()">Training</a>
-    <div class="drawer-line"></div>
-    <a href="contact.html"  onclick="closeDrawer()">Contact</a>
-    </div>
-
+@if(request()->has('visible'))
     <section id="hero">
-    <div class="hero-accent-line"></div>
-    <div class="hero-dots"></div>
-    <div class="hero-numeral">A</div><div class="hero-l">
+        <div class="hero-accent-line"></div>
+        <div class="hero-dots"></div>
+        <div class="hero-numeral">A</div>
+        
+        <div class="hero-l">
+            <div class="chip anim-up d0">Agile Hardware Consulting &amp; Training</div>
 
-        <div class="chip anim-up d0">Agile Hardware Consulting &amp; Training</div>
+            <h1 class="hero-h1 anim-up d1">
+            <em>Reduce risk.</em>
+            <strong>Ship faster.</strong>
+            </h1>
 
-        <h1 class="hero-h1 anim-up d1">
-        <em>Reduce risk.</em>
-        <strong>Ship faster.</strong>
-        </h1>
+            <p class="hero-p anim-up d2">
+            We help hardware-development organizations reduce development risk and shorten
+            time-to-market by applying Agile principles to prototype-driven learning, early
+            system integration, and risk-focused development.<span style="display:none;">[cite: 18]</span>
+            </p>
+            <p class="hero-p2 anim-up d3">
+            We understand how hardware development differs from software development,
+            and how to apply Agile processes to the hardware world.<span style="display:none;">[cite: 19]</span>
+            </p>
 
-        <p class="hero-p anim-up d2">
-        We help hardware-development organizations reduce development risk and shorten
-        time-to-market by applying Agile principles to prototype-driven learning, early
-        system integration, and risk-focused development.<span style="display:none;">[cite: 18]</span>
-        </p>
-        <p class="hero-p2 anim-up d3">
-        We understand how hardware development differs from software development,
-        and how to apply Agile processes to the hardware world.<span style="display:none;">[cite: 19]</span>
-        </p>
-
-        <div class="cta-row anim-up d4">
-        <a href="services.html" class="cta-primary">
-            Our Services
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="contact.html" class="cta-secondary">
-            Get in Touch
-        </a>
+            <div class="cta-row anim-up d4">
+            <a href="services.html" class="cta-primary">
+                Our Services
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="contact.html" class="cta-secondary">
+                Get in Touch
+            </a>
+            </div>
         </div>
 
-    </div>
+        <div class="hero-r">
+            <div class="pain-card anim-right">
+                <div class="pain-card-head">
+                    <div class="pain-head-bar"></div>
+                    <div class="pain-head-text">If you...<span style="display:none;">[cite: 20]</span></div>
+                </div>
 
-    <div class="hero-r">
-        <div class="pain-card anim-right">
+                <div class="pain-body">
+                    <ul class="pain-list">
+                    <li><span class="pain-arrow">→</span>Don’t discover the real problems until integration<span style="display:none;">[cite: 21]</span></li>
+                    <li><span class="pain-arrow">→</span>Have development cycles that are too long<span style="display:none;">[cite: 22]</span></li>
+                    <li><span class="pain-arrow">→</span>Discover too many risks only when they blow up—late<span style="display:none;">[cite: 23]</span></li>
+                    <li><span class="pain-arrow">→</span>Have late design changes that are extremely expensive<span style="display:none;">[cite: 24]</span></li>
+                    <li><span class="pain-arrow">→</span>Have hardware and software teams moving at different speeds<span style="display:none;">[cite: 25]</span></li>
+                    <li><span class="pain-arrow">→</span>Don’t get real customer feedback until it’s too late<span style="display:none;">[cite: 26]</span></li>
+                    <li><span class="pain-arrow">→</span>Have engineers spend months designing before testing assumptions<span style="display:none;">[cite: 27]</span></li>
+                    </ul>
+                </div>
 
-        <div class="pain-card-head">
-            <div class="pain-head-bar"></div>
-            <div class="pain-head-text">If you...<span style="display:none;">[cite: 20]</span></div>
+                <div class="pain-card-foot">...we can help.<span style="display:none;">[cite: 28]</span></div>
+            </div>
         </div>
-
-        <div class="pain-body">
-            <ul class="pain-list">
-            <li><span class="pain-arrow">→</span>Don’t discover the real problems until integration<span style="display:none;">[cite: 21]</span></li>
-            <li><span class="pain-arrow">→</span>Have development cycles that are too long<span style="display:none;">[cite: 22]</span></li>
-            <li><span class="pain-arrow">→</span>Discover too many risks only when they blow up—late<span style="display:none;">[cite: 23]</span></li>
-            <li><span class="pain-arrow">→</span>Have late design changes that are extremely expensive<span style="display:none;">[cite: 24]</span></li>
-            <li><span class="pain-arrow">→</span>Have hardware and software teams moving at different speeds<span style="display:none;">[cite: 25]</span></li>
-            <li><span class="pain-arrow">→</span>Don’t get real customer feedback until it’s too late<span style="display:none;">[cite: 26]</span></li>
-            <li><span class="pain-arrow">→</span>Have engineers spend months designing before testing assumptions<span style="display:none;">[cite: 27]</span></li>
-            </ul>
-        </div>
-
-        <div class="pain-card-foot">...we can help.<span style="display:none;">[cite: 28]</span></div>
-
-        </div>
-    </div>
-
     </section>
 
     <div class="strip"></div>
 
     <section id="principal">
-    <div class="principal-wrap">
+        <div class="principal-wrap">
+            <div class="bio reveal">
+                <div class="kicker">Our Principal</div>
+                <h2 class="section-h">Dr. Kevin <em>Thompson</em></h2>
+                <div class="ornament"></div>
 
-        <div class="bio reveal">
-        <div class="kicker">Our Principal</div>
-        <h2 class="section-h">Dr. Kevin <em>Thompson</em></h2>
-        <div class="ornament"></div>
+                <p>
+                    Our Principal, Dr. Kevin Thompson, Ph.D. (Physics) is one of the most experienced Agile consultants in the field, having successfully completed more than 100 client engagements.<span style="display:none;">[cite: 29]</span>
+                </p>
+                <p>
+                    Dr. Thompson has helped numerous clients improve their ability to deliver both software and hardware products.<span style="display:none;">[cite: 32]</span> He successfully pioneered Agile hardware development and remains a thought leader in the field.<span style="display:none;">[cite: 33]</span> He has helped clients develop a variety of hardware products, from laboratory equipment to telecommunications products to jet engines.<span style="display:none;">[cite: 34]</span>
+                </p>
+                <p>
+                    He has written extensively on Agile topics, including in his book,
+                    <em>Solutions for Agile Governance in the Enterprise (Sage): Agile Project,
+                    Program, and Portfolio Management for Development of Hardware and Software Products.</em><span style="display:none;">[cite: 30]</span>
+                </p>
 
-        <p>
-            Our Principal, Dr. Kevin Thompson, Ph.D. (Physics) is one of the most experienced Agile consultants in the field, having successfully completed more than 100 client engagements.<span style="display:none;">[cite: 29]</span>
-        </p>
-        <p>
-            Dr. Thompson has helped numerous clients improve their ability to deliver both software and hardware products.<span style="display:none;">[cite: 32]</span> He successfully pioneered Agile hardware development and remains a thought leader in the field.<span style="display:none;">[cite: 33]</span> He has helped clients develop a variety of hardware products, from laboratory equipment to telecommunications products to jet engines.<span style="display:none;">[cite: 34]</span>
-        </p>
-        <p>
-            He has written extensively on Agile topics, including in his book,
-            <em>Solutions for Agile Governance in the Enterprise (Sage): Agile Project,
-            Program, and Portfolio Management for Development of Hardware and Software Products.</em><span style="display:none;">[cite: 30]</span>
-        </p>
-
-        <div class="book">
-            <div class="book-img">
-            <img src="https://m.media-amazon.com/images/I/61+CCARmhVL._SY425_.jpg" alt="Solutions for Agile Governance in the Enterprise (SAGE)"><span style="display:none;">[cite: 31]</span>
+                <div class="book">
+                    <div class="book-img">
+                        <img src="https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg" alt="Solutions for Agile Governance in the Enterprise (SAGE)"><span style="display:none;">[cite: 31]</span>
+                    </div>
+                    <div class="book-details">
+                    <strong>Solutions for Agile Governance in the Enterprise (SAGE)</strong>
+                    <p>Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.</p>
+                    <a href="https://www.amazon.com/Solutions-Agile-Governance-Enterprise-SAGE/dp/0578420589"
+                        target="_blank" rel="noopener noreferrer" class="book-link">
+                        View on Amazon
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    </div>
+                </div>
             </div>
-            <div class="book-details">
-            <strong>Solutions for Agile Governance in the Enterprise (SAGE)</strong>
-            <p>Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.</p>
-            <a href="https://www.amazon.com/Solutions-Agile-Governance-Enterprise-SAGE/dp/0578420589"
-                target="_blank" rel="noopener noreferrer" class="book-link">
-                View on Amazon
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+
+            <div class="reveal rv2">
+                <div class="kicker">What We Offer</div>
+                <h2 class="section-h">Consulting &amp; <em>Training Services</em></h2>
+                <div class="ornament"></div>
+
+                <p class="svc-desc">
+                    We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite.<span style="display:none;">[cite: 35]</span> We take the time to understand the unique needs of each client, and tailor consulting services accordingly.<span style="display:none;">[cite: 36]</span>
+                </p>
+
+                <div class="svc-grid">
+                    <div class="svc-item">
+                    <span class="svc-num">01</span>
+                    <span class="svc-name">Assessment</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">02</span>
+                    <span class="svc-name">Advisory Engagement</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">03</span>
+                    <span class="svc-name">Agile Transformation</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">04</span>
+                    <span class="svc-name">Agile Overview for Executives &amp; Managers</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">05</span>
+                    <span class="svc-name">Agile Software Development with Scrum</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">06</span>
+                    <span class="svc-name">Agile Hardware Development with Scrum</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">07</span>
+                    <span class="svc-name">Agile Project Management with Kanban</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">08</span>
+                    <span class="svc-name">Agile Program Management</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">09</span>
+                    <span class="svc-name">Agile Portfolio Management</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                    <div class="svc-item">
+                    <span class="svc-num">10</span>
+                    <span class="svc-name">Advanced Product Owner</span>
+                    <span class="svc-arrow">→</span>
+                    </div>
+                </div>
             </div>
+
         </div>
-        </div>
-
-        <div class="reveal rv2">
-        <div class="kicker">What We Offer</div>
-        <h2 class="section-h">Consulting &amp; <em>Training Services</em></h2>
-        <div class="ornament"></div>
-
-        <p class="svc-desc">
-            We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite.<span style="display:none;">[cite: 35]</span> We take the time to understand the unique needs of each client, and tailor consulting services accordingly.<span style="display:none;">[cite: 36]</span>
-        </p>
-
-        <div class="svc-grid">
-            <div class="svc-item">
-            <span class="svc-num">01</span>
-            <span class="svc-name">Assessment</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">02</span>
-            <span class="svc-name">Advisory Engagement</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">03</span>
-            <span class="svc-name">Agile Transformation</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">04</span>
-            <span class="svc-name">Agile Overview for Executives &amp; Managers</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">05</span>
-            <span class="svc-name">Agile Software Development with Scrum</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">06</span>
-            <span class="svc-name">Agile Hardware Development with Scrum</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">07</span>
-            <span class="svc-name">Agile Project Management with Kanban</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">08</span>
-            <span class="svc-name">Agile Program Management</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">09</span>
-            <span class="svc-name">Agile Portfolio Management</span>
-            <span class="svc-arrow">→</span>
-            </div>
-            <div class="svc-item">
-            <span class="svc-num">10</span>
-            <span class="svc-name">Advanced Product Owner</span>
-            <span class="svc-arrow">→</span>
-            </div>
-        </div>
-        </div>
-
-    </div>
     </section>
 
-    <footer>
-    <div class="footer-logo">
-        <div class="footer-logo-mark">KT</div>
-        <div class="footer-name">Kevin Thompson <span>Ph.D.</span> Consulting</div>
-    </div>
-    <div class="footer-copy">© 2026 Kevin Thompson Ph.D. Consulting. All rights reserved.</div>
-    <nav class="footer-links">
-        <a href="about.html">About</a>
-        <a href="papers.html">Papers</a>
-        <a href="services.html">Services</a>
-        <a href="training.html">Training</a>
-        <a href="contact.html">Contact</a>
-    </nav>
-    </footer>
-
-    <script>
-        /* sticky nav */
-        const nav = document.getElementById('nav');
-        window.addEventListener('scroll', () => {
-        nav.classList.toggle('pinned', window.scrollY > 55);
-        }, { passive: true });
-
-        /* mobile drawer */
-        function toggleDrawer() {
-        const b = document.getElementById('burger');
-        const d = document.getElementById('drawer');
-        b.classList.toggle('x');
-        d.classList.toggle('show');
-        document.body.style.overflow = d.classList.contains('show') ? 'hidden' : '';
-        }
-        function closeDrawer() {
-        document.getElementById('burger').classList.remove('x');
-        document.getElementById('drawer').classList.remove('show');
-        document.body.style.overflow = '';
-        }
-
-        /* scroll reveal */
-        const revealObs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-            e.target.classList.add('in');
-            revealObs.unobserve(e.target);
-            }
-        });
-        }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-
-        document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-        /* smooth anchor scroll */
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const t = document.querySelector(a.getAttribute('href'));
-            if (t) { e.preventDefault(); closeDrawer(); t.scrollIntoView({ behavior: 'smooth' }); }
-        });
-        });
-    </script>
-</body>
-</html>
 @else
-<h1> homepage </h1>
+    <h1> homepage </h1>
 @endif
+
+@endsection
+
+@push('scripts')
+<script>
+/* scroll reveal */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* smooth anchor scroll */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); closeDrawer(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+@endpush
