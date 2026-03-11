@@ -370,8 +370,6 @@
 @endpush
 
 @section('content')
-
-@if(request()->has('visible'))
     <section id="hero">
         <div class="hero-accent-line"></div>
         <div class="hero-dots"></div>
@@ -532,11 +530,6 @@
 
         </div>
     </section>
-
-@else
-    <h1> homepage </h1>
-@endif
-
 @endsection
 
 @push('scripts')
