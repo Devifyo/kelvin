@@ -43,4 +43,22 @@ class PageController extends Controller
     {
         return view('landing-pages.contact');
     }
+
+    public function blog()
+    {
+        // Later, you can fetch dynamic blog posts here:
+        // $posts = Post::where('is_published', true)->latest()->get();
+        // return view('landing-pages.blog', compact('posts'));
+        
+        return view('landing-pages.blog');
+    }
+
+    public function showBlog($slug = 'embedded-software')
+    {
+        // Later, you will fetch the post from the database using the slug:
+        // $post = Post::where('slug', $slug)->firstOrFail();
+        // return view('landing-pages.blog-show', compact('post'));
+
+        return view('landing-pages.blog-show');
+    }
 }

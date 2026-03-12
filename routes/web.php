@@ -28,6 +28,8 @@ Route::controller(PageController::class)->group(function () {
     
     // Contact
     Route::get('/contact-us', 'contact')->name('contact');
+    Route::get('/agile-insights-blog', 'blog')->name('blog');
+    Route::get('/agile-insights-blog/{slug}', 'showBlog')->name('blog.show');
 });
 
 // Contact Form Submission
