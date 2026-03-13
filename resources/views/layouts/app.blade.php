@@ -36,12 +36,16 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      {{-- @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-training-classes') || request()->Is('agile-consulting-services') ) --}}
+      @if(request()->Is('/') || request()->Is('about-kevin-thompson') )
         @yield('content')
-      {{-- @else --}}
-       {{-- <h1 class="page-title">{{ $title ?? 'Page Title' }}</h1>
+      @else
+       <section class="page-header">
+            <div class="header-content reveal">
+                <h1 class="page-title">{{ $title ?? 'work in progress...' }}</h1>
+            </div>
+        </section>
       @endif
-    </main> --}}
+    </main>
 
     @include('layouts.partials.frontend.footer')
 
