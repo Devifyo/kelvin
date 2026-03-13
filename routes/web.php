@@ -21,7 +21,7 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/agile-consulting-services', 'services')->name('services');
     
     // Training (Main listing)
-    Route::get('/agile-training-classes', 'training')->name('training');
+    Route::get('/agile-training-classes/{slug?}', 'training')->name('training');
     
     // Papers & Presentations (Library)
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');

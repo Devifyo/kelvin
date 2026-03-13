@@ -10,6 +10,7 @@
     padding: 11rem 4.5rem 6rem;
     position: relative;
     overflow: hidden;
+    text-align: center;
 }
 .page-header::before {
     content: ''; position: absolute; inset: 0;
@@ -17,22 +18,11 @@
     z-index: 0;
 }
 .header-content {
-    max-width: 1180px;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
 }
-.page-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3rem, 4.5vw, 4rem);
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    max-width: 900px;
-}
-.page-title em { font-style: italic; color: var(--copper3); }
-
 .kicker {
     display: inline-flex;
     align-items: center;
@@ -45,170 +35,139 @@
     color: var(--copper2);
     margin-bottom: 1.1rem;
 }
-.kicker::before { content: ''; width: 24px; height: 1px; background: var(--copper2); }
+.kicker::before, .kicker::after { 
+    content: ''; width: 24px; height: 1px; background: var(--copper2); 
+}
+.page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+.page-title em { font-style: italic; color: var(--copper3); }
+.short-desc {
+    font-family: -apple-system, sans-serif;
+    font-size: 1.1rem;
+    color: rgba(250,247,242,.7);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 700px;
+    margin: 0 auto;
+}
 
 /* ─────────────────────────────────────────
-   COURSE LAYOUT
+   TRAINING INDEX LAYOUT
 ───────────────────────────────────────── */
-.course-section {
-    padding: 7rem 4.5rem;
+.training-wrapper {
     background: var(--ivory);
+    padding: 7rem 4.5rem;
 }
-.course-grid {
-    max-width: 1180px;
+.content-container {
+    max-width: 1000px; /* Slightly narrower for reading focus */
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 5rem;
-    align-items: start;
 }
 
-/* MAIN CONTENT */
-.course-main h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
-    color: var(--slate);
-    margin: 0 0 1.25rem;
-    font-weight: 400;
-    line-height: 1.2;
-}
-.course-main h2 em { font-style: italic; color: var(--copper); }
-
-.ornament {
-    width: 60px; height: 1.5px;
-    background: linear-gradient(90deg, var(--copper), transparent);
-    margin-bottom: 2rem;
-}
-
-.course-body p {
-    font-family: -apple-system, sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.85;
-    color: var(--charcoal);
-    font-weight: 300;
-    margin-bottom: 1.75rem;
-}
-
-/* Highlight Box for Objectives */
-.objectives-box {
+/* Course Cards */
+.course-card {
     background: var(--white);
     border: 1px solid var(--ivory3);
-    border-left: 3px solid var(--copper);
-    padding: 2.5rem;
-    margin: 3rem 0;
-    box-shadow: var(--card-shadow);
+    padding: 3.5rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(26,35,50,.03);
+    transition: transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
 }
-.objectives-box h3 {
-    font-family: -apple-system, sans-serif;
-    font-size: .85rem;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
+.course-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; bottom: 0;
+    background: var(--copper);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform .4s ease;
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+    border-color: rgba(181,114,42,.2);
+}
+.course-card:hover::before {
+    transform: scaleY(1);
+}
+
+.course-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
     color: var(--slate);
-    margin-bottom: 1rem;
+    line-height: 1.2;
+    margin: 0;
 }
-.objectives-box p {
+.course-card p {
     font-family: 'Palatino Linotype', serif;
-    font-size: 1.2rem;
-    font-style: italic;
-    line-height: 1.7;
-    color: var(--charcoal);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--body-text);
     margin: 0;
 }
 
-/* Topics Grid */
-.topics-container {
-    margin-top: 4rem;
-}
-.topics-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 2rem;
-}
-.topic-item {
-    display: flex;
-    align-items: flex-start;
-    gap: .75rem;
-    font-family: -apple-system, sans-serif;
-    font-size: .95rem;
-    color: var(--body-text);
-    padding-bottom: .75rem;
-    border-bottom: 1px solid var(--ivory3);
-}
-.topic-icon {
-    color: var(--copper);
-    margin-top: .15rem;
-    flex-shrink: 0;
-}
-
-/* SIDEBAR META */
-.course-sidebar {
-    position: sticky;
-    top: 120px;
-}
-.meta-card {
-    background: var(--white);
-    border: 1px solid var(--ivory3);
-    box-shadow: var(--card-shadow);
-    padding: 2.5rem;
-}
-.meta-item {
-    margin-bottom: 2rem;
-}
-.meta-item:last-child {
-    margin-bottom: 0;
-}
-.meta-label {
+/* Card Meta (Bottom Row) */
+.card-footer {
     display: flex;
     align-items: center;
-    gap: .6rem;
-    font-family: -apple-system, sans-serif;
-    font-size: .65rem;
-    font-weight: 700;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--copper);
-    margin-bottom: .75rem;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--ivory3);
 }
-.meta-value {
-    font-family: -apple-system, sans-serif;
-    font-size: .95rem;
-    line-height: 1.6;
-    color: var(--slate);
-    font-weight: 500;
+.meta-info {
+    display: flex;
+    gap: 2rem;
 }
-
-.sidebar-cta {
-    margin-top: 2rem;
-    display: block;
-    text-align: center;
-    width: 100%;
-    padding: 1.1rem 2rem;
-    background: linear-gradient(135deg, var(--copper), var(--copper2));
-    color: var(--white);
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
     font-family: -apple-system, sans-serif;
     font-size: .8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+.meta-item svg { color: var(--copper); }
+
+/* Buttons */
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .8rem 1.8rem;
+    background: transparent;
+    color: var(--slate);
+    font-family: -apple-system, sans-serif;
+    font-size: .75rem;
     font-weight: 700;
     letter-spacing: .15em;
     text-transform: uppercase;
-    border: none;
-    cursor: pointer;
+    border: 1.5px solid var(--ivory3);
     transition: all .35s;
-    box-shadow: 0 4px 24px rgba(181,114,42,.35);
+    text-decoration: none;
 }
-.sidebar-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 36px rgba(181,114,42,.5);
-    background: linear-gradient(135deg, var(--copper2), var(--copper3));
-    color: var(--slate);
+.btn-outline:hover {
+    border-color: var(--copper);
+    color: var(--copper);
+    background: var(--ivory);
 }
 
-@media(max-width: 900px) {
-    .course-grid { grid-template-columns: 1fr; gap: 4rem; }
-    .course-sidebar { position: static; }
-    .topics-grid { grid-template-columns: 1fr; }
+@media(max-width: 768px) {
     .page-header { padding: 9rem 2.5rem 4rem; }
-    .course-section { padding: 5rem 2.5rem; }
+    .training-wrapper { padding: 5rem 2.5rem; }
+    .course-card { padding: 2.5rem 2rem; }
+    .card-footer { flex-direction: column; align-items: flex-start; gap: 2rem; }
+    .meta-info { flex-direction: column; gap: 1rem; }
 }
 </style>
 @endpush
@@ -217,125 +176,89 @@
 
 <section class="page-header">
     <div class="header-content reveal">
-        <div class="kicker">Training Course</div>
-        
-        <h1 class="page-title">Agile Overview for <em>Executives and Managers</em><span style="display:none;">[cite: 149, 156]</span></h1>
+        <div class="kicker">Curriculum</div>
+        <h1 class="page-title">Training <em>Classes</em></h1>
+        <p class="short-desc">We provide comprehensive on-site training to empower your teams, from hands-on engineers to the C-suite, with the Agile skills needed to ship faster and reduce risk.</p>
     </div>
 </section>
 
 <div class="strip"></div>
 
-<section class="course-section">
-    <div class="course-grid">
+<section class="training-wrapper">
+    <div class="content-container">
         
-        <div class="course-main reveal">
+        <div class="course-card reveal rv1">
+            <h2>Agile Overview for Executives and Managers</h2>
+            <p>Understand the organizational shifts that accompany an Agile migration. Learn the characteristics of Agile processes, scaling concepts, and how to support self-organizing teams while aligning business needs with iterative cycles.</p>
             
-            <h2>Course <em>Overview</em></h2>
-            <div class="ornament"></div>
-
-            <div class="course-body">
-                <p>When engineering teams move to Agile methods, managers and executives often wonder what their new roles and responsibilities will be in this new world.<span style="display:none;">[cite: 157]</span></p>
-                <p>Self-organizing Agile teams still need guidance and assistance in achieving goals, however, and managers must support these teams by providing direction, assisting Scrum Masters to remove impediments, and helping program management and business needs fit into the iterative cycle.<span style="display:none;">[cite: 158]</span></p>
-            </div>
-
-            <div class="objectives-box reveal rv1">
-                <h3>Learning Objectives</h3>
-                <p>Attendees will learn the characteristics of Agile processes, the benefits of adopting Agile development, scaling concepts, how to “go Agile” with a geographically distributed workforce, and organizational impacts of an Agile migration.<span style="display:none;">[cite: 160]</span></p>
-            </div>
-
-            <div class="topics-container reveal rv2">
-                <h2>Curriculum &amp; <em>Topics</em></h2>
-                <div class="ornament"></div>
-                
-                <div class="topics-grid">
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Agile Enterprise<span style="display:none;">[cite: 168]</span>
+            <div class="card-footer">
+                <div class="meta-info">
+                    <div class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        1 Day
                     </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Why Agile?<span style="display:none;">[cite: 169]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Introduction to Scrum<span style="display:none;">[cite: 170]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Agile Transformation<span style="display:none;">[cite: 171]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Requirements<span style="display:none;">[cite: 172]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Cross-Team & Release Planning<span style="display:none;">[cite: 173]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Agile + Waterfall: Hybrid Projects<span style="display:none;">[cite: 174]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Distributed Teams<span style="display:none;">[cite: 175]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Organizational Impacts<span style="display:none;">[cite: 176]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Portfolio Management<span style="display:none;">[cite: 177]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Budgeting<span style="display:none;">[cite: 178]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Agile Hardware Development<span style="display:none;">[cite: 179]</span>
-                    </div>
-                    <div class="topic-item">
-                        <svg class="topic-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Kanban<span style="display:none;">[cite: 180]</span>
+                    <div class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Leadership & Management
                     </div>
                 </div>
+                <a href="{{ route('training', ['slug' => 'hello']) }}" class="btn-outline">View Details →</a>
             </div>
-
         </div>
 
-        <aside class="course-sidebar reveal">
-            <div class="meta-card">
-                
-                <div class="meta-item">
-                    <div class="meta-label">
+        <div class="course-card reveal rv1">
+            <h2>Agile Software Development with Scrum</h2>
+            <p>Master the practical details of the Scrum process framework for software products. Experience hands-on skills required for a Scrum Team to plan and implement work, from progressive elaboration to tracking Sprint progress.</p>
+            
+            <div class="card-footer">
+                <div class="meta-info">
+                    <div class="meta-item">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Course Length
+                        2 Days
                     </div>
-                    <div class="meta-value">One day.<span style="display:none;">[cite: 166]</span></div>
-                </div>
-
-                <div class="meta-item">
-                    <div class="meta-label">
+                    <div class="meta-item">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Target Audience
+                        Software Teams
                     </div>
-                    <div class="meta-value">Executives, Directors, Managers, Product/Program Managers, and other leadership figures who need to understand the organizational shifts that accompany an Agile migration.<span style="display:none;">[cite: 162]</span></div>
                 </div>
-
-                <div class="meta-item">
-                    <div class="meta-label">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        Prerequisites
-                    </div>
-                    <div class="meta-value">No prerequisites.<span style="display:none;">[cite: 164]</span></div>
-                </div>
-
-                <a href="{{ route('contact') }}" class="sidebar-cta">Request Booking</a>
-
+                <a href="/training/software-scrum" class="btn-outline">View Details →</a>
             </div>
-        </aside>
+        </div>
+
+        <div class="course-card reveal rv1">
+            <h2>Agile Hardware Development with Scrum</h2>
+            <p>Learn how to apply Agile processes to the physical world. This class trains attendees in the practical details of Scrum specifically tailored for the complexities of hardware product development.</p>
+            
+            <div class="card-footer">
+                <div class="meta-info">
+                    <div class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        2 Days
+                    </div>
+                    <div class="meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Hardware Engineers & Teams
+                    </div>
+                </div>
+                <a href="/training/hardware-scrum" class="btn-outline">View Details →</a>
+            </div>
+        </div>
+
+        <div class="course-card reveal rv1">
+            <h2>Agile Project Management with Kanban</h2>
+            <p>Learn the principles of flow, managing work-in-progress limits, and optimizing delivery schedules using the Kanban methodology.</p>
+            <div class="card-footer">
+                <a href="#" class="btn-outline">View Details →</a>
+            </div>
+        </div>
+
+        <div class="course-card reveal rv1">
+            <h2>Advanced Product Owner</h2>
+            <p>Deep-dive into backlog grooming, stakeholder management, and value maximization for experienced Product Owners looking to take their skills to the next level.</p>
+            <div class="card-footer">
+                <a href="#" class="btn-outline">View Details →</a>
+            </div>
+        </div>
 
     </div>
 </section>

@@ -136,10 +136,10 @@
 
                 <div class="book">
                     <div class="book-img">
-                        <img src="https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg" alt="Solutions for Agile Governance in the Enterprise (SAGE)">
+                        <img src="https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg" alt="Solutions for Agile Governance in the Enterprise (Sage)">
                     </div>
                     <div class="book-details">
-                        <strong>Solutions for Agile Governance in the Enterprise (SAGE)</strong>
+                        <strong>Solutions for Agile Governance in the Enterprise (Sage)</strong>
                         <p>Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.</p>
                         <a href="https://www.amazon.com/Solutions-Agile-Governance-Enterprise-SAGE/dp/0578420589"
                             target="_blank" rel="noopener noreferrer" class="book-link">
@@ -229,24 +229,11 @@
 
 @push('scripts')
 <script>
-/* scroll reveal */
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      revealObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-/* smooth anchor scroll */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { e.preventDefault(); closeDrawer(); t.scrollIntoView({ behavior: 'smooth' }); }
-  });
-});
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); closeDrawer(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+    });
 </script>
 @endpush

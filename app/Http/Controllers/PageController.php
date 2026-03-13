@@ -21,21 +21,17 @@ class PageController extends Controller
         return view('landing-pages.services');
     }
 
-    public function training()
+    public function training($slug = null)
     {
-        // Later, you can fetch dynamic training courses here
-        // $courses = TrainingCourse::all();
-        // return view('landing-pages.training', compact('courses'));
+        if(!is_null($slug)) {
+            return view('landing-pages.training-show');
+        }
         
         return view('landing-pages.training');
     }
 
     public function papers()
     {
-        // Later, you can fetch dynamic papers here
-        // $caseStudies = Paper::where('category', 'Case Study')->get();
-        // return view('landing-pages.papers', compact('caseStudies', ...));
-
         return view('landing-pages.papers');
     }
 

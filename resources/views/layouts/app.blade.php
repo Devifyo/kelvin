@@ -36,17 +36,17 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      @if(request()->Is('/') || request()->Is('about-kevin-thompson') )
+      {{-- @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-training-classes') || request()->Is('agile-consulting-services') ) --}}
         @yield('content')
-      @else
-       <h1 class="page-title">{{ $title ?? 'Page Title' }}</h1>
+      {{-- @else --}}
+       {{-- <h1 class="page-title">{{ $title ?? 'Page Title' }}</h1>
       @endif
-    </main>
+    </main> --}}
 
     @include('layouts.partials.frontend.footer')
 
     <script>
-        /* sticky nav */
+        /* sticky nav  */
         const nav = document.getElementById('nav');
         window.addEventListener('scroll', () => {
             nav.classList.toggle('pinned', window.scrollY > 55);
@@ -65,6 +65,21 @@
             document.getElementById('drawer').classList.remove('show');
             document.body.style.overflow = '';
         }
+
+        /* ─────────────────────────────────────────
+           GLOBAL SCROLL REVEAL ANIMATION
+           Works on any page with class="reveal"
+        ───────────────────────────────────────── */
+        const revealObs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              revealObs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
     </script>
     
     @stack('scripts')
