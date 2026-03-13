@@ -36,7 +36,7 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      @if(request()->Is('/'))
+      @if(request()->Is('/') || request()->Is('about-kevin-thompson') )
         @yield('content')
       @else
        <h1 class="page-title">{{ $title ?? 'Page Title' }}</h1>
