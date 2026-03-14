@@ -36,10 +36,4 @@ Route::controller(PageController::class)->group(function () {
 Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
 
 
-/*
-|--------------------------------------------------------------------------
-| Future Dynamic Routes (Examples for later)
-|--------------------------------------------------------------------------
-| Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.show');
-| Route::get('/agile-training-classes/{slug}', [TrainingController::class, 'show'])->name('training.show');
-*/
+require __DIR__.'/auth.php';

@@ -24,7 +24,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="shortcut icon" href="/favicon.ico">
-
     <meta name="theme-color" content="#1a2332">
 
     <link rel="stylesheet" href="/css/frontend/main.css">
@@ -36,7 +35,7 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      @if(request()->Is('/') || request()->Is('about-kevin-thompson') )
+      @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-hardware-papers-and-presentations') )
         @yield('content')
       @else
        <section class="page-header">

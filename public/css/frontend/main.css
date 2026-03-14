@@ -30,7 +30,8 @@ img{max-width:100%;display:block}
   --body-text:  #4a5968;
   --muted:      #7a8fa0;
   --white:      #ffffff;
-
+  --a11y-muted: #5e7080;   /* Darker than #7a8fa0 */
+  --a11y-copper: #935a1e;  /* Darker than #b5722a */
   /* effects */
   --glow: 0 0 60px rgba(181,114,42,.08);
   --card-shadow: 0 4px 32px rgba(26,35,50,.1);
