@@ -34,10 +34,10 @@
 .page-subtitle {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
     font-size: 1.05rem;
-    color: rgba(250,247,242,.6);
+    color: rgba(250,247,242,.85); /* FIX: Bumped opacity from .6 to .85 for dark background contrast */
     max-width: 600px;
     line-height: 1.8;
-    font-weight: 300;
+    font-weight: 400; /* FIX: Bumped weight for readability */
 }
 
 /* ─────────────────────────────────────────
@@ -58,10 +58,10 @@
     gap: .7rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
     font-size: .65rem;
-    font-weight: 700;
+    font-weight: 800; /* FIX: Bumped from 700 to 800 */
     letter-spacing: .3em;
     text-transform: uppercase;
-    color: var(--copper);
+    color: #7a4b1f; /* FIX: Darkened copper to explicitly pass WCAG 4.5:1 ratio */
     margin-bottom: 1.1rem;
 }
 .kicker::before { content: ''; width: 24px; height: 1px; background: var(--copper); }
@@ -73,7 +73,7 @@
     color: var(--slate);
     margin-bottom: 1.1rem;
 }
-.section-h em { font-style: italic; color: var(--copper); }
+.section-h em { font-style: italic; color: #7a4b1f; } /* FIX: Accessible darkened copper */
 
 .ornament {
     width: 40px; height: 1.5px;
@@ -131,9 +131,9 @@
 .service-desc {
     font-family: -apple-system, sans-serif;
     font-size: .95rem;
-    color: var(--body-text);
+    color: var(--charcoal, #2c3a4a); /* FIX: Explicitly use charcoal instead of the lighter body-text */
     line-height: 1.8;
-    font-weight: 300;
+    font-weight: 400; /* FIX: Bumped from 300 to 400 for better contrast parsing */
 }
 .service-desc p { margin-bottom: 1rem; }
 .service-desc p:last-child { margin-bottom: 0; }
@@ -158,15 +158,15 @@
     font-family: -apple-system, sans-serif;
     font-size: 1.05rem;
     line-height: 1.8;
-    color: var(--body-text);
-    font-weight: 300;
+    color: var(--charcoal, #2c3a4a); /* FIX: Enforced dark text */
+    font-weight: 400; /* FIX: Readability bump */
     margin-bottom: 2rem;
 }
 
 .course-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: .75rem; /* Tightened slightly for a sleeker list */
 }
 .course-link {
     display: flex;
@@ -179,21 +179,42 @@
     font-size: 1rem;
     font-weight: 600;
     color: var(--slate);
-    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+    transition: all .32s cubic-bezier(.4, 0, .2, 1);
+    text-decoration: none;
+}
+.course-link::before {
+    content: ''; 
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--copper);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform .32s cubic-bezier(.4, 0, .2, 1);
 }
 .course-link:hover {
     background: var(--white);
-    border-color: var(--copper);
-    color: var(--copper);
-    box-shadow: var(--card-shadow);
+    border-color: rgba(181,114,42,.25);
     transform: translateX(5px);
+    box-shadow: var(--card-shadow);
+    color: var(--slate);
 }
 .course-link svg {
     color: var(--copper2);
-    transition: transform .3s;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity .32s ease, transform .32s cubic-bezier(.4, 0, .2, 1);
+    position: relative;
+    z-index: 1;
+}
+.course-link:hover svg {
+    opacity: 1;
+    transform: none;
 }
 .course-link:hover svg {
     transform: translateX(4px);
+}
+.course-link:hover::before {
+    transform: scaleY(1);
 }
 
 @media(max-width: 1100px) {
@@ -210,106 +231,89 @@
 
 @section('content')
 
+{{-- ─────────────────────────────────────────
+     PAGE HEADER
+───────────────────────────────────────── --}}
 <section class="page-header">
     <div class="header-content reveal">
         <div class="kicker" style="color:var(--copper2);">Our Expertise</div>
-        <h1 class="page-title">Consulting &amp; <em>Training</em><span style="display:none;">[cite: 135]</span></h1>
-        <p class="page-subtitle">We offer both consulting and training services. All services are provided on-site at client locations.<span style="display:none;">[cite: 136]</span></p>
+        <h1 class="page-title">Consulting &amp; <em>Training</em></h1>
+        <p class="page-subtitle">We offer both consulting and training services. All services are provided on-site at client locations.</p>
     </div>
 </section>
 
 <div class="strip"></div>
 
+{{-- ─────────────────────────────────────────
+     CONSULTING SERVICES
+───────────────────────────────────────── --}}
 <section class="content-section">
     <div class="content-wrap">
         
         <div class="reveal">
             <div class="kicker">Strategic Guidance</div>
-            <h2 class="section-h">Consulting <em>Services</em><span style="display:none;">[cite: 137]</span></h2>
+            <h2 class="section-h">Consulting <em>Services</em></h2>
             <div class="ornament"></div>
         </div>
 
         <div class="consulting-grid">
             
-            <div class="service-card reveal rv1">
-                <div class="service-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                </div>
-                <h3 class="service-title">Assessment</h3>
-                <div class="service-desc">
-                    <p>An assessment is an investigation into issues that are interfering with the client’s ability to function well and deliver products on a timely basis.<span style="display:none;">[cite: 138]</span></p>
-                    <p>It involves stakeholder interviews, analysis, preparation of findings and recommendations, and delivery of a final report which highlights action items to address the issues discovered.<span style="display:none;">[cite: 139]</span></p>
-                    <p>Assessments are particularly useful when the issues affecting the client are unclear and subject to confusion and disagreement.<span style="display:none;">[cite: 140]</span></p>
-                </div>
-            </div>
+            @foreach($consultingServices as $index => $service)
+                {{-- Dynamically stagger the animation delay --}}
+                <div class="service-card reveal rv{{ ($index % 3) + 1 }}">
+                    
+                    <div class="service-icon">
+                        {{-- Pro Tip: Map specific SVGs based on the slug to keep your premium look --}}
+                        @php
+                            $iconPath = match($service->slug) {
+                                'agile-assessment-services' => '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>', // Search icon
+                                'agile-advisory-engagement-coaching' => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>', // Users icon
+                                'agile-transformation-consulting' => '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>', // Pulse/Activity icon
+                                default => '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' // Generic fallback icon
+                            };
+                        @endphp
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            {!! $iconPath !!}
+                        </svg>
+                    </div>
 
-            <div class="service-card reveal rv2">
-                <div class="service-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    <h3 class="service-title">{{ $service->title }}</h3>
+                    
+                    <div class="service-desc">
+                        {{-- Converts the \n\n from the database seeder into real HTML paragraphs --}}
+                        <p>{!! nl2br(e($service->content)) !!}</p>
+                    </div>
                 </div>
-                <h3 class="service-title">Advisory Engagement</h3>
-                <div class="service-desc">
-                    <p>In an advisory engagement, we are available for question-and-answer sessions and hands-on coaching about various Agile practices.<span style="display:none;">[cite: 141]</span></p>
-                    <p>Advisory engagements are useful when a client has an existing Agile process but is dissatisfied with how well the process is working and wants some help improving it.<span style="display:none;">[cite: 142]</span></p>
-                </div>
-            </div>
-
-            <div class="service-card reveal rv1">
-                <div class="service-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <h3 class="service-title">Agile Transformation</h3>
-                <div class="service-desc">
-                    <p>An Agile transformation takes a client through the process of converting a development organization from its previous state to an Agile process.<span style="display:none;">[cite: 143]</span></p>
-                    <p>The scope can be as small as a single team, or as large as multiple teams spanning the globe for a large enterprise.<span style="display:none;">[cite: 144]</span></p>
-                    <p>The basic stages of a transformation include scoping, planning, training, kick-off, and coaching the organization until people have mastered the new world well enough to stand on their own.<span style="display:none;">[cite: 145]</span> Depending on needs, an Assessment may also be included.<span style="display:none;">[cite: 146]</span></p>
-                </div>
-            </div>
+            @endforeach
 
         </div>
 
     </div>
 </section>
 
+{{-- ─────────────────────────────────────────
+     TRAINING CLASSES
+───────────────────────────────────────── --}}
 <section class="training-section">
     <div class="training-wrap">
         
         <div class="training-intro reveal">
             <div class="kicker">Education & Growth</div>
-            <h2 class="section-h">Training <em>Classes</em><span style="display:none;">[cite: 147]</span></h2>
+            <h2 class="section-h">Training <em>Classes</em></h2>
             <div class="ornament"></div>
-            <p>The following classes and presentations are available.<span style="display:none;">[cite: 148]</span> Each class is designed to address specific needs within your organization, from executive briefings to deep-dive team frameworks.</p>
+            <p>The following classes and presentations are available. Each class is designed to address specific needs within your organization, from executive briefings to deep-dive team frameworks.</p>
         </div>
 
         <div class="course-list reveal rv1">
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Overview for Executives and Managers<span style="display:none;">[cite: 149]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Software Development with Scrum<span style="display:none;">[cite: 150]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Hardware Development with Scrum<span style="display:none;">[cite: 151]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Project Management with Kanban<span style="display:none;">[cite: 152]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Program Management<span style="display:none;">[cite: 153]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Agile Portfolio Management<span style="display:none;">[cite: 154]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
-                Advanced Product Owner<span style="display:none;">[cite: 155]</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+            
+            @foreach($trainingClasses as $class)
+                {{-- Dynamically generate the route using the class's SEO slug --}}
+                <a href="{{ route('training', $class->slug) }}" class="course-link">
+                    {{ $class->title }}
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            @endforeach
+
         </div>
 
     </div>
@@ -318,16 +322,5 @@
 @endsection
 
 @push('scripts')
-<script>
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      revealObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-</script>
 @endpush

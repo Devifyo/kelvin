@@ -234,6 +234,47 @@
     .page-header { padding: 10rem 2.5rem 4rem; }
     .course-section { padding: 5rem 2.5rem; }
 }
+.markdown-content p {
+        margin-bottom: 1.25rem;
+        color: var(--charcoal, #2c3a4a);
+        line-height: 1.8;
+    }
+    .markdown-content p:last-child {
+        margin-bottom: 0;
+    }
+    
+    /* Premium Custom Bullet Points */
+    .markdown-content ul {
+        margin: 1.25rem 0 1.5rem 1.5rem;
+        padding: 0;
+        list-style: none;
+    }
+    .markdown-content li {
+        position: relative;
+        margin-bottom: 0.75rem;
+        color: var(--charcoal, #2c3a4a);
+        line-height: 1.7;
+        font-weight: 400;
+    }
+    .markdown-content li::before {
+        content: '•';
+        position: absolute;
+        left: -1.25rem;
+        color: var(--copper);
+        font-size: 1.2rem;
+        line-height: 1;
+        top: 0.1rem;
+    }
+    .markdown-content em {
+        font-style: italic;
+        color: rgba(181,114,42, 0.9); /* Darkened copper for readability */
+        font-size: 0.92rem;
+        display: block; /* Pushes the note to its own line naturally */
+        margin-top: 1rem;
+        padding-left: 1rem;
+        border-left: 2px solid rgba(181,114,42, 0.3); /* Subtle copper line on the left */
+        line-height: 1.6;
+    }
 </style>
 @endpush
 
@@ -241,11 +282,11 @@
 
     <section class="page-header">
         <div class="header-content reveal">
-            <a href="{{ route('training') }}" class="kicker" style="text-decoration: none;">← Back to Curriculum</a>
+            <a href="{{ route('services.training') }}" class="kicker" style="text-decoration: none;">← Back to Curriculum</a>
             
-            <h1 class="page-title">Agile Software Development <em>with Scrum</em></h1>
+            <h1 class="page-title">{!! str_replace(' with ', ' <em>with</em> ', e($service->title)) !!}</h1>
             
-            <p class="short-desc">The Scrum process framework is well-suited for teams that engage in product development. This class trains attendees in the practical details of the Scrum process framework, as applied to the development of software products.</p>
+            <p class="short-desc">{{ $service->short_description }}</p>
         </div>
     </section>
 
@@ -259,136 +300,90 @@
                 <h2>Course <em>Overview</em></h2>
                 <div class="ornament"></div>
 
-                <div class="course-body">
-                    <p>The Scrum process framework has revolutionized software engineering by allowing teams to pivot quickly, manage complexity, and deliver continuous value. Unlike traditional waterfall methods, Scrum is specifically tailored to handle the unpredictable nature of product development.</p>
-                    <p>This immersive training goes beyond the theory, putting attendees into the practical, day-to-day realities of running a successful software Scrum team. You will walk away with the exact frameworks needed to build the right things, and build them right.</p>
+                {{-- Added 'markdown-content' class and Str::markdown() --}}
+                <div class="course-body markdown-content">
+                    @php
+                        // Fixes the (*) so the Markdown parser doesn't break the italics
+                        $safeContent = str_replace('(*)', '(\*)', $service->content);
+                    @endphp
+                    
+                    {!! \Illuminate\Support\Str::markdown($safeContent) !!}
                 </div>
 
-                <div class="objectives-box reveal rv1">
+                @if($service->learning_objectives)
+                <div class="objectives-box reveal rv1 markdown-content">
                     <h3>Learning Objectives</h3>
-                    <p>Attendees learn and experience all of the practical, hands-on skills required for a Scrum Team to plan and implement work in a Sprint. Attendees also receive an understanding of the drivers and benefits of Scrum, and its place in the context of the larger world of project management.</p>
+                    {!! \Illuminate\Support\Str::markdown($service->learning_objectives) !!}
                 </div>
+                @endif
 
+                @if(!empty($service->topics))
                 <div class="topics-container reveal rv2">
                     <h2>Curriculum &amp; <em>Topics</em></h2>
                     <div class="ornament"></div>
                     
                     <div class="topics-grid">
                         
-                        <div class="topic-group">
-                            <h3>Introduction to Scrum</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Classical and Agile project management</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Building the Right Things vs. Building Things Right</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Scrum Overview</div>
+                        @foreach($service->topics as $groupTitle => $subTopics)
+                            <div class="topic-group" @if($loop->last) style="grid-column: 1 / -1;" @endif>
+                                
+                                <h3>{{ $groupTitle }}</h3>
+                                
+                                <div class="topic-list" @if($loop->last) style="display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;" @endif>
+                                    
+                                    @foreach($subTopics as $topic)
+                                        <div class="topic-item">
+                                            <svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg> 
+                                            {{ $topic }}
+                                        </div>
+                                    @endforeach
+                                    
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Requirements</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Progressive Elaboration</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Stories & Epics</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false"  fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Definition of Done</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Estimation</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Planning Poker</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Affinity Estimation</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Units for Estimation</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Task Decomposition</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Task Breakdowns</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Task Estimation</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Planning Sprints</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Scheduling</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Velocity Forecasting</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Scope Definition</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Tracking Sprint Progress</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Tracking Data</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Burndown Charts</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Releases</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> The Release Planning Horizon</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Potentially Shippable Increments</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Hardening Sprints</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group">
-                            <h3>Distributed Organizations</h3>
-                            <div class="topic-list">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Co-Location versus Distribution</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Best Practices for Distributed Orgs</div>
-                            </div>
-                        </div>
-
-                        <div class="topic-group" style="grid-column: 1 / -1;">
-                            <h3>Time Boxes &amp; Meetings</h3>
-                            <div class="topic-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;">
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Sprint</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Backlog Grooming</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Sprint Planning</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Daily Stand-Up</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Review &amp; Retrospective</div>
-                                <div class="topic-item"><svg class="topic-icon" width="16" height="16" viewBox="0 0 24 24"  aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Five-hour Sample Scrum Project</div>
-                            </div>
-                        </div>
+                        @endforeach
 
                     </div>
                 </div>
+                @endif
 
             </div>
 
             <aside class="course-sidebar reveal">
                 <div class="meta-card">
                     
+                    @if($service->length)
                     <div class="meta-item">
                         <div class="meta-label">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             Course Length
                         </div>
-                        <div class="meta-value">Two days.</div>
+                        <div class="meta-value">{{ $service->length }}</div>
                     </div>
+                    @endif
 
+                    @if($service->audience)
                     <div class="meta-item">
                         <div class="meta-label">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             Target Audience
                         </div>
-                        <div class="meta-value">Software Developers, QA personnel, Scrum Masters, Product Owners, Project Managers, Product Managers, and managers.</div>
+                        <div class="meta-value">{{ $service->audience }}</div>
                     </div>
+                    @endif
 
+                    @if($service->prerequisites)
                     <div class="meta-item">
                         <div class="meta-label">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                             Prerequisites
                         </div>
-                        <div class="meta-value">No prerequisites.</div>
+                        <div class="meta-value">{{ $service->prerequisites }}</div>
                     </div>
+                    @endif
 
-                    <a href="{{ route('contact') }}" class="sidebar-cta">Request Booking</a>
+                    <a href="{{ route('contact') }}?course={{ $service->slug }}" class="sidebar-cta">Request Booking</a>
 
                 </div>
             </aside>
