@@ -35,10 +35,6 @@ class PageController extends Controller
         return view('landing-pages.papers');
     }
 
-    public function contact()
-    {
-        return view('landing-pages.contact');
-    }
 
     public function blog()
     {

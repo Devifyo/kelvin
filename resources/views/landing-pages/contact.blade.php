@@ -276,7 +276,7 @@ textarea.form-control {
                 </div>
             @endif
 
-            <form action="{{ url('/contact') }}" method="POST">
+            <form action="{{ route('contact.store') }}" method="POST">
                 @csrf
                 
                 <div class="form-row">

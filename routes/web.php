@@ -25,12 +25,13 @@ Route::controller(PageController::class)->group(function () {
     
     // Papers & Presentations (Library)
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');
-    
-    // Contact
-    Route::get('/contact-us', 'contact')->name('contact');
+
     Route::get('/agile-insights-blog', 'blog')->name('blog');
     Route::get('/agile-insights-blog/{slug}', 'showBlog')->name('blog.show');
 });
 
-// Contact Form Submission
-Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+// Contact Logic (Unified)
+Route::controller(ContactController::class)->group(function () {
+    Route::get('/contact-us', 'show')->name('contact'); // Render the form
+    Route::post('/contact-us', 'store')->name('contact.store'); // Process the form
+});

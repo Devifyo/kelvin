@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             
             // 1. Admin Routes (Protected, Prefixed with /admin)
-            Route::middleware(['web', 'auth'])
+            Route::middleware(['web', 'auth', 'admin'])
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
@@ -24,7 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'redirect.logged.in' => \App\Http\Middleware\RedirectLoggedInUsers::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -23,8 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
-            if (Auth::user()->role === config('roles.admin')) {
+           if (Auth::user()->hasRole(config('roles.admin'))) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 

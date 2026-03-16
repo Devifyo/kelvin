@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Livewire\Admin\ProfileSettings;
+use App\Livewire\Admin\ContactInquiries;
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -18,3 +19,6 @@ Route::get('/profile', ProfileSettings::class)->name('profile');
 Route::get('/services', function () { return "Services"; })->name('services.index');
 Route::get('/training', function () { return "Training"; })->name('training.index');
 Route::get('/papers', function () { return "Papers"; })->name('papers.index');
+
+
+Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
