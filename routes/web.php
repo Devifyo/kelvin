@@ -18,7 +18,7 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/about-kevin-thompson', 'about')->name('about');
     
     // Services
-    Route::get('/agile-consulting-services', 'services')->name('services');
+    Route::get('/agile-consulting-services', 'services')->name('services.training');
     
     // Training (Main listing)
     Route::get('/agile-training-classes/{slug?}', 'training')->name('training');
@@ -34,6 +34,3 @@ Route::controller(PageController::class)->group(function () {
 
 // Contact Form Submission
 Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
-
-
-require __DIR__.'/auth.php';

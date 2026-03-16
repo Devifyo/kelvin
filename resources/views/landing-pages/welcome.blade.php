@@ -78,7 +78,7 @@
             </p>
 
             <div class="cta-row anim-up d4">
-                <a href="{{ route('services') }}" class="cta-primary">
+                <a href="{{ route('services.training') }}" class="cta-primary">
                     Our Services
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>

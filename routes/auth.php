@@ -9,5 +9,5 @@ Route::controller(AuthController::class)->name("auth.")->group(function () {
     // Change this from "auth.login" to just "login"
     // The final registered name will now be "auth.login"
     Route::any("/login", 'login')->name("login");
-    
+    Route::post("/logout", 'logout')->name("logout");
 });

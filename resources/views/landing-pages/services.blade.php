@@ -282,31 +282,31 @@
         </div>
 
         <div class="course-list reveal rv1">
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Overview for Executives and Managers<span style="display:none;">[cite: 149]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Software Development with Scrum<span style="display:none;">[cite: 150]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Hardware Development with Scrum<span style="display:none;">[cite: 151]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Project Management with Kanban<span style="display:none;">[cite: 152]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Program Management<span style="display:none;">[cite: 153]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Agile Portfolio Management<span style="display:none;">[cite: 154]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('training') }}" class="course-link">
+            <a href="{{ route('training',['slug' => 'hello']) }}" class="course-link">
                 Advanced Product Owner<span style="display:none;">[cite: 155]</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>

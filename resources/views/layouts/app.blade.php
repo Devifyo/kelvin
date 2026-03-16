@@ -35,7 +35,7 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-hardware-papers-and-presentations') )
+      @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-hardware-papers-and-presentations') ||  request()->Is('agile-consulting-services') || request()->Is('contact-us') || request()->Is('agile-training-classes/*')  )
         @yield('content')
       @else
        <section class="page-header">
@@ -86,6 +86,6 @@
     </script>
     
     @stack('scripts')
-
+<x-alert />
 </body>
 </html>

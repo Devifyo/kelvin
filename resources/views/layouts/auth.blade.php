@@ -62,5 +62,6 @@
     <main class="auth-wrapper">
         @yield('content')
     </main>
+<x-alert />
 </body>
 </html>

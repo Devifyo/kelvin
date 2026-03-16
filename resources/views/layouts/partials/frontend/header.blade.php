@@ -11,8 +11,8 @@
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
         <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}">Papers &amp; Presentations</a>
-        <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Services</a>
-        <a href="{{ route('training') }}" class="{{ request()->routeIs('training*') ? 'active' : '' }}">Training</a>
+        <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') ? 'active' : '' }}">Consulting & Training</a>
+        {{-- <a href="{{ route('training') }}" class="{{ request()->routeIs('training*') ? 'active' : '' }}">Training</a> --}}
         <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog*') ? 'active' : '' }}">Blog</a>
         
         <a href="{{ route('contact') }}" class="nav-contact {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
@@ -30,7 +30,7 @@
     <div class="drawer-line"></div>
     <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}" onclick="closeDrawer()">Papers &amp; Presentations</a>
     <div class="drawer-line"></div>
-    <a href="{{ route('services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}" onclick="closeDrawer()">Services</a>
+    <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') ? 'active' : '' }}" onclick="closeDrawer()">Consulting & Training</a>
     <div class="drawer-line"></div>
     <a href="{{ route('training') }}" class="{{ request()->routeIs('training*') ? 'active' : '' }}" onclick="closeDrawer()">Training</a>
     <div class="drawer-line"></div>
