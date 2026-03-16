@@ -258,30 +258,42 @@
 
         <div class="consulting-grid">
             
-            @foreach($consultingServices as $index => $service)
+           @foreach($consultingServices as $index => $service)
                 {{-- Dynamically stagger the animation delay --}}
                 <div class="service-card reveal rv{{ ($index % 3) + 1 }}">
                     
                     <div class="service-icon">
-                        {{-- Pro Tip: Map specific SVGs based on the slug to keep your premium look --}}
-                        @php
-                            $iconPath = match($service->slug) {
-                                'agile-assessment-services' => '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>', // Search icon
-                                'agile-advisory-engagement-coaching' => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>', // Users icon
-                                'agile-transformation-consulting' => '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>', // Pulse/Activity icon
-                                default => '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>' // Generic fallback icon
-                            };
-                        @endphp
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            {!! $iconPath !!}
-                        </svg>
+                        @if($service->featured_image)
+                            {{-- 1. Display Uploaded Image/Icon File --}}
+                            <img src="{{ asset('storage/' . $service->featured_image) }}" 
+                                alt="{{ $service->title }} icon" 
+                                style="width: 24px; height: 24px; object-fit: contain;">
+                        @elseif($service->icon)
+                            {{-- 2. Display Raw SVG Code (Preserves theme colors) --}}
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                {!! $service->icon !!}
+                            </svg>
+                        @else
+                            {{-- 3. Fallback to hardcoded match logic --}}
+                            @php
+                                $iconPath = match($service->slug) {
+                                    'agile-assessment-services' => '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>',
+                                    'agile-advisory-engagement-coaching' => '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>',
+                                    'agile-transformation-consulting' => '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+                                    default => '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>'
+                                };
+                            @endphp
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                {!! $iconPath !!}
+                            </svg>
+                        @endif
                     </div>
 
                     <h3 class="service-title">{{ $service->title }}</h3>
                     
-                    <div class="service-desc">
-                        {{-- Converts the \n\n from the database seeder into real HTML paragraphs --}}
-                        <p>{!! nl2br(e($service->content)) !!}</p>
+                    <div class="service-desc markdown-content">
+                        {{-- Markdown support for lists and formatting --}}
+                        {!! \Illuminate\Support\Str::markdown($service->content) !!}
                     </div>
                 </div>
             @endforeach

@@ -32,6 +32,7 @@ class Service extends Model
         'topics',
         'is_active',
         'sort_order',
+        'icon',
     ];
 
     /**
