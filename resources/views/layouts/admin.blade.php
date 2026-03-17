@@ -249,6 +249,7 @@
 
     @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tiny.cloud/1/{{ config('app.tinymce_api_key', 'no-api-key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');

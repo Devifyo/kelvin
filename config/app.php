@@ -29,6 +29,7 @@ return [
     'env' => env('APP_ENV', 'production'),
 
     'schema' => env('APP_SCHEMA', 'http'),
+    'tinymce_api_key' => env('TinyMCE_API_KEY', ''),
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
