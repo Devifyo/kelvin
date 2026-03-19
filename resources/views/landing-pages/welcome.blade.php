@@ -5,6 +5,15 @@
     
     <style>
         /* ─────────────────────────────────────────
+           HERO TEXT VISIBILITY FIX
+        ───────────────────────────────────────── */
+        .hero-p, .hero-p2 {
+            color: rgba(250, 247, 242, 0.95) !important; /* Brightens the text almost to pure ivory */
+            font-weight: 400 !important; /* Adds a tiny bit of thickness for readability */
+            text-shadow: 0 1px 3px rgba(26, 35, 50, 0.4); /* Helps lift the text off the dark background */
+        }
+
+        /* ─────────────────────────────────────────
            STICKY BIO COLUMN (EDITORIAL SCROLL)
         ───────────────────────────────────────── */
         .principal-wrap {
@@ -154,7 +163,6 @@
                 <div class="kicker">What We Offer</div>
                 <h2 class="section-h">Consulting &amp; <em>Training Services</em></h2>
                 <div class="ornament"></div>
-
                 <p class="svc-desc">
                     We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite. We take the time to understand the unique needs of each client, and tailor consulting services accordingly.
                 </p>
@@ -162,62 +170,34 @@
                 <div class="svc-group">
                     <h3 class="svc-group-title first">Consulting</h3>
                     <div class="svc-grid">
-                        <div class="svc-item">
-                            <span class="svc-num">01</span>
-                            <span class="svc-name">Assessment</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">02</span>
-                            <span class="svc-name">Advisory Engagement</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">03</span>
-                            <span class="svc-name">Agile Transformation</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
+                        @forelse ($consultingServices as $service)
+                        <a href="{{ route('services.training',['slug' => $service->slug]) }}" class="svc-item-link">
+                            <div class="svc-item">
+                                <span class="svc-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="svc-name">{{ $service->title }}</span>
+                                <span class="svc-arrow">→</span>
+                            </div> 
+                        </a>  
+                        @empty
+                            <p>No consulting services available at this time.</p>
+                        @endforelse
                     </div>
                 </div>
 
                 <div class="svc-group">
                     <h3 class="svc-group-title">Training</h3>
                     <div class="svc-grid">
-                        <div class="svc-item">
-                            <span class="svc-num">01</span>
-                            <span class="svc-name">Agile Overview for Executives &amp; Managers</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">02</span>
-                            <span class="svc-name">Agile Software Development with Scrum</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">03</span>
-                            <span class="svc-name">Agile Hardware Development with Scrum</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">04</span>
-                            <span class="svc-name">Agile Project Management with Kanban</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">05</span>
-                            <span class="svc-name">Agile Program Management</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">06</span>
-                            <span class="svc-name">Agile Portfolio Management</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
-                        <div class="svc-item">
-                            <span class="svc-num">07</span>
-                            <span class="svc-name">Advanced Product Owner</span>
-                            <span class="svc-arrow">→</span>
-                        </div>
+                        @forelse ($trainingClasses as $training)
+                        <a href="{{ route('training',['slug' => $training->slug]) }}" class="svc-item-link">
+                            <div class="svc-item">
+                                <span class="svc-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="svc-name">{{ $training->title }}</span>
+                                <span class="svc-arrow">→</span>
+                            </div>
+                        </a>
+                        @empty
+                            <p>No training classes available at this time.</p>
+                        @endforelse
                     </div>
                 </div>
 

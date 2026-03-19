@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     public function home(Request $request)
-    {
-        return view('landing-pages.welcome');
+    {   
+        // 1. Fetch active consulting services
+        $consultingServices = Service::active()->consulting()->ordered()->get();
+        // 2. Fetch active training classes
+        $trainingClasses = Service::active()->training()->ordered()->get();
+        return view('landing-pages.welcome',compact('consultingServices', 'trainingClasses'));
     }
 
     public function about()

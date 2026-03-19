@@ -32,6 +32,7 @@ class TrainingSeeder extends Seeder
                     ]
                 ],
                 'sort_order' => 1,
+                'is_active' => true,
             ],
             [
                 'title' => 'Agile Software Development with Scrum',
@@ -57,6 +58,7 @@ class TrainingSeeder extends Seeder
                     'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective', 'Five-hour sample Scrum Project']
                 ],
                 'sort_order' => 2,
+                 'is_active' => true,
             ],
             [
                 'title' => 'Agile Hardware Development with Scrum',
@@ -82,6 +84,7 @@ class TrainingSeeder extends Seeder
                     'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective', 'Five-hour sample Scrum Project']
                 ],
                 'sort_order' => 3,
+                'is_active' => true,
             ],
             [
                 'title' => 'Agile Project Management with Kanban',
@@ -105,6 +108,7 @@ class TrainingSeeder extends Seeder
                     'Complete Kanban Exercise' => ['Two and one-half hour Kanban Project']
                 ],
                 'sort_order' => 4,
+                'is_active' => true,
             ],
             [
                 'title' => 'Agile Program Management',
@@ -129,6 +133,7 @@ class TrainingSeeder extends Seeder
                     'Distributed Organizations' => ['Co-Location versus Distribution', 'Best Practices for Distributed Organizations']
                 ],
                 'sort_order' => 5,
+                'is_active' => true,
             ],
             [
                 'title' => 'Agile Portfolio Management',
@@ -157,6 +162,7 @@ class TrainingSeeder extends Seeder
                     'Budgeting and Capitalization' => ['Classic Budgeting', 'Issues with Classic Budgeting', 'Agile Budgeting', 'Drivers for Capitalization', 'Tax Implications of Capitalization', 'What can (and can’t) be Capitalized']
                 ],
                 'sort_order' => 6,
+                'is_active' => true,
             ],
             [
                 'title' => 'Advanced Product Owner',
@@ -185,6 +191,7 @@ class TrainingSeeder extends Seeder
                     'Class Project*' => ['Half-Day Exercise to Draft a Release Plan', 'Focus may be client’s product or standard example']
                 ],
                 'sort_order' => 7,
+                'is_active' => true,
             ],
         ];
 
