@@ -7,6 +7,7 @@ use App\Livewire\Admin\ContactInquiries;
 use App\Livewire\Admin\ConsultingServices;
 use App\Livewire\Admin\TrainingClasses;
 use App\Livewire\Admin\BlogPosts;
+use App\Livewire\Admin\ManagePapers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 /*
@@ -20,14 +21,13 @@ use Illuminate\Support\Facades\Storage;
 // Dashboard Route (URL: /admin, Name: admin.dashboard)
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', ProfileSettings::class)->name('profile');
-// Example placeholder routes for your future CRUD operations
-Route::get('/papers', function () { return "Papers"; })->name('papers.index');
-
 
 Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
 Route::get('/consulting-services', ConsultingServices::class)->name('services.index');
 
 Route::get('/training-classes', TrainingClasses::class)->name('training.index');
+
+Route::get('/papers', ManagePapers::class)->name('papers.index');
 
 Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 

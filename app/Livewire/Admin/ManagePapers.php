@@ -56,7 +56,7 @@ class ManagePapers extends Component
         $this->sub_category = $paper->sub_category;
         $this->description = $paper->description;
         $this->existing_file = $paper->file_url;
-        $this->is_active = $paper->is_active;
+        $this->is_active = (bool) $paper->is_active;
         $this->sort_order = $paper->sort_order;
         $this->resetValidation();
         $this->showModal = true;

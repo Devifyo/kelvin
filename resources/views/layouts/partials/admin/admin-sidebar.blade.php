@@ -14,7 +14,7 @@
         </a>
         
         {{-- Separated: Consulting Services --}}
-        <a href="{{ route('admin.services.index') }}" class="nav-item">
+        <a href="{{ route('admin.services.index') }}" class="nav-item {{ request()->routeIs('admin.services*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
@@ -23,7 +23,7 @@
         </a>
 
         {{-- Separated: Training Classes --}}
-        <a href="{{ route('admin.training.index') }}" class="nav-item">
+        <a href="{{ route('admin.training.index') }}" class="nav-item {{ request()->routeIs('admin.training*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                 <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
@@ -31,12 +31,12 @@
             Training Classes
         </a>
 
-        <a href="#" class="nav-item">
+        <a href="{{ route('admin.papers.index') }}" class="nav-item {{ request()->routeIs('admin.papers*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             Papers & Research
         </a>
         
-        <a href="{{ route('admin.blog.index') }}" class="nav-item">
+        <a href="{{ route('admin.blog.index') }}" class="nav-item {{ request()->routeIs('admin.blog*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
             Blog Posts
         </a>

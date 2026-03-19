@@ -37,7 +37,10 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
+        
+        .tox-statusbar__branding {
+            display: none !important;
+        }
         /* ── SIDEBAR ── */
         .admin-sidebar {
             width: 280px;
