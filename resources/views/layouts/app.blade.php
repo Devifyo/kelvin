@@ -35,15 +35,7 @@
     @include('layouts.partials.frontend.header')
 
     <main>
-      @if(request()->Is('/') || request()->Is('about-kevin-thompson') || request()->Is('agile-hardware-papers-and-presentations') ||  request()->Is('agile-consulting-services') || request()->Is('contact-us') || request()->Is('agile-training-classes/*')  )
         @yield('content')
-      @else
-       <section class="page-header">
-            <div class="header-content reveal">
-                <h1 class="page-title">{{ $title ?? 'work in progress...' }}</h1>
-            </div>
-        </section>
-      @endif
     </main>
 
     @include('layouts.partials.frontend.footer')

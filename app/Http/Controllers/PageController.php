@@ -61,10 +61,6 @@ class PageController extends Controller
 
     public function blog()
     {
-        // Later, you can fetch dynamic blog posts here:
-        // $posts = Post::where('is_published', true)->latest()->get();
-        // return view('landing-pages.blog', compact('posts'));
-        
         return view('landing-pages.blog');
     }
 

@@ -393,7 +393,7 @@
         <h1 class="page-title">Embedded Software<span style="display:none;"></span></h1>
         
         <div class="article-meta-wrapper">
-            <img src="https://via.placeholder.com/100x100/243345/faf7f2?text=KT" alt="Dr. Kevin Thompson" class="meta-avatar">
+            <img src="https://kevin.devifyo.cloud/img/frontend/Dr.%20Kevin%20Thompson.webp" alt="Dr. Kevin Thompson" class="meta-avatar">
             <div class="meta-info">
                 <strong>Dr. Kevin Thompson</strong>
                 <div class="meta-details">
@@ -488,7 +488,7 @@
                 </div>
 
                 <div class="author-bio-box">
-                    <img src="https://via.placeholder.com/150x150/243345/faf7f2?text=KT" alt="Dr. Kevin Thompson">
+                    <img src="https://kevin.devifyo.cloud/img/frontend/Dr.%20Kevin%20Thompson.webp" alt="Dr. Kevin Thompson">
                     <div class="author-bio-text">
                         <h4>Dr. Kevin Thompson, Ph.D.</h4>
                         <p>Principal Consultant specializing in Agile hardware development. Dr. Thompson has successfully guided over 100 enterprise transformations, bridging the gap between hardware engineering and Agile software methodologies.</p>
@@ -505,17 +505,6 @@
 
 @push('scripts')
 <script>
-// Scroll Animation Observer
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      revealObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
 // Reading Progress Bar Logic
 window.addEventListener('scroll', () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;

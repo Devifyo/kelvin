@@ -126,6 +126,7 @@
     color: var(--slate);
     font-weight: 600;
     transition: color .3s;
+    word-break: break-word; /* Fixes long emails overflowing on mobile */
 }
 .method-details a:hover { color: var(--copper); }
 
@@ -207,7 +208,7 @@ textarea.form-control {
     color: var(--slate);
 }
 
-/* Success Message Alert (For Laravel Session) */
+/* Success Message Alert */
 .alert-success {
     background: rgba(181,114,42,.1);
     border: 1px solid var(--copper);
@@ -222,12 +223,25 @@ textarea.form-control {
     gap: .75rem;
 }
 
-@media(max-width: 900px) {
+/* ─────────────────────────────────────────
+   RESPONSIVE DESIGN
+───────────────────────────────────────── */
+/* Tablet */
+@media(max-width: 992px) {
     .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
     .page-header { padding: 9rem 2.5rem 4rem; }
     .contact-section { padding: 5rem 2.5rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .contact-form-wrap { padding: 2.5rem 1.5rem; }
+    .form-row { grid-template-columns: 1fr; gap: 1.25rem; }
+    .contact-form-wrap { padding: 2.5rem 2rem; }
+}
+
+/* Mobile */
+@media(max-width: 576px) {
+    .page-header { padding: 7rem 1.5rem 3rem; }
+    .contact-section { padding: 3rem 1.5rem; }
+    .contact-grid { gap: 2.5rem; }
+    .contact-form-wrap { padding: 2rem 1.25rem; }
+    .method-details a { font-size: 0.95rem; } /* Scale down email size to prevent overflow */
 }
 </style>
 @endpush
@@ -237,7 +251,7 @@ textarea.form-control {
 <section class="page-header">
     <div class="header-content reveal">
         <div class="kicker" style="color:var(--copper2);">Let's Connect</div>
-        <h1 class="page-title">Contact<span style="display:none;">[cite: 510]</span></h1>
+        <h1 class="page-title">Contact</h1>
         <p class="page-subtitle">Whether you're facing a specific hardware development challenge or want to explore an Agile transformation, we're here to help.</p>
     </div>
 </section>
@@ -262,7 +276,7 @@ textarea.form-control {
                 </div>
                 <div class="method-details">
                     <span>Email Address</span>
-                    <a href="mailto:kevin@kevinthompsonphd.com">kevin@kevinthompsonphd.com</a><span style="display:none;">[cite: 511]</span>
+                    <a href="mailto:kevin@kevinthompsonphd.com">kevin@kevinthompsonphd.com</a>
                 </div>
             </div>
         </div>
@@ -320,15 +334,18 @@ textarea.form-control {
 
 @push('scripts')
 <script>
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
-      revealObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+// Wrapped in an IIFE to prevent variable redeclaration errors in Lighthouse
+(function() {
+    const contactRevealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          contactRevealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => contactRevealObs.observe(el));
+})();
 </script>
 @endpush
