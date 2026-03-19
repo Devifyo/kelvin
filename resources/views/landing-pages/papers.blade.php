@@ -2,6 +2,13 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/frontend/papers.css') }}">
+<style>
+    /* Ensure the anchor tags behave exactly like the buttons did */
+    .filter-btn {
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -14,12 +21,19 @@
     </div>
 </section>
 
-{{-- DYNAMIC FILTER MENU --}}
+{{-- DYNAMIC SERVER-SIDE FILTER MENU --}}
 <div class="filter-container reveal rv1">
     <div class="filter-menu">
-        <button class="filter-btn active" data-filter="all">All Documents</button>
+        <a href="{{ route('papers', ['category' => 'all']) }}" 
+           class="filter-btn {{ $currentFilter === 'all' ? 'active' : '' }}">
+           All Documents
+        </a>
+        
         @foreach($categories as $cat)
-            <button class="filter-btn" data-filter="{{ $cat->slug }}">{{ $cat->name }}</button>
+            <a href="{{ route('papers', ['category' => $cat->slug]) }}" 
+               class="filter-btn {{ $currentFilter === $cat->slug ? 'active' : '' }}">
+               {{ $cat->name }}
+            </a>
         @endforeach
     </div>
 </div>
@@ -28,15 +42,17 @@
     <div class="papers-grid" id="papers-container">
 
         {{-- DYNAMIC CARDS --}}
-        @foreach($papers as $paper)
-            <div class="paper-card" data-category="{{ $paper->category?->slug ?? 'uncategorized' }}">
+        @forelse($papers as $paper)
+            <div class="paper-card">
                 <div class="paper-meta">
                     <span class="paper-category-tag">{{ $paper->category?->name ?? 'Document' }}</span>
                     {{ $paper->sub_category }}
                 </div>
                 <h2 class="paper-title">{{ $paper->title }}</h2>
+                
+                {{-- Unescaped output so TinyMCE HTML renders correctly --}}
                 <div class="paper-desc">
-                    {{ $paper->description }}
+                    {!! $paper->description !!}
                 </div>
                 
                 @if($paper->file_path)
@@ -50,12 +66,13 @@
                 </a>
                 @endif
             </div>
-        @endforeach
-
-        <div class="no-results" id="no-results-msg" style="display: none; grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--white); border: 1px dashed var(--ivory3);">
-            <h3>No documents found.</h3>
-            <p style="color: var(--muted);">Please try selecting a different category.</p>
-        </div>
+        @empty
+            {{-- SERVER-SIDE NO RESULTS MESSAGE --}}
+            <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--white); border: 1px dashed var(--ivory3);">
+                <h3>No documents found.</h3>
+                <p style="color: var(--muted);">Please try selecting a different category.</p>
+            </div>
+        @endforelse
 
     </div>
 </section>
@@ -64,39 +81,18 @@
 
 @push('scripts')
 <script>
-// Vanilla JS Filtering Logic (Hooked to Dynamic Categories)
 document.addEventListener('DOMContentLoaded', () => {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.paper-card');
-    const noResultsMsg = document.getElementById('no-results-msg');
+    // Keep the scroll reveal animations
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active button state
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const filterValue = btn.getAttribute('data-filter');
-            let visibleCount = 0;
-
-            // Filter cards
-            cards.forEach(card => {
-                card.style.animation = 'none';
-                card.offsetHeight; /* trigger reflow */
-                card.style.animation = null; 
-
-                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            // Show 'no results' message if empty
-            noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
-        });
-    });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 });
 </script>
 @endpush

@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
             'redirect.logged.in' => \App\Http\Middleware\RedirectLoggedInUsers::class,
+            'maintenance' => \App\Http\Middleware\RequestFilter::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

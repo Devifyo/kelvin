@@ -22,14 +22,14 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', ProfileSettings::class)->name('profile');
 
-Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
-Route::get('/consulting-services', ConsultingServices::class)->name('services.index');
+Route::get('/inquiries', ContactInquiries::class)->name('inquiries')->middleware('maintenance');
+Route::get('/consulting-services', ConsultingServices::class)->name('services.index')->middleware('maintenance');
 
-Route::get('/training-classes', TrainingClasses::class)->name('training.index');
+Route::get('/training-classes', TrainingClasses::class)->name('training.index')->middleware('maintenance');
 
-Route::get('/papers', ManagePapers::class)->name('papers.index');
+Route::get('/papers', ManagePapers::class)->name('papers.index')->middleware('maintenance');
 
-Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
+Route::get('/blog-posts', BlogPosts::class)->name('blog.index')->middleware('maintenance');
 
 Route::post('/tinymce-upload', function (Request $request) {
     if ($request->hasFile('file')) {
@@ -37,4 +37,4 @@ Route::post('/tinymce-upload', function (Request $request) {
         return response()->json(['location' => Storage::url($path)]);
     }
     return response()->json(['error' => 'No file uploaded.'], 400);
-})->name('tinymce.upload');
+})->name('tinymce.upload')->middleware('maintenance');

@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Service, Post, Paper, Category};
+use App\Services\FrontendContentService;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function home(Request $request)
+    public function __construct(
+        protected FrontendContentService $contentService
+    ) {}
+
+    public function home()
     {   
-        // 1. Fetch active consulting services
-        $consultingServices = Service::active()->consulting()->ordered()->get();
-        // 2. Fetch active training classes
-        $trainingClasses = Service::active()->training()->ordered()->get();
-        return view('landing-pages.welcome',compact('consultingServices', 'trainingClasses'));
+        return view('landing-pages.welcome', [
+            'consultingServices' => $this->contentService->getConsultingServices(),
+            'trainingClasses'    => $this->contentService->getTrainingClasses(),
+        ]);
     }
 
     public function about()
@@ -21,86 +24,46 @@ class PageController extends Controller
         return view('landing-pages.about');
     }
 
-    /**
-     * Display the Consulting Services listing.
-     */
     public function services()
     {
-        // 1. Fetch active consulting services
-        $consultingServices = Service::active()->consulting()->ordered()->get();
-        
-        // 2. Fetch active training classes
-        $trainingClasses = Service::active()->training()->ordered()->get();
-
-        // 3. Pass BOTH variables to the view
-        return view('landing-pages.services', compact('consultingServices', 'trainingClasses'));
+        return view('landing-pages.services', [
+            'consultingServices' => $this->contentService->getConsultingServices(),
+            'trainingClasses'    => $this->contentService->getTrainingClasses(),
+        ]);
     }
 
-    /**
-     * Display the Training Classes listing OR a specific Training Class.
-     */
-    public function training($slug = null)
+    public function training(?string $slug = null)
     {
-        // 1. If a slug is provided, show the single course detail page
-        if (!is_null($slug)) {
-            $service = Service::active()
-                ->training()
-                ->where('slug', $slug)
-                ->firstOrFail(); // Will automatically throw a 404 if the slug is invalid
-
+        if ($slug) {
+            $service = $this->contentService->getTrainingClassBySlug($slug);
             return view('landing-pages.training-show', compact('service'));
         }
         
-        // 2. If no slug is provided, show the main curriculum list
-        $trainingClasses = Service::active()->training()->ordered()->get();
-
+        $trainingClasses = $this->contentService->getTrainingClasses();
         return view('landing-pages.training', compact('trainingClasses'));
     }
 
-    public function papers()
+    public function papers(Request $request)
     {
-        // Fetch papers with their categories
-        $papers = Paper::with('category')->where('is_active', true)->orderBy('sort_order')->get();
-        
-        // Fetch only categories that actually have active papers assigned to them
-        $categories = Category::where('type', 'paper')
-                        ->whereHas('papers', function($q) {
-                            $q->where('is_active', true);
-                        })->orderBy('name')->get();
+        $currentFilter = $request->query('category', 'all');
+        $data = $this->contentService->getPapersData($currentFilter);
 
-        return view('landing-pages.papers', compact('papers', 'categories'));
+        return view('landing-pages.papers', array_merge($data, [
+            'currentFilter' => $currentFilter
+        ]));
     }
-
 
     public function blog(Request $request)
     {
         $search = $request->input('search');
-
-        // Fetch published posts, eagerly load the category, apply search filter if present, and paginate.
-        $posts = Post::with('category')
-            ->published()
-            ->when($search, function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('excerpt', 'like', "%{$search}%")
-                      ->orWhereHas('category', function ($qc) use ($search) {
-                          $qc->where('name', 'like', "%{$search}%");
-                      });
-                });
-            })
-            ->orderBy('published_at', 'desc')
-            ->paginate(9); // Show 9 posts per page (3 rows)
+        $posts = $this->contentService->getBlogPosts($search);
 
         return view('landing-pages.blog', compact('posts', 'search'));
     }
 
-    public function showBlog($slug)
+    public function showBlog(string $slug)
     {
-        // Fetch the post by slug, including its category and author.
-        // firstOrFail() will automatically show a 404 page if the slug doesn't exist.
-        $post = Post::with(['category', 'author'])
-                    ->where('slug', $slug)
-                    ->firstOrFail();
+        $post = $this->contentService->getPostBySlug($slug);
 
         return view('landing-pages.blog-show', compact('post'));
     }
