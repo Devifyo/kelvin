@@ -10,7 +10,7 @@ class Category extends Model
         "name",
         "slug",
         "type"
-    ]
+    ];
 
     public function posts()
     {

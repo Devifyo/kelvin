@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
+use App\Models\{Service, Post};
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -63,17 +63,36 @@ class PageController extends Controller
     }
 
 
-    public function blog()
+    public function blog(Request $request)
     {
-        return view('landing-pages.blog');
+        $search = $request->input('search');
+
+        // Fetch published posts, eagerly load the category, apply search filter if present, and paginate.
+        $posts = Post::with('category')
+            ->published()
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('excerpt', 'like', "%{$search}%")
+                      ->orWhereHas('category', function ($qc) use ($search) {
+                          $qc->where('name', 'like', "%{$search}%");
+                      });
+                });
+            })
+            ->orderBy('published_at', 'desc')
+            ->paginate(9); // Show 9 posts per page (3 rows)
+
+        return view('landing-pages.blog', compact('posts', 'search'));
     }
 
-    public function showBlog($slug = 'embedded-software')
+    public function showBlog($slug)
     {
-        // Later, you will fetch the post from the database using the slug:
-        // $post = Post::where('slug', $slug)->firstOrFail();
-        // return view('landing-pages.blog-show', compact('post'));
+        // Fetch the post by slug, including its category and author.
+        // firstOrFail() will automatically show a 404 page if the slug doesn't exist.
+        $post = Post::with(['category', 'author'])
+                    ->where('slug', $slug)
+                    ->firstOrFail();
 
-        return view('landing-pages.blog-show');
+        return view('landing-pages.blog-show', compact('post'));
     }
 }

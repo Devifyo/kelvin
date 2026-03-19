@@ -6,6 +6,9 @@ use App\Livewire\Admin\ProfileSettings;
 use App\Livewire\Admin\ContactInquiries;
 use App\Livewire\Admin\ConsultingServices;
 use App\Livewire\Admin\TrainingClasses;
+use App\Livewire\Admin\BlogPosts;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -25,3 +28,13 @@ Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
 Route::get('/consulting-services', ConsultingServices::class)->name('services.index');
 
 Route::get('/training-classes', TrainingClasses::class)->name('training.index');
+
+Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
+
+Route::post('/tinymce-upload', function (Request $request) {
+    if ($request->hasFile('file')) {
+        $path = $request->file('file')->store('blog/content-images', 'public');
+        return response()->json(['location' => Storage::url($path)]);
+    }
+    return response()->json(['error' => 'No file uploaded.'], 400);
+})->name('tinymce.upload');
