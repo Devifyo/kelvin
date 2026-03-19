@@ -1,0 +1,223 @@
+    /* ─────────────────────────────────────────
+    PAGE HEADER
+    ───────────────────────────────────────── */
+    .page-header {
+        background: var(--slate);
+        padding: 11rem 4.5rem 6rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-header::before {
+        content: ''; position: absolute; inset: 0;
+        background: radial-gradient(ellipse 80% 80% at 50% 100%, rgba(47,66,89,.6) 0%, transparent 70%);
+        z-index: 0;
+    }
+    .header-content {
+        max-width: 1180px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        text-align: center; /* Centered for the new layout */
+    }
+    .page-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        font-weight: 300;
+        color: var(--white);
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+    }
+    .page-title em { font-style: italic; color: var(--copper3); }
+    .page-subtitle {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+        font-size: 1.05rem;
+        color: rgba(250,247,242,.8);
+        max-width: 700px;
+        line-height: 1.8;
+        font-weight: 300;
+        margin: 0 auto;
+    }
+    .kicker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .7rem;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .3em;
+        text-transform: uppercase;
+        color: var(--copper2);
+        margin-bottom: 1.1rem;
+    }
+    .kicker::before, .kicker::after { 
+        content: ''; width: 24px; height: 1px; background: var(--copper2); 
+    }
+
+    /* ─────────────────────────────────────────
+    FILTER BAR
+    ───────────────────────────────────────── */
+    .filter-container {
+        background: var(--ivory2);
+        padding: 2rem 4.5rem;
+        border-bottom: 1px solid var(--ivory3);
+        display: flex;
+        justify-content: center;
+        position: static;
+        top: 85px; /* Adjust based on your nav height */
+        z-index: 150;
+        backdrop-filter: blur(10px);
+        background: rgba(242, 236, 227, 0.9);
+    }
+    .filter-menu {
+        display: flex;
+        gap: .5rem;
+        background: var(--white);
+        padding: .5rem;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(26,35,50,.05);
+        border: 1px solid var(--ivory3);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .filter-btn {
+        font-family: -apple-system, sans-serif;
+        font-size: .75rem;
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--slate);
+        padding: .8rem 1.75rem;
+        border-radius: 50px;
+        transition: all .3s ease;
+    }
+    .filter-btn:hover {
+        color: var(--copper);
+    }
+    .filter-btn.active {
+        background: var(--slate);
+        color: var(--white);
+        box-shadow: 0 4px 12px rgba(26,35,50,.15);
+    }
+
+    /* ─────────────────────────────────────────
+    PAPERS GRID
+    ───────────────────────────────────────── */
+    .content-section {
+        padding: 6rem 4.5rem;
+        background: var(--ivory);
+        min-height: 60vh;
+    }
+    .papers-grid {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+    }
+
+    /* Paper Cards */
+    .paper-card {
+        background: var(--white);
+        border: 1px solid var(--ivory3);
+        padding: 3rem 2.5rem;
+        position: relative;
+        box-shadow: var(--card-shadow);
+        transition: all .4s cubic-bezier(.4,0,.2,1);
+        display: flex;
+        flex-direction: column;
+        /* Used for the JS filter animation */
+        animation: fadeIn .6s ease forwards; 
+    }
+    .paper-card:hover {
+        box-shadow: var(--hover-shadow);
+        border-color: rgba(181,114,42,.2);
+        transform: translateY(-4px);
+    }
+    .paper-card::before {
+        content: ''; position: absolute; left: 0; right: 0; top: 0;
+        height: 3px; background: linear-gradient(90deg, var(--copper), var(--copper2));
+        transform: scaleX(0); transform-origin: left;
+        transition: transform .4s cubic-bezier(.4,0,.2,1);
+    }
+    .paper-card:hover::before { transform: scaleX(1); }
+
+    .paper-meta {
+        font-family: -apple-system, sans-serif;
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        color: var(--a11y-muted);
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
+    .paper-category-tag {
+        background: var(--ivory2);
+        padding: .3rem .8rem;
+        border-radius: 4px;
+        color: var(--a11y-copper);
+    }
+
+    .paper-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--slate);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+    .paper-desc {
+        font-family: -apple-system, sans-serif;
+        font-size: .95rem;
+        color: var(--charcoal);
+        line-height: 1.7;
+        font-weight: 400;
+        margin-bottom: 2rem;
+        flex-grow: 1; /* Pushes the button to the bottom */
+    }
+
+    .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        font-family: -apple-system, sans-serif;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--a11y-copper);   
+        transition: color .3s;
+        align-self: flex-start;
+        padding-top: 1rem;
+        border-top: 1px solid var(--ivory3);
+        width: 100%;
+    }
+    .download-btn:hover { color: var(--slate); }
+    .download-btn svg { transition: transform .3s; }
+    .download-btn:hover svg { transform: translateY(3px); }
+
+    /* No Results Message */
+    .no-results {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.8rem;
+        color: var(--muted);
+        display: none;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media(max-width: 900px) {
+        .papers-grid { grid-template-columns: 1fr; }
+        .page-header { padding: 9rem 2.5rem 4rem; }
+        .content-section { padding: 4rem 2.5rem; }
+        .filter-container { padding: 1.5rem; }
+    }

@@ -21,4 +21,9 @@ class Category extends Model
     {
         return $this->hasMany(Resource::class);
     }
+
+    public function papers()
+    {
+        return $this->hasMany(Paper::class);
+    }
 }

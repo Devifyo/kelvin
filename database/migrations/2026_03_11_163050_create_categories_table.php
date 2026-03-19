@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->enum('type', ['blog', 'resource'])->index();
+            $table->string('type')->default('blog');
             $table->timestamps();
         });
     }

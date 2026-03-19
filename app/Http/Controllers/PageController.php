@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Service, Post};
+use App\Models\{Service, Post, Paper, Category};
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -59,7 +59,16 @@ class PageController extends Controller
 
     public function papers()
     {
-        return view('landing-pages.papers');
+        // Fetch papers with their categories
+        $papers = Paper::with('category')->where('is_active', true)->orderBy('sort_order')->get();
+        
+        // Fetch only categories that actually have active papers assigned to them
+        $categories = Category::where('type', 'paper')
+                        ->whereHas('papers', function($q) {
+                            $q->where('is_active', true);
+                        })->orderBy('name')->get();
+
+        return view('landing-pages.papers', compact('papers', 'categories'));
     }
 
 
