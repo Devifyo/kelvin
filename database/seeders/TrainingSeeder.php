@@ -55,7 +55,8 @@ class TrainingSeeder extends Seeder
                     'Tracking Sprint Progress' => ['Tracking Data', 'Burndown Chart'],
                     'Releases' => ['The Release Planning Horizon', 'Potentially Shippable Increments', 'Hardening Sprints'],
                     'Distributed Organizations' => ['Co-Location versus Distribution', 'Best Practices for Distributed Organizations'],
-                    'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective', 'Five-hour sample Scrum Project']
+                    'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective'],
+                    'Complete Scrum Exercise' => ['Five-hour sample Scrum Project']
                 ],
                 'sort_order' => 2,
                  'is_active' => true,
@@ -81,7 +82,8 @@ class TrainingSeeder extends Seeder
                     'Tracking Sprint Progress' => ['Tracking Data', 'Burndown Chart'],
                     'Releases' => ['The Release Planning Horizon', 'Potentially Shippable Increments', 'Hardening Sprints'],
                     'Distributed Organizations' => ['Co-Location versus Distribution', 'Best Practices for Distributed Organizations'],
-                    'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective', 'Five-hour sample Scrum Project']
+                    'Time Boxes & Meetings' => ['Sprint', 'Backlog Grooming', 'Sprint Planning', 'Daily Stand-Up', 'Review', 'Retrospective'],
+                    'Complete Scrum Exercise' => ['Five-hour sample Scrum Project']
                 ],
                 'sort_order' => 3,
                 'is_active' => true,

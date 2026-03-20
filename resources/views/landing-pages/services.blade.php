@@ -226,6 +226,40 @@
     .content-section, .training-section { padding: 5rem 2.5rem; }
     .service-card { padding: 2.5rem 1.5rem; }
 }
+
+/* ─────────────────────────────────────────
+   NUMBERED LIST CONSISTENCY (MATCHES HOME PAGE)
+───────────────────────────────────────── */
+.svc-num {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+    color: rgba(181, 114, 42, 0.5); /* Muted copper to match homepage */
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+}
+
+/* Specific sizing for the big consulting cards */
+.service-title {
+    display: flex;
+    align-items: baseline;
+}
+.service-title .svc-num {
+    font-size: 1.25rem;
+    width: 28px;
+    text-align: left;
+}
+
+/* Specific sizing for the training list links */
+.course-link-inner {
+    display: flex;
+    align-items: center;
+}
+.course-link .svc-num {
+    font-size: 0.85rem;
+    width: 22px;
+    text-align: right;
+    margin-right: 1rem;
+}
 </style>
 @endpush
 
@@ -289,7 +323,10 @@
                         @endif
                     </div>
 
-                    <h3 class="service-title">{{ $service->title }}</h3>
+                    <h3 class="service-title">
+                        <span class="svc-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}.</span>
+                        <span>{{ $service->title }}</span>
+                    </h3>
                     
                     <div class="service-desc markdown-content">
                         {{-- Markdown support for lists and formatting --}}
@@ -321,6 +358,7 @@
             @foreach($trainingClasses as $class)
                 {{-- Dynamically generate the route using the class's SEO slug --}}
                 <a href="{{ route('training', $class->slug) }}" class="course-link">
+                    <span class="svc-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                     {{ $class->title }}
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
