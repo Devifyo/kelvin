@@ -194,9 +194,12 @@
 
 /* bio text */
 .bio p{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-size:.96rem;color:var(--body-text);line-height:1.92;
-  font-weight:300;margin-bottom:1.15rem;
+  /* REMOVED sans-serif font family to allow Serif inheritance */
+  font-size: 1.1rem; /* Increased to match About page */
+  color: var(--charcoal); /* Darkened to match About page */
+  line-height: 1.9;
+  font-weight: 400; /* Increased from 300 to fix the "faint" issue */
+  margin-bottom: 1.75rem;
 }
 
 /* book card */
@@ -256,9 +259,12 @@
 
 /* ── services column ── */
 .svc-desc{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
-  font-size:.96rem;color:var(--body-text);line-height:1.88;
-  font-weight:300;margin-bottom:2.25rem;
+  /* REMOVED sans-serif font family to allow Serif inheritance */
+  font-size: 1.1rem; /* Increased to match About page */
+  color: var(--charcoal); /* Darkened to match About page */
+  line-height: 1.9;
+  font-weight: 400; /* Increased from 300 to fix the "faint" issue */
+  margin-bottom: 2.25rem;
 }
 
 .svc-grid{display:flex;flex-direction:column;gap:.5rem}
