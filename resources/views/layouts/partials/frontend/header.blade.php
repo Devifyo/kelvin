@@ -10,9 +10,11 @@
     <div class="nav-menu">
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
-        <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}">Papers &amp; Presentations</a>
         <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') || request()->routeIs('training') ? 'active' : '' }}">Consulting & Training</a>
-        {{-- <a href="{{ route('training') }}" class="{{ request()->routeIs('training*') ? 'active' : '' }}">Training</a> --}}
+        
+        {{-- Resources / Proof of Expertise --}}
+        <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}">Papers &amp; Presentations</a>
+        <a href="{{ route('podcasts-webinars') }}" class="{{ request()->routeIs('podcasts-webinars') ? 'active' : '' }}">Podcasts & Webinars</a>
         <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog*') ? 'active' : '' }}">Blog</a>
         
         <a href="{{ route('contact') }}" class="nav-contact {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
@@ -26,15 +28,21 @@
 <div class="drawer" id="drawer">
     <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}" onclick="closeDrawer()">Home</a>
     <div class="drawer-line"></div>
+    
     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}" onclick="closeDrawer()">About</a>
     <div class="drawer-line"></div>
-    <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}" onclick="closeDrawer()">Papers &amp; Presentations</a>
-    <div class="drawer-line"></div>
+    
     <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') || request()->routeIs('training') ? 'active' : '' }}" onclick="closeDrawer()">Consulting & Training</a>
     <div class="drawer-line"></div>
-    <a href="{{ route('training') }}" class="{{ request()->routeIs('training*') ? 'active' : '' }}" onclick="closeDrawer()">Training</a>
+    
+    <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}" onclick="closeDrawer()">Papers &amp; Presentations</a>
     <div class="drawer-line"></div>
+    
+    <a href="{{ route('podcasts-webinars') }}" class="{{ request()->routeIs('podcasts-webinars') ? 'active' : '' }}" onclick="closeDrawer()">Podcasts & Webinars</a>
+    <div class="drawer-line"></div>
+    
     <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog*') ? 'active' : '' }}" onclick="closeDrawer()">Blog</a>
     <div class="drawer-line"></div>
+    
     <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}" onclick="closeDrawer()">Contact</a>
 </div>

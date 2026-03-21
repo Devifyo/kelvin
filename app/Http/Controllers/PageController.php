@@ -67,4 +67,12 @@ class PageController extends Controller
 
         return view('landing-pages.blog-show', compact('post'));
     }
+
+    public function podcastsWebinars(Request $request)
+    {
+        $currentFilter = $request->query('type', 'all');
+        $mediaItems = $this->contentService->getPodcastsWebinars($currentFilter);
+
+        return view('landing-pages.podcasts-webinars', compact('mediaItems', 'currentFilter'));
+    }
 }

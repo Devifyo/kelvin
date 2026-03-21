@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Service, Post, Paper, Category};
+use App\Models\{Service, Post, Paper, Category, PodcastWebinar};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -60,5 +60,13 @@ class FrontendContentService
     public function getPostBySlug(string $slug): Model
     {
         return Post::with(['category', 'author'])->where('slug', $slug)->firstOrFail();
+    }
+
+    public function getPodcastsWebinars(?string $filter = 'all')
+    {
+        return PodcastWebinar::where('is_active', true)
+            ->when($filter !== 'all', fn($query) => $query->where('type', $filter))
+            ->orderBy('published_date', 'desc')
+            ->get();
     }
 }
