@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Services\DashboardServices;
 class DashboardController extends Controller
 {
-    public function index()
+    public $dashboardServices;
+    public function __construct(DashboardServices $dashboardServices)
     {
-        return view('admin.dashboard');
+        $this->dashboardServices = $dashboardServices;
+    }
+
+    public function index()
+    {   
+        $stats = $this->dashboardServices->getDashboardData();
+        $inquiries = $this->dashboardServices->getContactMessagesData();
+        return view('admin.dashboard', compact('stats', 'inquiries'));
     }
 }

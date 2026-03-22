@@ -20,4 +20,13 @@ class PodcastWebinar extends Model
     {
         return $this->thumbnail_image ? Storage::url($this->thumbnail_image) : null;
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('published_date', 'desc');
+    }
 }

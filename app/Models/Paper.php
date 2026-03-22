@@ -24,4 +24,13 @@ class Paper extends Model
     {
         return $this->file_path ? Storage::url($this->file_path) : '#';
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    } 
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc');
+    }
 }
