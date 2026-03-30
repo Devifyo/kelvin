@@ -18,7 +18,7 @@ class RequestFilter
         if ($request->boolean('visible')) {
             return $next($request);
         }
-
+      abort(403, 'Page not found.'); 
         return response('Work in progress', Response::HTTP_SERVICE_UNAVAILABLE);
     }
 }

@@ -23,10 +23,10 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', ProfileSettings::class)->name('profile');
 
-Route::get('/inquiries', ContactInquiries::class)->name('inquiries')->middleware('maintenance');
-Route::get('/consulting-services', ConsultingServices::class)->name('services.index')->middleware('maintenance');
+Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
+Route::get('/consulting-services', ConsultingServices::class)->name('services.index');
 
-Route::get('/training-classes', TrainingClasses::class)->name('training.index')->middleware('maintenance');
+Route::get('/training-classes', TrainingClasses::class)->name('training.index');
 
 Route::get('/papers', ManagePapers::class)->name('papers.index')->middleware('maintenance');
 
