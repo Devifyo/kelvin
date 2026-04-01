@@ -1,64 +1,6 @@
 <div class="lw-service-manager">
     {{-- Internal Styles for scoping and layout --}}
-    <style>
-        .lw-service-manager .list-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap; }
-        .lw-service-manager .search-box { position: relative; flex: 1; max-width: 400px; }
-        .lw-service-manager .search-box svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
-        .lw-service-manager .search-box input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 10px; border: 1px solid var(--ivory3); background: var(--white); font-size: 0.95rem; color: var(--slate); outline: none; transition: border-color 0.2s; }
-        .lw-service-manager .search-box input:focus { border-color: var(--copper); }
-        
-        .lw-service-manager .filter-tabs { display: flex; background: var(--white); border-radius: 10px; padding: 0.3rem; border: 1px solid var(--ivory3); }
-        .lw-service-manager .filter-pill { padding: 0.5rem 1.2rem; border: none; background: transparent; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
-        .lw-service-manager .filter-pill.active { background: var(--copper); color: var(--white); box-shadow: 0 2px 8px rgba(181, 114, 42, 0.3); }
-
-        .btn-create { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--slate); color: var(--white); border: none; padding: 0.75rem 1.25rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
-        .btn-create:hover { transform: translateY(-1px); background: var(--charcoal); }
-        
-        .lw-service-manager .service-list-container { background: var(--white); border-radius: 12px; border: 1px solid var(--ivory3); overflow: hidden; }
-        .lw-service-manager .service-row { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--ivory3); transition: background 0.2s; }
-        .lw-service-manager .service-row:last-child { border-bottom: none; }
-        .lw-service-manager .service-row:hover { background: var(--ivory); }
-
-        .lw-service-manager .service-avatar { width: 44px; height: 44px; border-radius: 10px; background: rgba(181, 114, 42, 0.1); color: var(--copper); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
-        .lw-service-manager .service-avatar img, .lw-service-manager .service-avatar svg { width: 24px; height: 24px; object-fit: contain; }
-
-        /* Modal Structure */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(26, 35, 50, 0.85); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
-        .modal-window { background: var(--white); width: 100%; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); display: flex; flex-direction: column; position: relative; animation: modalPop 0.3s ease-out; }
-        @keyframes modalPop { from { opacity: 0; transform: scale(0.98) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        
-        .close-x { position: absolute; top: 1.25rem; right: 1.25rem; width: 34px; height: 34px; border-radius: 50%; background: var(--ivory); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 11; color: var(--muted); }
-        .close-x:hover { background: #ef4444; color: white; transform: rotate(90deg); }
-        
-        .modal-header { padding: 1.5rem 2.5rem; border-bottom: 1px solid var(--ivory3); background: var(--ivory2); border-radius: 20px 20px 0 0; }
-        .modal-body { padding: 2.5rem; max-height: 70vh; overflow-y: auto; }
-        .modal-footer { padding: 1.25rem 2.5rem; background: var(--ivory2); border-top: 1px solid var(--ivory3); display: flex; justify-content: flex-end; gap: 1.25rem; border-radius: 0 0 20px 20px; }
-
-        /* Form Controls */
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--slate); text-transform: uppercase; margin-bottom: 0.6rem; letter-spacing: 0.08em; }
-        .form-control { width: 100%; padding: 0.9rem 1.1rem; border-radius: 10px; border: 1.5px solid var(--ivory3); font-size: 0.95rem; color: var(--slate); background: var(--white); transition: all 0.2s; }
-        .form-control:focus { outline: none; border-color: var(--copper); box-shadow: 0 0 0 4px rgba(181, 114, 42, 0.1); }
-        
-        .form-divider { margin: 2.5rem 0 1.5rem; font-size: 0.75rem; font-weight: 900; color: var(--copper); text-transform: uppercase; border-bottom: 2px solid var(--ivory); padding-bottom: 0.5rem; letter-spacing: 0.1em; }
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        
-        .image-preview-box { width: 85px; height: 85px; background: white; border-radius: 12px; border: 1.5px solid var(--ivory3); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); position: relative; }
-        .image-preview-box img, .image-preview-box svg { width: 45px; height: 45px; object-fit: contain; }
-        
-        .status-badge { padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; border: none; cursor: pointer; transition: opacity 0.2s; }
-        .badge-active { background: rgba(16, 185, 129, 0.12); color: #059669; }
-        .badge-draft { background: var(--ivory3); color: var(--muted); }
-        
-        .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: transparent; cursor: pointer; color: var(--muted); transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
-        .icon-btn:hover { background: var(--ivory3); color: var(--slate); }
-        .icon-btn.delete:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        .error-msg { color: #ef4444; font-size: 0.75rem; margin-top: 0.4rem; display: block; font-weight: 600; }
-        
-        /* Added for Image Upload Spinner */
-        .animate-spin { animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
+    <link href="{{ asset('css/admin/consulting-services.css') }}" rel="stylesheet">
 
     {{-- List Header Controls --}}
     <div class="list-controls">
@@ -81,40 +23,65 @@
 
     {{-- Data List --}}
     <div class="service-list-container">
-        @forelse($services as $item)
-            <div class="service-row" wire:key="consult-{{ $item->id }}">
-                <div style="display: flex; align-items: center; gap: 1.25rem; width: 45%;">
-                    <div class="service-avatar">
-                        @if($item->featured_image) 
-                            <img src="{{ asset('storage/'.$item->featured_image) }}">
-                        @elseif($item->icon) 
-                            <div style="width: 24px; height: 24px;">{!! $item->icon !!}</div>
-                        @else 
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> 
-                        @endif
-                    </div>
-                    <div>
-                        <div style="font-weight: 700; color: var(--slate); font-size: 0.95rem;">{{ $item->title }}</div>
-                        <div style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">/{{ $item->slug }}</div>
-                    </div>
-                </div>
-                
-                <button wire:click="toggleStatus({{ $item->id }})" class="status-badge {{ $item->is_active ? 'badge-active' : 'badge-draft' }}">
-                    {{ $item->is_active ? 'Active' : 'Draft' }}
-                </button>
+        
+        <div id="sortable-list"
+             x-data
+             x-init="if (typeof Sortable !== 'undefined') {
+                 Sortable.create($el, {
+                     animation: 150,
+                     handle: '.drag-handle',
+                     onEnd: function () {
+                         let orderedIds = Array.from($el.querySelectorAll('.service-row')).map(row => row.dataset.id);
+                         $wire.updateSortOrder(orderedIds);
+                     }
+                 });
+             }"
+        >
+            @forelse($services as $item)
+                <div class="service-row" wire:key="consult-{{ $item->id }}" data-id="{{ $item->id }}">
+                    <div style="display: flex; align-items: center; gap: 1.25rem; width: 45%;">
+                        
+                        <div class="drag-handle" style="cursor: grab; color: var(--muted); display: flex; align-items: center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="8" cy="4" r="1.5"/><circle cx="16" cy="4" r="1.5"/>
+                                <circle cx="8" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/>
+                                <circle cx="8" cy="20" r="1.5"/><circle cx="16" cy="20" r="1.5"/>
+                            </svg>
+                        </div>
 
-                <div style="display: flex; gap: 0.75rem; align-items: center;">
-                    <div style="text-align: right; margin-right: 1.5rem;">
-                        <div style="font-size: 0.6rem; font-weight: 800; color: var(--muted);">SORT</div>
-                        <div style="font-size: 0.85rem; font-weight: 700;">#{{ $item->sort_order }}</div>
+                        <div class="service-avatar">
+                            @if($item->featured_image) 
+                                <img src="{{ asset('storage/'.$item->featured_image) }}">
+                            @elseif($item->icon) 
+                                <div style="width: 24px; height: 24px;">{!! $item->icon !!}</div>
+                            @else 
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> 
+                            @endif
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--slate); font-size: 0.95rem;">{{ $item->title }}</div>
+                            <div style="font-size: 0.75rem; color: var(--muted); font-family: monospace;">/{{ $item->slug }}</div>
+                        </div>
                     </div>
-                    <button wire:click="edit({{ $item->id }})" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                    <button x-on:click="Swal.fire({title:'Delete Service?', text:'This action cannot be undone.', icon:'warning', showCancelButton:true, confirmButtonColor:'#ef4444', confirmButtonText:'Delete'}).then((r)=>{if(r.isConfirmed) $wire.deleteService({{$item->id}})})" class="icon-btn delete"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    
+                    <button wire:click="toggleStatus({{ $item->id }})" class="status-badge {{ $item->is_active ? 'badge-active' : 'badge-draft' }}">
+                        {{ $item->is_active ? 'Active' : 'Draft' }}
+                    </button>
+
+                    <div style="display: flex; gap: 0.75rem; align-items: center;">
+                        <div style="text-align: right; margin-right: 1.5rem;">
+                            <div style="font-size: 0.6rem; font-weight: 800; color: var(--muted);">SORT</div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">#{{ $item->sort_order }}</div>
+                        </div>
+                        <button wire:click="edit({{ $item->id }})" class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button x-on:click="Swal.fire({title:'Delete Service?', text:'This action cannot be undone.', icon:'warning', showCancelButton:true, confirmButtonColor:'#ef4444', confirmButtonText:'Delete'}).then((r)=>{if(r.isConfirmed) $wire.deleteService({{$item->id}})})" class="icon-btn delete"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                    </div>
                 </div>
-            </div>
-        @empty
-            <div style="text-align: center; padding: 5rem; color: var(--muted); font-size: 0.9rem;">No consulting services found matching your criteria.</div>
-        @endforelse
+            @empty
+                <div style="text-align: center; padding: 5rem; color: var(--muted); font-size: 0.9rem;">No consulting services found matching your criteria.</div>
+            @endforelse
+        </div>
+
         <div style="padding: 1.25rem; border-top: 1px solid var(--ivory3); background: var(--ivory2);">{{ $services->links() }}</div>
     </div>
 

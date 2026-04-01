@@ -59,6 +59,23 @@ class ConsultingServices extends Component
         $this->icon = null;
     }
 
+    // --- Handle Drag and Drop Sorting ---
+    public function updateSortOrder($orderedIds)
+    {
+        if (empty($orderedIds)) return;
+
+        // Get the lowest sort_order of the current visible items to offset correctly (safeguards pagination logic)
+        $minSortOrder = Service::whereIn('id', $orderedIds)->min('sort_order');
+
+        // Apply the new order
+        foreach ($orderedIds as $index => $id) {
+            Service::where('id', $id)->update(['sort_order' => $minSortOrder + $index]);
+        }
+        
+        // Let the front-end know it saved 
+        $this->dispatch('notify', message: 'Order updated successfully.', type: 'success');
+    }
+
     public function create()
     {
         $this->reset(['serviceId', 'title', 'slug', 'icon', 'icon_file', 'existing_icon_path', 'short_description', 'content', 'meta_title', 'meta_description', 'meta_keywords']);

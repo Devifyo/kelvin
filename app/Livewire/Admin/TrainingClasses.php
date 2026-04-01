@@ -77,7 +77,23 @@ class TrainingClasses extends Component
         unset($this->topicGroups[$groupIndex]['items'][$itemIndex]);
         $this->topicGroups[$groupIndex]['items'] = array_values($this->topicGroups[$groupIndex]['items']);
     }
-    // --------------------------------------
+
+    // --- Handle Drag and Drop Sorting ---
+    public function updateSortOrder($orderedIds)
+    {
+        if (empty($orderedIds)) return;
+
+        // Get the lowest sort_order of the current visible items to offset correctly (safeguards pagination logic)
+        $minSortOrder = Service::whereIn('id', $orderedIds)->min('sort_order');
+
+        // Apply the new order
+        foreach ($orderedIds as $index => $id) {
+            Service::where('id', $id)->update(['sort_order' => $minSortOrder + $index]);
+        }
+        
+        // Let the front-end know it saved 
+        $this->dispatch('notify', message: 'Order updated successfully.', type: 'success');
+    }
 
     public function create()
     {
