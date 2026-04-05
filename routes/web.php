@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\VisaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,6 @@ Route::controller(ContactController::class)->group(function () {
     Route::get('/contact-us', 'show')->name('contact'); // Render the form
     Route::post('/contact-us', 'store')->name('contact.store'); // Process the form
 });
+
+
+Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->name('visa.eater-sunday');

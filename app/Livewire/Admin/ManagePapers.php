@@ -23,7 +23,14 @@ class ManagePapers extends Component
     public $title, $category_id, $new_category_name, $sub_category, $description;
     public $file, $existing_file;
     public $is_active = true, $sort_order = 0;
+    public $filterCategory = '';
+    public $filterStatus = '';
 
+    public function setStatusFilter(string $value): void
+    {
+        $this->filterStatus = $value;
+        $this->resetPage();
+    }
     protected function rules()
     {
         return [
@@ -32,10 +39,23 @@ class ManagePapers extends Component
             'new_category_name' => 'required_if:category_id,new|nullable|string|max:255',
             'sub_category' => 'nullable|string|max:255',
             'description' => 'required|string|max:2000',
-            'file' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx|max:10240', // 10MB
+            'file' => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx|max:30240', // 10MB
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    /**
+     * Reorder papers based on drag-and-drop.
+     * Receives an ordered array of paper IDs from the frontend.
+     */
+    public function reorder(array $orderedIds)
+    {
+        foreach ($orderedIds as $index => $id) {
+            Paper::where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+
+        $this->dispatch('notify', message: 'Order updated.', type: 'success');
     }
 
     public function create()
@@ -86,7 +106,9 @@ class ManagePapers extends Component
         ];
 
         if ($this->file) {
-            $data['file_path'] = $this->file->store('papers', 'public');
+            
+            $originalName = $this->file->getClientOriginalName();
+            $data['file_path'] = $this->file->storeAs('papers', $originalName, 'public');
         }
 
         Paper::updateOrCreate(['id' => $this->paperId], $data);
@@ -108,13 +130,18 @@ class ManagePapers extends Component
 
     public function render()
     {
-        // Fetch papers and eager load categories
         $papers = Paper::with('category')
             ->when($this->search, function($q) {
                 $q->where('title', 'like', '%'.$this->search.'%');
-            })->orderBy('sort_order')->paginate(15);
+            })
+            ->when($this->filterCategory, function($q) {
+                $q->where('category_id', $this->filterCategory);
+            })
+            ->when($this->filterStatus !== '', function($q) {
+                $q->where('is_active', (bool) $this->filterStatus);
+            })
+            ->orderBy('sort_order')->paginate(15);
 
-        // Pass only 'paper' type categories to the view
         $categories = Category::where('type', 'paper')->orderBy('name')->get();
 
         return view('livewire.admin.manage-papers', compact('papers', 'categories'));
