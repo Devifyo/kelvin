@@ -9,6 +9,7 @@ use App\Livewire\Admin\TrainingClasses;
 use App\Livewire\Admin\BlogPosts;
 use App\Livewire\Admin\ManagePapers;
 use App\Livewire\Admin\ManagePodcastsWebinars;
+use App\Livewire\Admin\VisitorAnalytics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 /*
@@ -33,6 +34,8 @@ Route::get('/papers', ManagePapers::class)->name('papers.index');
 Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 
 Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars')->middleware('maintenance');
+
+Route::get('/visitors', VisitorAnalytics::class)->name('visitors');
 
 
 Route::post('/tinymce-upload', function (Request $request) {

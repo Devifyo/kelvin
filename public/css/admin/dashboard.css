@@ -324,3 +324,201 @@
 }
 .empty-state svg { width: 40px; height: 40px; color: var(--muted); margin-bottom: 1rem; }
 .empty-state p { font-size: 0.95rem; color: var(--muted); margin: 0; }
+
+/* ── VISITOR SNAPSHOT WIDGET ── */
+.vsw {
+    background: var(--white);
+    border: 1px solid var(--ivory3);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 1px 2px rgba(26,35,50,0.04), 0 4px 16px rgba(26,35,50,0.04);
+}
+
+.vsw-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.5rem;
+    background: #fafaf9;
+    border-bottom: 1px solid var(--ivory3);
+}
+
+.vsw-head-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.vsw-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--slate);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.vsw-period-select {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--slate);
+    background: var(--white);
+    border: 1px solid var(--ivory3);
+    border-radius: 8px;
+    padding: 0.25rem 0.6rem 0.25rem 0.5rem;
+    cursor: pointer;
+    outline: none;
+    appearance: auto;
+    transition: border-color 0.15s;
+}
+.vsw-period-select:hover,
+.vsw-period-select:focus { border-color: var(--copper); }
+
+.vsw-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--copper);
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+.vsw-more svg { width: 12px; height: 12px; }
+.vsw-more:hover { opacity: 0.7; }
+
+/* Metrics row */
+.vsw-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--ivory3);
+}
+
+.vsw-metric {
+    padding: 1.4rem 1.5rem 1.2rem;
+    border-right: 1px solid var(--ivory3);
+    display: flex;
+    flex-direction: column;
+}
+.vsw-metric:last-child { border-right: none; }
+
+.vsw-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+}
+
+.vsw-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--slate);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.55rem;
+}
+
+.vsw-trend {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-self: flex-start;
+    margin-bottom: 0.85rem;
+}
+.vsw-up      { color: #15803d; background: rgba(22,163,74,0.1); }
+.vsw-down    { color: #b91c1c; background: rgba(220,38,38,0.08); }
+.vsw-neutral { color: var(--muted); background: var(--ivory3); }
+
+.vsw-bar {
+    height: 3px;
+    background: var(--ivory3);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: auto;
+}
+.vsw-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--copper), var(--copper2));
+    border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+    .vsw-metrics { grid-template-columns: repeat(2, 1fr); }
+    .vsw-metric:nth-child(2) { border-right: none; }
+    .vsw-metric:nth-child(3),
+    .vsw-metric:nth-child(4) { border-top: 1px solid var(--ivory3); }
+}
+
+/* Geo section */
+.vsw-geo {
+    padding: 1.1rem 1.5rem 0.9rem;
+}
+
+.vsw-geo-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 0 0 0.8rem;
+}
+
+.vsw-geo-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #f5f4f1;
+}
+.vsw-geo-row:last-child { border-bottom: none; }
+
+.vsw-cc {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: var(--ivory3);
+    border-radius: 4px;
+    padding: 0.18rem 0.35rem;
+    width: 30px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.vsw-cn {
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--slate);
+    width: 130px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vsw-gbar {
+    flex: 1;
+    height: 4px;
+    background: var(--ivory3);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.vsw-gfill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--copper), var(--copper2));
+    border-radius: 999px;
+}
+
+.vsw-pct {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--slate);
+    width: 34px;
+    text-align: right;
+    flex-shrink: 0;
+}

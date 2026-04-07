@@ -10,6 +10,7 @@ class DashboardOverview extends Component
 {
     public $showModal = false;
     public $selectedInquiry = null;
+    public $visitorPeriod = 'today';
 
     public function viewMessage($id)
     {

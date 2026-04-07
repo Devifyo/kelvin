@@ -4,6 +4,7 @@
 
 @push('styles')
 <link href="{{ asset('css/admin/dashboard.css') }}" rel="stylesheet">
+<link href="{{ asset('css/admin/visitor-analytics.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')

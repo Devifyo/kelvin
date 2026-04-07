@@ -29,6 +29,63 @@
         </div>
     </div>
 
+    {{-- Visitor Snapshot Widget --}}
+    <div class="vsw">
+        <div class="vsw-head">
+            <div class="vsw-head-left">
+                <h2 class="vsw-title">Visitor Overview</h2>
+                <select wire:model.live="visitorPeriod" class="vsw-period-select">
+                    <option value="today">Today</option>
+                    <option value="7days">Last 7 Days</option>
+                    <option value="1month">Last 1 Month</option>
+                </select>
+            </div>
+            <a href="{{ route('admin.visitors') }}" class="vsw-more">
+                Full Analytics
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="vsw-metrics">
+            <div class="vsw-metric">
+                <span class="vsw-label">Visitors Today</span>
+                <span class="vsw-val">247</span>
+                <span class="vsw-trend vsw-up">&#8593; 12%</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:62%"></div></div>
+            </div>
+            <div class="vsw-metric">
+                <span class="vsw-label">Page Views</span>
+                <span class="vsw-val">814</span>
+                <span class="vsw-trend vsw-up">&#8593; 8%</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:78%"></div></div>
+            </div>
+            <div class="vsw-metric">
+                <span class="vsw-label">Avg. Session</span>
+                <span class="vsw-val">3m 24s</span>
+                <span class="vsw-trend vsw-down">&#8595; 5%</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:45%"></div></div>
+            </div>
+            <div class="vsw-metric">
+                <span class="vsw-label">Bounce Rate</span>
+                <span class="vsw-val">42%</span>
+                <span class="vsw-trend vsw-neutral">&#8212; stable</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:42%"></div></div>
+            </div>
+        </div>
+
+        <div class="vsw-geo">
+            <p class="vsw-geo-label">Top Countries</p>
+            @foreach([['US','United States',38],['GB','United Kingdom',19],['CA','Canada',12],['AU','Australia',8],['DE','Germany',7]] as [$code,$name,$pct])
+                <div class="vsw-geo-row">
+                    <span class="vsw-cc">{{ $code }}</span>
+                    <span class="vsw-cn">{{ $name }}</span>
+                    <div class="vsw-gbar"><div class="vsw-gfill" style="width:{{ $pct }}%"></div></div>
+                    <span class="vsw-pct">{{ $pct }}%</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
     <div class="inquiries-section">
         <div class="section-header">
             <h2 class="section-title">Recent Contact Inquiries</h2>
