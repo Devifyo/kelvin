@@ -30,7 +30,7 @@ Route::get('/training-classes', TrainingClasses::class)->name('training.index');
 
 Route::get('/papers', ManagePapers::class)->name('papers.index');
 
-Route::get('/blog-posts', BlogPosts::class)->name('blog.index')->middleware('maintenance');
+Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 
 Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars')->middleware('maintenance');
 

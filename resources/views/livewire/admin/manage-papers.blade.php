@@ -1,52 +1,5 @@
 <div class="lw-service-manager">
-    <style>
-        /* Shared Admin Styles */
-        .lw-service-manager .list-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; gap: 1rem; flex-wrap: wrap; }
-        .lw-service-manager .search-box { position: relative; flex: 1; max-width: 680px; display: flex; align-items: center; border-radius: 10px; border: 1px solid var(--ivory3); background: var(--white); overflow: hidden; transition: border-color 0.15s; }
-        .lw-service-manager .search-box:focus-within { border-color: var(--slate); }
-        .lw-service-manager .search-box .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); pointer-events: none; flex-shrink: 0; }
-        .lw-service-manager .search-box input { flex: 1; padding: 0.75rem 1rem 0.75rem 2.75rem; border: none; background: transparent; outline: none; min-width: 0; }
-        .search-divider { width: 1px; height: 22px; background: var(--ivory3); flex-shrink: 0; }
-        .filter-wrap { position: relative; display: flex; align-items: center; flex-shrink: 0; }
-        .filter-wrap .filter-icon { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--muted); pointer-events: none; }
-        .filter-select { padding: 0.75rem 2rem 0.75rem 2.25rem; border: none; background: transparent; color: var(--slate); font-size: 0.875rem; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.6rem center; }
-        .btn-create { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--slate); color: var(--white); border: none; padding: 0.75rem 1.25rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
-        .lw-service-manager .filter-tabs { display: flex; background: var(--white); border-radius: 10px; padding: 0.3rem; border: 1px solid var(--ivory3); }
-        .lw-service-manager .filter-pill { padding: 0.5rem 1.2rem; border: none; background: transparent; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s; }
-        .lw-service-manager .filter-pill.active { background: var(--copper); color: var(--white); }
-        .service-list-container { background: var(--white); border-radius: 12px; border: 1px solid var(--ivory3); overflow: hidden; }
-        .service-row { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--ivory3); transition: background 0.2s; }
-        .service-row:hover { background: var(--ivory); }
-
-        /* Drag-and-drop styles */
-        .drag-handle { cursor: grab; color: var(--muted); padding: 0.25rem; display: flex; align-items: center; }
-        .drag-handle:active { cursor: grabbing; }
-        .service-row.sortable-ghost { opacity: 0.4; background: var(--ivory2); }
-        .service-row.sortable-chosen { box-shadow: 0 4px 16px rgba(0,0,0,0.12); background: var(--white); }
-
-        .modal-overlay { position: fixed; inset: 0; background: rgba(26, 35, 50, 0.85); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
-        .modal-window { background: var(--white); width: 100%; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); display: flex; flex-direction: column; position: relative; }
-        .close-x { position: absolute; top: 1.25rem; right: 1.25rem; width: 34px; height: 34px; border-radius: 50%; background: var(--ivory); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 11; }
-        .modal-header { padding: 1.5rem 2.5rem; border-bottom: 1px solid var(--ivory3); background: var(--ivory2); border-radius: 20px 20px 0 0; }
-        .modal-body { padding: 2.5rem; max-height: 70vh; overflow-y: auto; }
-        .modal-footer { padding: 1.25rem 2.5rem; background: var(--ivory2); border-top: 1px solid var(--ivory3); display: flex; justify-content: flex-end; gap: 1.25rem; border-radius: 0 0 20px 20px; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--slate); text-transform: uppercase; margin-bottom: 0.6rem; letter-spacing: 0.08em; }
-        .form-control { width: 100%; padding: 0.9rem 1.1rem; border-radius: 10px; border: 1.5px solid var(--ivory3); }
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .icon-btn { width: 36px; height: 36px; border-radius: 10px; border: none; background: transparent; cursor: pointer; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; }
-        .icon-btn:hover { background: var(--ivory3); color: var(--slate); }
-        .icon-btn.delete:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-        .status-badge { padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; border: none; cursor: pointer; }
-        .badge-active { background: rgba(16, 185, 129, 0.12); color: #059669; }
-        .badge-inactive { background: var(--ivory3); color: var(--muted); }
-        .error-msg { color: #ef4444; font-size: 0.75rem; margin-top: 0.4rem; display: block; font-weight: 600; }
-        .preview-box { margin-top: 0.75rem; padding: 0.75rem; border: 1px dashed var(--ivory3); border-radius: 8px; display: inline-block; background: var(--ivory2); }
-        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 1rem; }
-        .empty-state-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--ivory2); display: flex; align-items: center; justify-content: center; color: var(--muted); }
-        .empty-state h3 { font-size: 1rem; font-weight: 700; color: var(--slate); margin: 0; }
-        .empty-state p { font-size: 0.85rem; color: var(--muted); margin: 0; }
-    </style>
+    <link href="{{ asset('css/admin/manage-papers.css') }}" rel="stylesheet">
 
     <div class="list-controls">
         <div class="search-box">

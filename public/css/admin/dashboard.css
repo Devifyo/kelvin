@@ -1,0 +1,326 @@
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--ivory3);
+    box-shadow: 0 4px 12px rgba(26,35,50,0.02);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(26,35,50,0.06);
+}
+
+.stat-info h3 {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--slate);
+    line-height: 1;
+}
+
+.stat-icon {
+    width: 48px; height: 48px;
+    background: var(--ivory);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--copper);
+}
+
+.stat-icon svg { width: 24px; height: 24px; stroke-width: 2; }
+
+/* Modern Table Styles */
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-family: -apple-system, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--slate);
+    margin: 0;
+}
+
+.table-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--ivory3);
+    box-shadow: 0 4px 12px rgba(26,35,50,0.02);
+    overflow: hidden;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.modern-table th {
+    background-color: #fafafa;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--ivory3);
+}
+
+.modern-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+.modern-table tr:last-child td {
+    border-bottom: none;
+}
+
+.modern-table tr:hover td {
+    background-color: #fcfcfc;
+}
+
+/* Contact Cell (Avatar + Details) */
+.contact-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ivory), #e2e8f0);
+    color: var(--slate);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.c-name {
+    font-weight: 600;
+    color: var(--slate);
+    font-size: 0.95rem;
+}
+
+.c-email {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* Message Cell (Subject + Excerpt) */
+.message-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.m-subject {
+    font-weight: 600;
+    color: var(--slate);
+    font-size: 0.9rem;
+}
+
+.m-excerpt {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+/* Soft Pill Badges */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.pill-new {
+    background-color: rgba(200, 100, 50, 0.1);
+    color: var(--copper);
+}
+
+.pill-new .dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--copper);
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.pill-read {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Misc Table Elements */
+.date-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.action-cell {
+    text-align: right;
+}
+
+.btn-view {
+    background: var(--white);
+    border: 1px solid var(--ivory3);
+    color: var(--slate);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-view:hover {
+    border-color: var(--slate);
+    background: #f8fafc;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(2px);
+}
+
+.modal-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 600px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--ivory3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--slate);
+}
+
+.modal-close {
+    background: none; border: none;
+    font-size: 1.5rem; color: var(--muted);
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.msg-meta {
+    background: var(--ivory);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--slate);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.msg-content {
+    font-size: 0.95rem;
+    color: var(--slate);
+    line-height: 1.6;
+}
+
+.modal-footer {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--ivory3);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-modal-close {
+    padding: 0.5rem 1rem;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #475569;
+}
+
+.btn-modal-reply {
+    padding: 0.5rem 1rem;
+    background: var(--copper);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+.empty-state svg { width: 40px; height: 40px; color: var(--muted); margin-bottom: 1rem; }
+.empty-state p { font-size: 0.95rem; color: var(--muted); margin: 0; }
