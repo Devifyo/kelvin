@@ -91,6 +91,71 @@
     letter-spacing: 0.05em;
     color: var(--muted);
     margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Hint badge + tooltip */
+.va-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--ivory3);
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-weight: 800;
+    cursor: default;
+    flex-shrink: 0;
+    position: relative;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.va-hint::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 7px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--slate);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.45;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: normal;
+    width: 200px;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(26,35,50,0.18);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+}
+
+.va-hint::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--slate);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+}
+
+.va-hint:hover::after,
+.va-hint:hover::before {
+    opacity: 1;
 }
 
 .va-stat-value {
@@ -570,4 +635,148 @@
     width: 32px;
     text-align: right;
     flex-shrink: 0;
+}
+
+/* ── ALL VISITORS INFINITE SCROLL ── */
+
+.va-visitors-total {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+.va-visitors-scroll {
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: auto;
+    overscroll-behavior: contain;
+}
+
+/* Sticky header so column labels stay visible while scrolling */
+.va-visitors-scroll .va-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fafafa;
+    box-shadow: 0 1px 0 var(--ivory3);
+}
+
+.va-visitors-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1.1rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.va-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--ivory3);
+    border-top-color: var(--copper);
+    border-radius: 50%;
+    animation: va-spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes va-spin {
+    to { transform: rotate(360deg); }
+}
+
+.va-visitors-end {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border-top: 1px solid var(--ivory3);
+}
+
+/* ── WORLD MAP ── */
+
+.va-map-card { overflow: hidden; }
+
+#va-world-map {
+    background: #e8e0d8;
+}
+
+.va-map-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+.va-legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Leaflet tooltip override */
+.va-leaflet-tip {
+    background: var(--white);
+    border: 1px solid var(--ivory3);
+    color: var(--slate);
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 4px 16px rgba(26,35,50,0.12);
+}
+
+.va-leaflet-tip::before {
+    border-top-color: var(--ivory3);
+}
+
+.va-map-tip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.55rem 0.85rem;
+    min-width: 120px;
+}
+
+.va-map-tip strong {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--slate);
+}
+
+.va-map-tip > span {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.va-map-tip-cities {
+    margin-top: 0.5rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--ivory3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.va-map-tip-city {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.va-map-tip-city-name {
+    font-size: 0.75rem;
+    color: var(--slate);
+    font-weight: 500;
+}
+
+.va-map-tip-city-visits {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 600;
 }

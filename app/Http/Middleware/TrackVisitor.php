@@ -76,10 +76,15 @@ class TrackVisitor
         $device  = $agent->isTablet() ? 'Tablet' : ($agent->isMobile() ? 'Mobile' : 'Desktop');
 
         // ── Geo lookup — cached 24 h per IP ──────────────────────────────
-        [$country, $countryCode, $city] = cache()->remember(
-            'geoip_' . md5($ip),
-            86400,
-            fn () => $this->geoLookup($ip)
+        // array_pad handles old 3-element cached values during the transition
+        [$country, $countryCode, $city, $lat, $lon] = array_pad(
+            cache()->remember(
+                'geoip_' . md5($ip),
+                86400,
+                fn () => $this->geoLookup($ip)
+            ),
+            5,
+            null
         );
 
         // ── Create page-view record ───────────────────────────────────────
@@ -88,6 +93,8 @@ class TrackVisitor
             'country'          => $country,
             'country_code'     => $countryCode,
             'city'             => $city,
+            'lat'              => $lat,
+            'lon'              => $lon,
             'browser'          => $browser,
             'os'               => $os,
             'device'           => $device,
@@ -118,13 +125,13 @@ class TrackVisitor
             str_starts_with($ip, '10.') ||
             str_starts_with($ip, '172.')
         ) {
-            return ['Local', null, null];
+            return ['Local', null, null, null, null];
         }
 
         try {
             $ctx = stream_context_create(['http' => ['timeout' => 2]]);
             $raw = @file_get_contents(
-                "http://ip-api.com/json/{$ip}?fields=status,country,countryCode,city",
+                "http://ip-api.com/json/{$ip}?fields=status,country,countryCode,city,lat,lon",
                 false,
                 $ctx
             );
@@ -132,13 +139,19 @@ class TrackVisitor
             if ($raw) {
                 $data = json_decode($raw, true);
                 if (is_array($data) && ($data['status'] ?? '') === 'success') {
-                    return [$data['country'] ?? null, $data['countryCode'] ?? null, $data['city'] ?? null];
+                    return [
+                        $data['country']     ?? null,
+                        $data['countryCode'] ?? null,
+                        $data['city']        ?? null,
+                        isset($data['lat'])  ? (float) $data['lat'] : null,
+                        isset($data['lon'])  ? (float) $data['lon'] : null,
+                    ];
                 }
             }
         } catch (\Throwable) {
             // Geo is best-effort
         }
 
-        return [null, null, null];
+        return [null, null, null, null, null];
     }
 }

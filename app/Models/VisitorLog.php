@@ -12,6 +12,8 @@ class VisitorLog extends Model
         'country',
         'country_code',
         'city',
+        'lat',
+        'lon',
         'browser',
         'os',
         'device',
@@ -185,6 +187,52 @@ class VisitorLog extends Model
                 ];
             })
             ->all();
+    }
+
+    /**
+     * All-time geographic data for the world map.
+     * Returns country bubbles and city dots with visitor counts + coordinates.
+     */
+    public static function mapData(): array
+    {
+        $countries = static::query()
+            ->selectRaw('country, country_code, ROUND(AVG(lat), 4) as lat, ROUND(AVG(lon), 4) as lon, COUNT(DISTINCT ip_address) as visitors')
+            ->whereNotNull('lat')
+            ->whereNotNull('lon')
+            ->whereNotNull('country')
+            ->groupBy('country', 'country_code')
+            ->orderByDesc('visitors')
+            ->get()
+            ->map(fn ($r) => [
+                'name'     => $r->country,
+                'code'     => $r->country_code,
+                'lat'      => (float) $r->lat,
+                'lon'      => (float) $r->lon,
+                'visitors' => (int) $r->visitors,
+            ])
+            ->values()
+            ->all();
+
+        $cities = static::query()
+            ->selectRaw('city, country, ROUND(AVG(lat), 4) as lat, ROUND(AVG(lon), 4) as lon, COUNT(DISTINCT ip_address) as visitors')
+            ->whereNotNull('lat')
+            ->whereNotNull('lon')
+            ->whereNotNull('city')
+            ->groupBy('city', 'country')
+            ->orderByDesc('visitors')
+            ->limit(150)
+            ->get()
+            ->map(fn ($r) => [
+                'city'     => $r->city,
+                'country'  => $r->country,
+                'lat'      => (float) $r->lat,
+                'lon'      => (float) $r->lon,
+                'visitors' => (int) $r->visitors,
+            ])
+            ->values()
+            ->all();
+
+        return ['countries' => $countries, 'cities' => $cities];
     }
 
     public static function topPages(string $period = 'today'): array
