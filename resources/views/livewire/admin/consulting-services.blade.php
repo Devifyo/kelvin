@@ -82,7 +82,9 @@
             @endforelse
         </div>
 
-        <div style="padding: 1.25rem; border-top: 1px solid var(--ivory3); background: var(--ivory2);">{{ $services->links() }}</div>
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--ivory3); background: var(--ivory);">
+            {{ $services->links('vendor.pagination.admin-theme') }}
+        </div>
     </div>
 
     {{-- CREATE/EDIT MODAL --}}

@@ -38,7 +38,9 @@
         @empty
             <div style="text-align: center; padding: 5rem; color: var(--muted); font-size: 0.9rem;">No podcasts or webinars added yet.</div>
         @endforelse
-        <div style="padding: 1.25rem; background: var(--ivory2);">{{ $mediaItems->links() }}</div>
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--ivory3); background: var(--ivory);">
+            {{ $mediaItems->links('vendor.pagination.admin-theme') }}
+        </div>
     </div>
 
     @if($showModal)

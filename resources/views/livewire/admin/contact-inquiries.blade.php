@@ -93,8 +93,8 @@
             @endforelse
         </div>
         
-        <div style="padding: 1.2rem 1.5rem; border-top: 1px solid #e2e8f0;">
-            {{ $inquiries->links() }}
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--ivory3); background: var(--ivory);">
+            {{ $inquiries->links('vendor.pagination.admin-theme') }}
         </div>
     </div>
 

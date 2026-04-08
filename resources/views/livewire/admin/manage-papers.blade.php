@@ -94,9 +94,9 @@
             @endforelse
         </div>
 
-        @if($papers->hasPages())
-            <div style="padding: 1.25rem; background: var(--ivory2);">{{ $papers->links() }}</div>
-        @endif
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--ivory3); background: var(--ivory);">
+            {{ $papers->links('vendor.pagination.admin-theme') }}
+        </div>
     </div>
 
     @if($showModal)

@@ -10,17 +10,17 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             <input type="text" wire:model.live.debounce.300ms="searchTitle" placeholder="Search blog posts...">
         </div> -->
-        <!-- <div style="display: flex; gap: 1rem;">
-            <div class="filter-tabs">
+        <div style="display: flex; gap: 1rem;">
+            <!-- <div class="filter-tabs">
                 <button wire:click="setFilter('all')" class="filter-pill {{ $filterStatus === 'all' ? 'active' : '' }}">All</button>
                 <button wire:click="setFilter('published')" class="filter-pill {{ $filterStatus === 'published' ? 'active' : '' }}">Published</button>
                 <button wire:click="setFilter('draft')" class="filter-pill {{ $filterStatus === 'draft' ? 'active' : '' }}">Drafts</button>
-            </div>
+            </div> -->
             <button wire:click="create" class="btn-create">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 New Post
             </button>
-        </div> -->
+        </div>
     </div>
 
     {{-- Data List --}}
@@ -64,7 +64,9 @@
         @empty
             <div style="text-align: center; padding: 5rem; color: var(--muted); font-size: 0.9rem;">No blog posts found.</div>
         @endforelse
-        <div style="padding: 1.25rem; border-top: 1px solid var(--ivory3); background: var(--ivory2);">{{ $posts->links() }}</div>
+        <div style="padding: 1.25rem 1.5rem; border-top: 1px solid var(--ivory3); background: var(--ivory);">
+            {{ $posts->links('vendor.pagination.admin-theme') }}
+        </div>
     </div>
 
     {{-- CREATE/EDIT MODAL --}}
