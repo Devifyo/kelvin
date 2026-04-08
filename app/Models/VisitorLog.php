@@ -49,20 +49,37 @@ class VisitorLog extends Model
             default => static::today(),
         };
 
-        $total    = (clone $query)->count();
-        $pageviews = (clone $query)->sum('session_duration') > 0 ? (clone $query)->count() : $total;
-        $avgSec   = (clone $query)->avg('session_duration') ?? 0;
-        $bounces  = (clone $query)->where('is_bounce', true)->count();
-        $new      = (clone $query)->where('is_new_visitor', true)->count();
+        // Each row = one page view; visitors = distinct IPs
+        $pageviews = (clone $query)->count();
+        $visitors  = (clone $query)->distinct('ip_address')->count('ip_address');
+
+        // Average total session time per visitor:
+        // sum each IP's page durations, then average across IPs
+        $avgSec = (clone $query)
+            ->selectRaw('SUM(session_duration) as total')
+            ->groupBy('ip_address')
+            ->pluck('total')
+            ->avg() ?? 0;
+
+        // Bounce: visitors who only loaded 1 page in this period
+        $bounced = (clone $query)
+            ->selectRaw('ip_address, COUNT(*) as cnt')
+            ->groupBy('ip_address')
+            ->havingRaw('COUNT(*) = 1')
+            ->get()
+            ->count();
+
+        // New visitors: first-ever visit (is_new_visitor set once per IP lifetime)
+        $new = (clone $query)->where('is_new_visitor', true)->count();
 
         $m = intdiv((int) $avgSec, 60);
         $s = (int) $avgSec % 60;
 
         return [
-            'visitors'    => $total,
-            'pageviews'   => $pageviews,
-            'avg_session' => "{$m}m {$s}s",
-            'bounce_rate' => $total > 0 ? round($bounces / $total * 100) . '%' : '0%',
+            'visitors'     => $visitors,
+            'pageviews'    => $pageviews,
+            'avg_session'  => "{$m}m {$s}s",
+            'bounce_rate'  => $visitors > 0 ? round($bounced / $visitors * 100) . '%' : '0%',
             'new_visitors' => $new,
         ];
     }
@@ -142,6 +159,31 @@ class VisitorLog extends Model
                 'pct'   => round($r->cnt / $total * 100),
                 'icon'  => $icons[$r->browser] ?? '?',
             ])
+            ->all();
+    }
+
+    public static function recentVisitors(int $limit = 10): array
+    {
+        return static::latest()
+            ->limit($limit)
+            ->get()
+            ->map(function ($r) {
+                $sec = (int) $r->session_duration;
+                $duration = $sec > 0
+                    ? intdiv($sec, 60) . 'm ' . ($sec % 60) . 's'
+                    : '–';
+
+                return [
+                    'ip'       => preg_replace('/\.\d+$/', '.xxx', $r->ip_address ?? ''),
+                    'country'  => $r->country,
+                    'city'     => $r->city,
+                    'browser'  => $r->browser,
+                    'os'       => $r->os,
+                    'page'     => $r->page,
+                    'duration' => $duration,
+                    'time'     => $r->created_at->diffForHumans(),
+                ];
+            })
             ->all();
     }
 

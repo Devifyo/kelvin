@@ -5,7 +5,6 @@
         <button wire:click="setPeriod('today')" class="va-period-btn {{ $period === 'today' ? 'active' : '' }}">Today</button>
         <button wire:click="setPeriod('week')"  class="va-period-btn {{ $period === 'week'  ? 'active' : '' }}">Last 7 Days</button>
         <button wire:click="setPeriod('month')" class="va-period-btn {{ $period === 'month' ? 'active' : '' }}">Last 30 Days</button>
-        <span class="va-dummy-badge">Sample Data</span>
     </div>
 
     {{-- Top Stats --}}
@@ -102,21 +101,16 @@
 
                 <div class="va-donut-wrap">
                     <svg viewBox="0 0 36 36" class="va-donut">
-                        {{-- Desktop 58% = 58/100 * 100.53 ≈ 58.31, offset = 0 --}}
                         <circle class="va-donut-hole" cx="18" cy="18" r="14"/>
                         <circle class="va-donut-ring"  cx="18" cy="18" r="14"/>
-                        <circle class="va-donut-seg" cx="18" cy="18" r="14"
-                            stroke="#b5722a"
-                            stroke-dasharray="58 42"
-                            stroke-dashoffset="25"/>
-                        <circle class="va-donut-seg" cx="18" cy="18" r="14"
-                            stroke="#d4924e"
-                            stroke-dasharray="35 65"
-                            stroke-dashoffset="-33"/>
-                        <circle class="va-donut-seg" cx="18" cy="18" r="14"
-                            stroke="#edb97a"
-                            stroke-dasharray="7 93"
-                            stroke-dashoffset="-68"/>
+                        @php $donutOffset = 25; @endphp
+                        @foreach($this->devices as $d)
+                            <circle class="va-donut-seg" cx="18" cy="18" r="14"
+                                stroke="{{ $d['color'] }}"
+                                stroke-dasharray="{{ $d['pct'] }} {{ 100 - $d['pct'] }}"
+                                stroke-dashoffset="{{ $donutOffset }}"/>
+                            @php $donutOffset -= $d['pct']; @endphp
+                        @endforeach
                     </svg>
                 </div>
             </div>
@@ -181,7 +175,6 @@
     <div class="va-card">
         <div class="va-card-header">
             <h3 class="va-card-title">Recent Visitors</h3>
-            <span class="va-dummy-badge">Illustrative Data</span>
         </div>
         <div class="va-card-body" style="padding: 0; overflow-x: auto;">
             <table class="va-table">
@@ -192,6 +185,7 @@
                         <th>Browser</th>
                         <th>OS</th>
                         <th>Page</th>
+                        <th>Duration</th>
                         <th>Time</th>
                     </tr>
                 </thead>
@@ -208,6 +202,7 @@
                             <td>{{ $v['browser'] }}</td>
                             <td>{{ $v['os'] }}</td>
                             <td><code class="va-path">{{ $v['page'] }}</code></td>
+                            <td><span class="va-time">{{ $v['duration'] }}</span></td>
                             <td><span class="va-time">{{ $v['time'] }}</span></td>
                         </tr>
                     @endforeach

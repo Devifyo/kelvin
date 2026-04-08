@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'redirect.logged.in' => \App\Http\Middleware\RedirectLoggedInUsers::class,
             'maintenance' => \App\Http\Middleware\RequestFilter::class,
         ]);
+        $middleware->appendToGroup('web', \App\Http\Middleware\TrackVisitor::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
