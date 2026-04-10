@@ -39,10 +39,9 @@ Route::get('/visitors', VisitorAnalytics::class)->name('visitors')->middleware('
 
 
 Route::post('/tinymce-upload', function (Request $request) {
-    dd($request->all());
     if ($request->hasFile('file')) {
         $path = $request->file('file')->store('blog/content-images', 'public');
         return response()->json(['location' => Storage::url($path)]);
     }
     return response()->json(['error' => 'No file uploaded.'], 400);
-})->name('tinymce.upload')->middleware('maintenance');
+})->name('tinymce.upload');
