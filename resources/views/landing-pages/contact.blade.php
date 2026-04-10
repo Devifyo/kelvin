@@ -270,15 +270,9 @@ textarea.form-control {
                 Reach out to discuss your organization's needs. All consulting and training services are provided on-site at client locations, tailored specifically to your product context.
             </p>
 
-            <div class="contact-method">
-                <div class="method-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </div>
-                <div class="method-details">
-                    <span>Email Address</span>
-                    <a href="mailto:kevin@kevinthompsonphd.com">kevin@kevinthompsonphd.com</a>
-                </div>
-            </div>
+            <p class="contact-text" style="font-size: 0.95rem; margin-top: -1rem; padding-left: 1rem; border-left: 3px solid rgba(181,114,42,0.3);">
+                Please fill out the form with your details and a brief message regarding the challenges your team is facing. We will review your inquiry and respond promptly to schedule an initial consultation.
+            </p>
         </div>
 
         <div class="contact-form-wrap reveal rv1">

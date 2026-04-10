@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\FrontendContentService;
+use App\Models\WelcomePageContent;
+use App\Models\AboutPageContent;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -13,15 +15,19 @@ class PageController extends Controller
 
     public function home()
     {   
+        $welcomeContent = WelcomePageContent::first();
+
         return view('landing-pages.welcome', [
             'consultingServices' => $this->contentService->getConsultingServices(),
             'trainingClasses'    => $this->contentService->getTrainingClasses(),
+            'welcomeContent'     => $welcomeContent,
         ]);
     }
 
     public function about()
     {
-        return view('landing-pages.about');
+        $aboutContent = AboutPageContent::first();
+        return view('landing-pages.about', compact('aboutContent'));
     }
 
     public function services()

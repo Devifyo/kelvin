@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@if(!empty($welcomeContent->seo_title))
+    @section('title', $welcomeContent->seo_title)
+    @section('meta_title', $welcomeContent->seo_title)
+@endif
+
+@if(!empty($welcomeContent->seo_description))
+    @section('meta_description', $welcomeContent->seo_description)
+@endif
+
+@if(!empty($welcomeContent->seo_keywords))
+    @section('meta_keywords', $welcomeContent->seo_keywords)
+@endif
+
 @push('styles')
     <link rel="stylesheet" href="/css/frontend/home.css">
     
@@ -189,62 +202,56 @@
         
         <div class="hero-l">
             <div class="elite-kicker anim-up d0">
-                Agile Hardware Consulting
+                {{ $welcomeContent->hero_kicker ?? 'Agile Hardware Consulting' }}
             </div>
 
             <h1 class="hero-h1 anim-up d1">
-                <em>Reduce risk.</em>
-                <strong>Ship faster.</strong>
+                <em>{{ $welcomeContent->hero_h1_em ?? 'Reduce risk.' }}</em>
+                <strong>{{ $welcomeContent->hero_h1_strong ?? 'Ship faster.' }}</strong>
             </h1>
 
             <p class="hero-p anim-up d2">
-                We help hardware-development organizations reduce development risk and shorten
-                time-to-market by applying Agile principles to prototype-driven learning, early
-                system integration, and risk-focused development.
+                {{ $welcomeContent->hero_p1 ?? 'We help hardware-development organizations reduce development risk and shorten time-to-market by applying Agile principles to prototype-driven learning, early system integration, and risk-focused development.' }}
             </p>
             <p class="hero-p2 anim-up d3">
-                We understand how hardware development differs from software development,
-                and how to apply Agile processes to the hardware world.
+                {{ $welcomeContent->hero_p2 ?? 'We understand how hardware development differs from software development, and how to apply Agile processes to the hardware world.' }}
             </p>
 
             <div class="cta-row anim-up d4">
-                <a href="{{ route('services.training') }}" class="cta-primary">
-                    Our Services
+                <a href="{{ $welcomeContent->hero_cta_primary_link ?? route('services.training') }}" class="cta-primary">
+                    {{ $welcomeContent->hero_cta_primary_text ?? 'Our Services' }}
                 </a>
-                <a href="{{ route('contact') }}" class="cta-secondary">
-                    Get in Touch
+                <a href="{{ $welcomeContent->hero_cta_secondary_link ?? route('contact') }}" class="cta-secondary">
+                    {{ $welcomeContent->hero_cta_secondary_text ?? 'Get in Touch' }}
                 </a>
             </div>
         </div>
 
         <div class="hero-r">
             <div class="elite-card anim-right">
-                <h3 class="elite-card-title">If your organization is experiencing...</h3>
+                <h3 class="elite-card-title">{{ $welcomeContent->pain_title ?? 'If your organization is experiencing...' }}</h3>
 
                 <ul class="elite-list">
+                    @php
+                        $painPoints = $welcomeContent && !empty($welcomeContent->pain_list) 
+                            ? $welcomeContent->pain_list 
+                            : [
+                                'Discovery of critical problems too late during system integration.',
+                                'Development cycles that are extending significantly beyond projections.',
+                                'Late-stage design changes resulting in severe cost overruns.',
+                                'Hardware and software engineering teams operating at misaligned velocities.',
+                                'Extended design phases occurring prior to the validation of core assumptions.'
+                            ];
+                    @endphp
+                    @foreach($painPoints as $index => $point)
                     <li>
-                        <span class="elite-num">01</span>
-                        <span>Discovery of critical problems too late during system integration.</span>
+                        <span class="elite-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        <span>{{ $point }}</span>
                     </li>
-                    <li>
-                        <span class="elite-num">02</span>
-                        <span>Development cycles that are extending significantly beyond projections.</span>
-                    </li>
-                    <li>
-                        <span class="elite-num">03</span>
-                        <span>Late-stage design changes resulting in severe cost overruns.</span>
-                    </li>
-                    <li>
-                        <span class="elite-num">04</span>
-                        <span>Hardware and software engineering teams operating at misaligned velocities.</span>
-                    </li>
-                    <li>
-                        <span class="elite-num">05</span>
-                        <span>Extended design phases occurring prior to the validation of core assumptions.</span>
-                    </li>
+                    @endforeach
                 </ul>
 
-                <div class="elite-foot">...we can help.</div>
+                <div class="elite-foot">{{ $welcomeContent->pain_footer ?? '...we can help.' }}</div>
             </div>
         </div>
     </section>
@@ -255,30 +262,28 @@
         <div class="principal-wrap">
             
             <div class="bio reveal">
-                <div class="kicker">Our Principal</div>
-                <h2 class="section-h">Dr. Kevin <em>Thompson</em></h2>
+                <div class="kicker">{{ $welcomeContent->principal_kicker ?? 'Our Principal' }}</div>
+                <h2 class="section-h">{{ $welcomeContent->principal_h2_name ?? 'Dr. Kevin' }} <em>{{ $welcomeContent->principal_h2_em ?? 'Thompson' }}</em></h2>
                 <div class="ornament"></div>
 
                 <p>
-                    Our Principal, Dr. Kevin Thompson, Ph.D. (Physics) is one of the most experienced Agile consultants in the field, having successfully completed more than 100 client engagements.
+                    {{ $welcomeContent->principal_p1 ?? 'Our Principal, Dr. Kevin Thompson, Ph.D. (Physics) is one of the most experienced Agile consultants in the field, having successfully completed more than 100 client engagements.' }}
                 </p>
                 <p>
-                    Dr. Thompson has helped numerous clients improve their ability to deliver both software and hardware products. He successfully pioneered Agile hardware development and remains a thought leader in the field. He has helped clients develop a variety of hardware products, from laboratory equipment to telecommunications products to jet engines.
+                    {{ $welcomeContent->principal_p2 ?? 'Dr. Thompson has helped numerous clients improve their ability to deliver both software and hardware products. He successfully pioneered Agile hardware development and remains a thought leader in the field. He has helped clients develop a variety of hardware products, from laboratory equipment to telecommunications products to jet engines.' }}
                 </p>
                 <p>
-                    He has written extensively on Agile topics, including in his book,
-                    <em>Solutions for Agile Governance in the Enterprise (Sage): Agile Project,
-                    Program, and Portfolio Management for Development of Hardware and Software Products.</em>
+                    {!! $welcomeContent->principal_p3 ?? 'He has written extensively on Agile topics, including in his book, <em>Solutions for Agile Governance in the Enterprise (Sage): Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.</em>' !!}
                 </p>
 
                 <div class="book">
                     <div class="book-img">
-                        <img src="https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg" alt="Solutions for Agile Governance in the Enterprise (Sage)">
+                        <img src="{{ $welcomeContent->principal_book_image ?? 'https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg' }}" alt="{{ $welcomeContent->principal_book_title ?? 'Book Cover' }}">
                     </div>
                     <div class="book-details">
-                        <strong>Solutions for Agile Governance in the Enterprise (Sage)</strong>
-                        <p>Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.</p>
-                        <a href="https://www.amazon.com/Solutions-Agile-Governance-Enterprise-SAGE/dp/0578420589"
+                        <strong>{{ $welcomeContent->principal_book_title ?? 'Solutions for Agile Governance in the Enterprise (Sage)' }}</strong>
+                        <p>{{ $welcomeContent->principal_book_desc ?? 'Agile Project, Program, and Portfolio Management for Development of Hardware and Software Products.' }}</p>
+                        <a href="{{ $welcomeContent->principal_book_url ?? 'https://www.amazon.com/Solutions-Agile-Governance-Enterprise-SAGE/dp/0578420589' }}"
                             target="_blank" rel="noopener noreferrer" class="book-link">
                             View on Amazon
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>

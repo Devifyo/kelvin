@@ -10,6 +10,8 @@ use App\Livewire\Admin\BlogPosts;
 use App\Livewire\Admin\ManagePapers;
 use App\Livewire\Admin\ManagePodcastsWebinars;
 use App\Livewire\Admin\VisitorAnalytics;
+use App\Livewire\Admin\WelcomePageSettings;
+use App\Livewire\Admin\AboutPageSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 /*
@@ -23,6 +25,8 @@ use Illuminate\Support\Facades\Storage;
 // Dashboard Route (URL: /admin, Name: admin.dashboard)
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', ProfileSettings::class)->name('profile');
+Route::get('/welcome-page', WelcomePageSettings::class)->name('welcome-page');
+Route::get('/about-page', AboutPageSettings::class)->name('about-page');
 
 Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
 Route::get('/consulting-services', ConsultingServices::class)->name('services.index');

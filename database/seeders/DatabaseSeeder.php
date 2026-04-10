@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ConsultingSeeder::class);
         $this->call(TrainingSeeder::class);
         $this->call(PaperSeeder::class);
+        $this->call(WelcomePageContentSeeder::class);
+        $this->call(AboutPageContentSeeder::class);
     }
 }
