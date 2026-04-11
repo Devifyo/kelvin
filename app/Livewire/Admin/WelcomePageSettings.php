@@ -162,6 +162,14 @@ class WelcomePageSettings extends Component
 
     public function render()
     {
-        return view('livewire.admin.welcome-page-settings')->title('Welcome Page Settings');
+        // Load services to pass to preview
+        $contentService = app(\App\Services\FrontendContentService::class);
+        $consultingServices = $contentService->getConsultingServices();
+        $trainingClasses = $contentService->getTrainingClasses();
+
+        return view('livewire.admin.welcome-page-settings', [
+            'consultingServices' => $consultingServices,
+            'trainingClasses' => $trainingClasses
+        ])->title('Welcome Page Settings');
     }
 }

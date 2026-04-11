@@ -198,6 +198,7 @@
 @endpush
 
 @section('content')
+
     <section id="hero">
         
         <div class="hero-l">
@@ -255,7 +256,7 @@
             </div>
         </div>
     </section>
-
+    
     <div class="strip"></div>
 
     <section id="principal">
@@ -338,6 +339,7 @@
 
         </div>
     </section>
+
 @endsection
 
 @push('scripts')
