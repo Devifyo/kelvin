@@ -24,11 +24,13 @@ class WelcomePageContentSeeder extends Seeder
             
             'pain_title' => 'If your organization is experiencing...',
             'pain_list' => [
-                'Discovery of critical problems too late during system integration.',
-                'Development cycles that are extending significantly beyond projections.',
-                'Late-stage design changes resulting in severe cost overruns.',
-                'Hardware and software engineering teams operating at misaligned velocities.',
-                'Extended design phases occurring prior to the validation of core assumptions.'
+                'Don\'t discover the real problems until integration',
+                'Have development cycles that are too long',
+                'Discover too many risks only when they blow up—late',
+                'Have late design changes that are extremely expensive',
+                'Have hardware and software teams moving at different speeds',
+                'Don\'t get real customer feedback until it\'s too late',
+                'Have engineers spend months designing before testing assumptions',
             ],
             'pain_footer' => '...we can help.',
             
