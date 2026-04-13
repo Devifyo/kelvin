@@ -37,7 +37,7 @@ Route::get('/papers', ManagePapers::class)->name('papers.index');
 
 Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 
-Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars')->middleware('maintenance');
+Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars');
 
 Route::get('/visitors', VisitorAnalytics::class)->name('visitors')->middleware('maintenance');
 

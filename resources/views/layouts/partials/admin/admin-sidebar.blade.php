@@ -20,10 +20,10 @@
             Welcome Page
         </a>
 
-        <!-- <a href="{{ route('admin.about-page') }}" class="nav-item {{ request()->routeIs('admin.about-page') ? 'active' : '' }}">
+        <a href="{{ route('admin.about-page') }}" class="nav-item {{ request()->routeIs('admin.about-page') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             About Page
-        </a> -->
+        </a>
         
         <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.5rem 1rem 0.5rem; font-weight: 800; font-family: -apple-system, sans-serif;">Applications & Resources</div>
 
