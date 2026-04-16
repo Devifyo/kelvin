@@ -19,26 +19,52 @@
     <meta property="twitter:title" content="@yield('title', 'Kevin Thompson Ph.D. Consulting')">
     <meta property="twitter:description" content="@yield('meta_description', 'Expert consulting and training for Agile hardware and software development.')">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    @php
+        use App\Models\AppSetting;
+        use Illuminate\Support\Facades\Storage;
+        $_c          = AppSetting::resolvedColors();
+        $_favicon    = AppSetting::get('favicon');
+        $_faviconUrl = $_favicon ? Storage::disk('public')->url($_favicon) : null;
+        $_appIcon    = AppSetting::get('app_icon');
+        $_appIconUrl = $_appIcon ? Storage::disk('public')->url($_appIcon) : null;
+        $_appName    = AppSetting::get('app_name', AppSetting::DEFAULTS['app_name']);
+    @endphp
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ $_faviconUrl ?? '/apple-touch-icon.png' }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ $_faviconUrl ?? '/favicon-32x32.png' }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ $_faviconUrl ?? '/favicon-16x16.png' }}">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="theme-color" content="#1a2332">
+    <link rel="shortcut icon" href="{{ $_faviconUrl ?? '/favicon.ico' }}">
+    <meta name="theme-color" content="{{ $_c['slate'] }}">
 
     <link rel="stylesheet" href="/css/frontend/main.css">
-    
+
+    {{-- Dynamic color override — keeps main.css static, just replaces the tokens --}}
+    <style>
+        :root {
+            --slate:       {{ $_c['slate'] }};
+            --slate2:      {{ $_c['slate2'] }};
+            --slate3:      {{ $_c['slate3'] }};
+            --copper:      {{ $_c['copper'] }};
+            --copper2:     {{ $_c['copper2'] }};
+            --copper3:     {{ $_c['copper3'] }};
+            --copper4:     {{ $_c['copper4'] }};
+            --copper-dark: {{ $_c['copperDark'] }};
+        }
+        /* main.css hardcodes the pinned nav color as rgba() — override it here */
+        #nav.pinned { background: {{ $_c['slate'] }}f7 !important; }
+    </style>
+
     @stack('styles')
 </head>
 <body>
 
-    @include('layouts.partials.frontend.header')
+    @include('layouts.partials.frontend.header', ['appName' => $_appName, 'appIconUrl' => $_appIconUrl])
 
     <main>
         @yield('content')
     </main>
 
-    @include('layouts.partials.frontend.footer')
+    @include('layouts.partials.frontend.footer', ['appName' => $_appName])
 
     <script>
         /* sticky nav  */

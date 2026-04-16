@@ -1,12 +1,21 @@
+@php
+    use App\Models\AppSetting;
+    $c       = AppSetting::resolvedColors();
+    $appName = AppSetting::get('app_name', AppSetting::DEFAULTS['app_name']);
+    $favicon = AppSetting::get('favicon');
+    $appIcon = AppSetting::get('app_icon');
+    $faviconUrl = $favicon ? Storage::disk('public')->url($favicon) : '/favicon-32x32.png';
+    $appIconUrl = $appIcon ? Storage::disk('public')->url($appIcon) : null;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@yield('title', $title ?? 'Admin Dashboard') | Kevin Thompson Ph.D.</title>
-    
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <meta name="theme-color" content="#1a2332">
+    <title>@yield('title', $title ?? 'Admin Dashboard') | {{ $appName }} Ph.D.</title>
+
+    <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
+    <meta name="theme-color" content="{{ $c['slate'] }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +23,11 @@
 
     <style>
         :root {
-            --slate:    #1a2332;
-            --slate-hi: #243345;
-            --copper:   #b5722a;
-            --copper2:  #d4924e;
-            --copper3:  #edb97a;
+            --slate:    {{ $c['slate'] }};
+            --slate-hi: {{ $c['slateHi'] }};
+            --copper:   {{ $c['copper'] }};
+            --copper2:  {{ $c['copper2'] }};
+            --copper3:  {{ $c['copper3'] }};
             --ivory:    #faf7f2;
             --ivory3:   #e8dfd2;
             --charcoal: #2c3a4a;
@@ -57,7 +66,7 @@
         }
 
         .sidebar-header {
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -76,12 +85,12 @@
         .sidebar-title { font-size: 1rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
         .sidebar-title span { display: block; font-size: 0.65rem; color: var(--copper3); letter-spacing: 0.1em; text-transform: uppercase; }
 
-        .sidebar-nav { padding: 1.5rem 1rem; flex-grow: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+        .sidebar-nav { padding: 1rem 1rem; flex-grow: 1; display: flex; flex-direction: column; gap: 0.25rem; overflow-y: auto; min-height: 0; }
 
         .nav-item {
             display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.85rem 1rem; color: rgba(255,255,255,0.7);
-            text-decoration: none; font-size: 0.9rem; font-weight: 500;
+            padding: 0.72rem 1rem; color: rgba(255,255,255,0.7);
+            text-decoration: none; font-size: 0.875rem; font-weight: 500;
             border-radius: 8px; transition: all 0.2s ease;
         }
 
@@ -96,6 +105,16 @@
 
         .nav-item svg { width: 18px; height: 18px; stroke-width: 2; transition: color 0.2s; }
         .nav-item.active svg { color: var(--copper); }
+
+        /* Fade hint at bottom of nav when it overflows */
+        .sidebar-nav-wrap { flex-grow: 1; display: flex; flex-direction: column; min-height: 0; position: relative; }
+        .sidebar-nav-wrap::after {
+            content: ''; pointer-events: none;
+            position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+            background: linear-gradient(to bottom, transparent, rgba(17,24,39,0.85));
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .sidebar-nav-wrap.can-scroll::after { opacity: 1; }
 
         .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
 
@@ -197,12 +216,13 @@
         .dropdown-item svg { width: 16px; height: 16px; stroke-width: 2; }
         .dropdown-divider { height: 1px; background: var(--ivory3); margin: 0.25rem 0; }
     </style>
+    <link rel="stylesheet" href="/css/admin/app-settings.css">
     @livewireStyles
     @stack('styles')
 </head>
 <body>
 
-    @include('layouts.partials.admin.admin-sidebar')
+    @include('layouts.partials.admin.admin-sidebar', ['appName' => $appName, 'appIconUrl' => $appIconUrl])
 
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
@@ -256,6 +276,21 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <script>
+        // Show fade hint when sidebar nav can scroll
+        function updateNavFade() {
+            const nav  = document.getElementById('sidebar-nav');
+            const wrap = document.getElementById('sidebar-nav-wrap');
+            if (!nav || !wrap) return;
+            const canScroll = nav.scrollHeight > nav.clientHeight;
+            const atBottom  = nav.scrollTop + nav.clientHeight >= nav.scrollHeight - 4;
+            wrap.classList.toggle('can-scroll', canScroll && !atBottom);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavFade();
+            document.getElementById('sidebar-nav')?.addEventListener('scroll', updateNavFade);
+        });
+        document.addEventListener('livewire:navigated', updateNavFade);
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');

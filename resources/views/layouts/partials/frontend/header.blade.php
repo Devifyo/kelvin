@@ -1,8 +1,18 @@
 <nav id="nav">
+    @php
+        $initials = strtoupper(substr($appName ?? 'KT', 0, 1))
+                  . strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1));
+    @endphp
     <a href="{{ route('home') }}" class="logo">
-        <div class="logo-mark">KT</div>
+        <div class="logo-mark">
+            @if($appIconUrl ?? null)
+                <img src="{{ $appIconUrl }}" alt="{{ $appName ?? 'Logo' }}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">
+            @else
+                {{ $initials }}
+            @endif
+        </div>
         <div class="logo-text">
-            <span class="logo-name">Kevin Thompson</span>
+            <span class="logo-name">{{ $appName ?? 'Kevin Thompson' }}</span>
             <span class="logo-sub">Ph.D. Consulting</span>
         </div>
     </a>

@@ -1,19 +1,26 @@
 <aside class="admin-sidebar" id="sidebar">
     <div class="sidebar-header">
-        <div class="sidebar-logo-mark">KT</div>
+        <div class="sidebar-logo-mark">
+            @if($appIconUrl ?? null)
+                <img src="{{ $appIconUrl }}" alt="App Icon" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+            @else
+                {{ strtoupper(substr($appName ?? 'KT', 0, 1)) }}{{ strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1)) }}
+            @endif
+        </div>
         <div class="sidebar-title">
-            Kevin Thompson
+            {{ $appName ?? 'Kevin Thompson' }}
             <span>Admin Portal</span>
         </div>
     </div>
 
-    <nav class="sidebar-nav">
+    <div class="sidebar-nav-wrap" id="sidebar-nav-wrap">
+    <nav class="sidebar-nav" id="sidebar-nav">
         <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
             Dashboard
         </a>
 
-        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.5rem 1rem 0.5rem; font-weight: 800; font-family: -apple-system, sans-serif;">Main Page Settings</div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.25rem 1rem 0.4rem; font-weight: 800; font-family: -apple-system, sans-serif;">Main Page Settings</div>
         
         <a href="{{ route('admin.welcome-page') }}" class="nav-item {{ request()->routeIs('admin.welcome-page') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
@@ -25,7 +32,7 @@
             About Page
         </a>
         
-        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.5rem 1rem 0.5rem; font-weight: 800; font-family: -apple-system, sans-serif;">Applications & Resources</div>
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.25rem 1rem 0.4rem; font-weight: 800; font-family: -apple-system, sans-serif;">Applications & Resources</div>
 
         {{-- Separated: Consulting Services --}}
         <a href="{{ route('admin.services.index') }}" class="nav-item {{ request()->routeIs('admin.services*') ? 'active' : '' }}">
@@ -65,11 +72,19 @@
             Visitor Analytics
         </a>
 
-       <a href="{{ route('admin.inquiries') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.inquiries') ? 'active' : '' }}">
+        <a href="{{ route('admin.inquiries') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.inquiries') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Contact Inquiries
         </a>
+
+        <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.25rem 1rem 0.4rem; font-weight: 800; font-family: -apple-system, sans-serif;">System</div>
+
+        <a href="{{ route('admin.app-settings') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.app-settings') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+            App Settings
+        </a>
     </nav>
+    </div>
 
     <div class="sidebar-footer">
         <form method="POST" action="{{ route('auth.logout') }}">

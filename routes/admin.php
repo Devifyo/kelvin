@@ -12,6 +12,7 @@ use App\Livewire\Admin\ManagePodcastsWebinars;
 use App\Livewire\Admin\VisitorAnalytics;
 use App\Livewire\Admin\WelcomePageSettings;
 use App\Livewire\Admin\AboutPageSettings;
+use App\Livewire\Admin\AppSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 /*
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Storage;
 // Dashboard Route (URL: /admin, Name: admin.dashboard)
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', ProfileSettings::class)->name('profile');
+Route::get('/app-settings', AppSettings::class)->name('app-settings')->middleware('maintenance');
 Route::get('/welcome-page', WelcomePageSettings::class)->name('welcome-page');
 Route::get('/about-page', AboutPageSettings::class)->name('about-page');
 

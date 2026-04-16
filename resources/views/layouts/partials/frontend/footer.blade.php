@@ -1,9 +1,13 @@
 <footer>
+    @php
+        $ftInitials = strtoupper(substr($appName ?? 'KT', 0, 1))
+                    . strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1));
+    @endphp
     <div class="footer-logo">
-        <div class="footer-logo-mark">KT</div>
-        <div class="footer-name">Kevin Thompson <span>Ph.D.</span> Consulting</div>
+        <div class="footer-logo-mark">{{ $ftInitials }}</div>
+        <div class="footer-name">{{ $appName ?? 'Kevin Thompson' }} <span>Ph.D.</span> Consulting</div>
     </div>
-    <div class="footer-copy">&copy; {{ date('Y') }} Kevin Thompson Ph.D. Consulting. All rights reserved.</div>
+    <div class="footer-copy">&copy; {{ date('Y') }} {{ $appName ?? 'Kevin Thompson' }} Ph.D. Consulting. All rights reserved.</div>
     
     <nav class="footer-links">
         <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
