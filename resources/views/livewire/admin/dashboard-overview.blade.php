@@ -46,43 +46,54 @@
             </a>
         </div>
 
+        @php
+            $visitorLabel = match($visitorPeriod) {
+                '7days'  => 'Visitors (7 Days)',
+                '1month' => 'Visitors (Month)',
+                default  => 'Visitors Today',
+            };
+            $visitorBarPct  = min(round($visitorStats['visitors'] / max($visitorStats['visitors'], 1) * 60), 100);
+            $pageviewBarPct = $visitorStats['visitors'] > 0
+                ? min(round($visitorStats['pageviews'] / $visitorStats['visitors'] / 10 * 100), 100)
+                : 0;
+            $sessionBarPct  = min(round($visitorStats['avg_session_sec'] / 600 * 100), 100);
+        @endphp
+
         <div class="vsw-metrics">
             <div class="vsw-metric">
-                <span class="vsw-label">Visitors Today</span>
-                <span class="vsw-val">247</span>
-                <span class="vsw-trend vsw-up">&#8593; 12%</span>
-                <div class="vsw-bar"><div class="vsw-fill" style="width:62%"></div></div>
+                <span class="vsw-label">{{ $visitorLabel }}</span>
+                <span class="vsw-val">{{ number_format($visitorStats['visitors']) }}</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:{{ $visitorBarPct }}%"></div></div>
             </div>
             <div class="vsw-metric">
                 <span class="vsw-label">Page Views</span>
-                <span class="vsw-val">814</span>
-                <span class="vsw-trend vsw-up">&#8593; 8%</span>
-                <div class="vsw-bar"><div class="vsw-fill" style="width:78%"></div></div>
+                <span class="vsw-val">{{ number_format($visitorStats['pageviews']) }}</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:{{ $pageviewBarPct }}%"></div></div>
             </div>
             <div class="vsw-metric">
                 <span class="vsw-label">Avg. Session</span>
-                <span class="vsw-val">3m 24s</span>
-                <span class="vsw-trend vsw-down">&#8595; 5%</span>
-                <div class="vsw-bar"><div class="vsw-fill" style="width:45%"></div></div>
+                <span class="vsw-val">{{ $visitorStats['avg_session'] }}</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:{{ $sessionBarPct }}%"></div></div>
             </div>
             <div class="vsw-metric">
                 <span class="vsw-label">Bounce Rate</span>
-                <span class="vsw-val">42%</span>
-                <span class="vsw-trend vsw-neutral">&#8212; stable</span>
-                <div class="vsw-bar"><div class="vsw-fill" style="width:42%"></div></div>
+                <span class="vsw-val">{{ $visitorStats['bounce_rate'] }}</span>
+                <div class="vsw-bar"><div class="vsw-fill" style="width:{{ $visitorStats['bounce_pct'] }}%"></div></div>
             </div>
         </div>
 
         <div class="vsw-geo">
             <p class="vsw-geo-label">Top Countries</p>
-            @foreach([['US','United States',38],['GB','United Kingdom',19],['CA','Canada',12],['AU','Australia',8],['DE','Germany',7]] as [$code,$name,$pct])
+            @forelse($topCountries as $country)
                 <div class="vsw-geo-row">
-                    <span class="vsw-cc">{{ $code }}</span>
-                    <span class="vsw-cn">{{ $name }}</span>
-                    <div class="vsw-gbar"><div class="vsw-gfill" style="width:{{ $pct }}%"></div></div>
-                    <span class="vsw-pct">{{ $pct }}%</span>
+                    <span class="vsw-cc">{{ $country['code'] }}</span>
+                    <span class="vsw-cn">{{ $country['country'] }}</span>
+                    <div class="vsw-gbar"><div class="vsw-gfill" style="width:{{ $country['pct'] }}%"></div></div>
+                    <span class="vsw-pct">{{ $country['pct'] }}%</span>
                 </div>
-            @endforeach
+            @empty
+                <p class="vsw-empty">No visitor data for this period.</p>
+            @endforelse
         </div>
     </div>
 

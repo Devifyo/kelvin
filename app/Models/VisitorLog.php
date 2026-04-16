@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class VisitorLog extends Model
 {
@@ -55,13 +56,16 @@ class VisitorLog extends Model
         $pageviews = (clone $query)->count();
         $visitors  = (clone $query)->distinct('ip_address')->count('ip_address');
 
-        // Average total session time per visitor:
-        // sum each IP's page durations, then average across IPs
-        $avgSec = (clone $query)
-            ->selectRaw('SUM(session_duration) as total')
-            ->groupBy('ip_address')
-            ->pluck('total')
-            ->avg() ?? 0;
+        // Average session duration: sum page durations per IP per day (one "session" = one IP per day),
+        // then average those session totals. Cap each page duration at 1800s (30 min) to exclude
+        // stale records where the user left and came back hours later within the same cache window.
+        $avgSec = DB::table(
+                (clone $query)
+                    ->selectRaw('SUM(LEAST(COALESCE(session_duration, 0), 1800)) as total')
+                    ->groupBy('ip_address', DB::raw('DATE(created_at)'))
+                    ->toBase(),
+                'sessions'
+            )->avg('total') ?? 0;
 
         // Bounce: visitors who only loaded 1 page in this period
         $bounced = (clone $query)
@@ -78,11 +82,13 @@ class VisitorLog extends Model
         $s = (int) $avgSec % 60;
 
         return [
-            'visitors'     => $visitors,
-            'pageviews'    => $pageviews,
-            'avg_session'  => "{$m}m {$s}s",
-            'bounce_rate'  => $visitors > 0 ? round($bounced / $visitors * 100) . '%' : '0%',
-            'new_visitors' => $new,
+            'visitors'        => $visitors,
+            'pageviews'       => $pageviews,
+            'avg_session'     => "{$m}m {$s}s",
+            'avg_session_sec' => (int) $avgSec,
+            'bounce_rate'     => $visitors > 0 ? round($bounced / $visitors * 100) . '%' : '0%',
+            'bounce_pct'      => $visitors > 0 ? (int) round($bounced / $visitors * 100) : 0,
+            'new_visitors'    => $new,
         ];
     }
 
