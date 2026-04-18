@@ -120,14 +120,14 @@
 
 /* Main Content Card */
 .article-wrap {
-    max-width: 860px;
+    max-width: 780px;
     margin: 0 auto;
     background: var(--white);
     border: 1px solid var(--ivory3);
     box-shadow: 0 20px 40px rgba(26,35,50,.04);
     position: relative;
-    top: -4rem; 
-    overflow: hidden; /* Keeps edge-to-edge image contained */
+    top: -4rem;
+    overflow: hidden;
 }
 .article-wrap::before {
     content: ''; position: absolute; left: 0; right: 0; top: 0;
@@ -146,7 +146,7 @@
 
 /* Inner Text Container */
 .article-body {
-    padding: 4rem 5rem;
+    padding: 3.5rem 4rem;
 }
 
 /* Refined PDF Card */
@@ -210,45 +210,137 @@
 
 /* Typography Polish */
 .rich-content {
-    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
-    font-size: 1.2rem;
-    color: var(--charcoal);
-    line-height: 1.9;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    color: #3d4f5c;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
+    word-spacing: 0.02em;
 }
+
+/* Lead paragraph */
 .rich-content > p:first-of-type {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     line-height: 1.8;
     color: var(--slate);
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--ivory3);
 }
-.rich-content p { margin-bottom: 2rem; }
+.rich-content p {
+    margin-bottom: 1.75rem;
+}
+
+/* Headings */
+.rich-content h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--slate);
+    margin: 3.5rem 0 1.25rem;
+    line-height: 1.2;
+}
 .rich-content h2 {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.45rem;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--slate);
-    margin: 4rem 0 1.5rem;
-    padding-bottom: .75rem;
-    border-bottom: 1px solid var(--ivory3);
+    margin: 3.5rem 0 1.25rem;
+    padding-bottom: .6rem;
+    border-bottom: 2px solid var(--ivory3);
 }
 .rich-content h3 {
     font-family: -apple-system, sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--slate);
-    margin: 2.5rem 0 1rem;
+    margin: 2.5rem 0 .75rem;
+    letter-spacing: -0.005em;
 }
+.rich-content h4 {
+    font-family: -apple-system, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--slate);
+    margin: 2rem 0 .5rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-size: .85rem;
+}
+.rich-content h5,
+.rich-content h6 {
+    font-family: -apple-system, sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 1.5rem 0 .5rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+/* Lists */
 .rich-content ul {
-    margin-bottom: 2.5rem;
-    padding-left: 1.5rem;
+    list-style: disc;
+    margin: 0 0 2rem 1.75rem;
+    padding: 0;
 }
-.rich-content ul li {
-    margin-bottom: 1rem;
-    padding-left: .5rem;
+.rich-content ol {
+    list-style: decimal;
+    margin: 0 0 2rem 1.75rem;
+    padding: 0;
 }
-.rich-content ul li strong { color: var(--slate); font-family: -apple-system, sans-serif; }
-.rich-content ul li::marker { color: var(--copper); }
+.rich-content ul ul,
+.rich-content ol ul { list-style: circle; margin-bottom: 0; margin-top: .35rem; margin-left: 1.5rem; }
+.rich-content ul ol,
+.rich-content ol ol { list-style: lower-alpha; margin-bottom: 0; margin-top: .35rem; margin-left: 1.5rem; }
+.rich-content li {
+    margin-bottom: .6rem;
+    line-height: 1.7;
+}
+.rich-content li::marker { color: var(--copper); font-size: .9em; }
+.rich-content li strong { color: var(--slate); }
+
+/* Inline styles */
+.rich-content strong,
+.rich-content b { font-weight: 700; color: var(--slate); }
+.rich-content em,
+.rich-content i { font-style: italic; }
+.rich-content u { text-decoration: underline; }
+.rich-content s,
+.rich-content del { text-decoration: line-through; color: var(--muted); }
+.rich-content a { color: var(--copper); text-decoration: underline; text-underline-offset: 3px; transition: color .2s; }
+.rich-content a:hover { color: var(--copper-dark); }
+
+/* Code */
+.rich-content code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .9em;
+    background: var(--ivory2);
+    border: 1px solid var(--ivory3);
+    border-radius: 3px;
+    padding: .1em .4em;
+    color: var(--slate);
+}
+.rich-content pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .9rem;
+    background: var(--slate);
+    color: var(--ivory);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+.rich-content pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+}
+
+/* Blockquote */
 .rich-content blockquote {
     margin: 4rem -2rem;
     padding: 2.5rem 3rem;
@@ -261,6 +353,48 @@
     border-bottom: 1px solid rgba(181,114,42,.2);
     background: var(--ivory);
 }
+
+/* Horizontal rule */
+.rich-content hr {
+    border: none;
+    border-top: 1px solid var(--ivory3);
+    margin: 3rem 0;
+}
+
+/* Images */
+.rich-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+    border-radius: 4px;
+}
+
+/* Tables */
+.rich-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+}
+.rich-content th {
+    font-family: -apple-system, sans-serif;
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--slate);
+    background: var(--ivory2);
+    padding: .75rem 1rem;
+    border: 1px solid var(--ivory3);
+    text-align: left;
+}
+.rich-content td {
+    padding: .75rem 1rem;
+    border: 1px solid var(--ivory3);
+    vertical-align: top;
+}
+.rich-content tr:nth-child(even) td { background: var(--ivory); }
 
 /* ─────────────────────────────────────────
    ARTICLE FOOTER & BOTTOM ACTIONS
@@ -358,10 +492,12 @@
 @media(max-width: 900px) {
     .article-wrap { top: -2rem; }
     .page-header { padding: 9rem 1.5rem 5rem; }
-    .article-cover { height: 300px; }
-    .article-body { padding: 3rem 2rem; }
+    .article-cover { height: 280px; }
+    .article-body { padding: 2.5rem 1.75rem; }
     .pdf-attachment { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-    .rich-content blockquote { margin: 3rem -2rem; padding: 2rem; font-size: 1.3rem; }
+    .rich-content { font-size: 1.05rem; }
+    .rich-content > p:first-of-type { font-size: 1.1rem; }
+    .rich-content blockquote { margin: 2.5rem -1.75rem; padding: 1.75rem 2rem; font-size: 1.25rem; }
     .article-actions { flex-direction: column; align-items: flex-start; gap: 2rem; }
     .author-bio-box { flex-direction: column; }
 }

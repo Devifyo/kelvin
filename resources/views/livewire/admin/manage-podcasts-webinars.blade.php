@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <style>
         .plyr { border-radius: 8px; --plyr-color-main: var(--copper, #b87333); }
+        .preview-box .plyr { max-width: 360px; max-height: 200px; }
+        .preview-box .plyr:-webkit-full-screen,
+        .preview-box .plyr:fullscreen { max-width: none; max-height: none; }
         .video-preview-overlay { position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:flex;align-items:center;justify-content:center; }
         .video-preview-inner { position:relative;width:min(860px,96vw); }
         .video-preview-close { position:absolute;top:-38px;right:0;background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;line-height:1; }
@@ -19,7 +22,7 @@
             <input type="text" wire:model.live="search" placeholder="Search podcasts & webinars...">
         </div>
         <button wire:click="create" class="btn-create">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Link
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New
         </button>
     </div>
 
@@ -87,7 +90,7 @@
                 
                 <div class="modal-header">
                     <h2 style="font-family: 'Cormorant Garamond'; font-size: 2rem; color: var(--slate); margin:0;">
-                        {{ $mediaId ? 'Edit Item' : 'New Podcast/Webinar' }}
+                        {{ $mediaId ? 'Edit Podcast/Webinar' : 'New Podcast/Webinar' }}
                     </h2>
                 </div>
                 
@@ -204,7 +207,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" wire:click="$set('showModal', false)" style="background: transparent; border: none; font-weight: 700; color: var(--muted); cursor: pointer; padding: 0.9rem 1.5rem;">Cancel</button>
-                    <button type="button" wire:click="save" style="background: var(--copper); color: white; border: none; padding: 0.9rem 2.5rem; border-radius: 10px; font-weight: 700; cursor: pointer;">Save Link</button>
+                    <button type="button" wire:click="save" style="background: var(--copper); color: white; border: none; padding: 0.9rem 2.5rem; border-radius: 10px; font-weight: 700; cursor: pointer;">Save</button>
                 </div>
                 
             </div>

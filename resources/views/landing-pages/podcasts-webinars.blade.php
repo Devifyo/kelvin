@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @push('styles')
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
+<style>
+.plyr { --plyr-color-main: var(--copper, #b87333); border-radius: 0; }
+.vp-overlay { position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9000;display:flex;align-items:center;justify-content:center;padding:1.5rem; }
+.vp-inner { position:relative;width:min(900px,100%); }
+.vp-close { position:absolute;top:-42px;right:0;background:none;border:none;color:#fff;font-size:2rem;line-height:1;cursor:pointer;padding:0; }
+.vp-title { position:absolute;top:-40px;left:0;color:rgba(255,255,255,.75);font-size:.875rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 50px); }
+</style>
 <style>
 /* ─────────────────────────────────────────
    PAGE HEADER (Matches Blog/Papers)
@@ -85,6 +93,11 @@
 .media-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; opacity: 0.85; }
 .media-card:hover .media-img-wrap img { transform: scale(1.05); opacity: 1; }
 
+/* Hover video preview */
+.media-img-wrap .hover-video { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease;pointer-events:none; }
+.media-card:hover .hover-video { opacity:1; }
+.media-card:hover .media-img-wrap img { opacity:0; }
+
 .play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 2; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
 .play-overlay svg { width: 24px; height: 24px; fill: var(--white); margin-left: 4px; transition: transform 0.3s; }
 .media-card:hover .play-overlay { background: var(--copper); border-color: var(--copper); transform: translate(-50%, -50%) scale(1.1); }
@@ -145,19 +158,38 @@
 </div>
 
 <section class="content-section">
+
+    {{-- Plyr overlay --}}
+    <div class="vp-overlay" id="vpOverlay" style="display:none;" onclick="if(event.target===this) vpClose()">
+        <div class="vp-inner">
+            <span class="vp-title" id="vpTitle"></span>
+            <button class="vp-close" onclick="vpClose()" aria-label="Close">&times;</button>
+            <video id="vpVideo" playsinline style="width:100%;"></video>
+        </div>
+    </div>
+
     <div class="media-grid">
 
         {{-- DYNAMIC CARDS --}}
         @forelse($mediaItems as $item)
+            @if($item->video_path)
+            <div class="media-card reveal rv2" style="cursor:pointer;"
+                 onclick="vpPlay('{{ $item->video_url }}', '{{ addslashes($item->title) }}')">
+            @else
             <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer" class="media-card reveal rv2">
+            @endif
                 <div class="media-img-wrap">
                     @if($item->thumbnail_url)
                         <img src="{{ $item->thumbnail_url }}" alt="{{ $item->title }}" loading="lazy">
                     @else
-                        {{-- Fallback Gradient if no image is uploaded --}}
                         <div style="width:100%; height:100%; background: linear-gradient(135deg, var(--slate), var(--charcoal));"></div>
                     @endif
-                    
+
+                    @if($item->video_path)
+                        <video class="hover-video" muted playsinline loop preload="none"
+                               data-src="{{ $item->video_url }}"></video>
+                    @endif
+
                     <div class="play-overlay">
                         <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
                     </div>
@@ -168,19 +200,26 @@
                         <span class="media-tag">{{ ucfirst($item->type) }}</span>
                         <span class="media-date">{{ $item->published_date ? $item->published_date->format('M d, Y') : '' }}</span>
                     </div>
-                    
+
                     <h3 class="media-title">{{ $item->title }}</h3>
-                    
-                    <div class="media-desc">
-                        {{ $item->description }}
-                    </div>
-                    
+
+                    <div class="media-desc">{{ $item->description }}</div>
+
                     <div class="media-platform">
+                        @if($item->video_path)
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+                        Play Video
+                        @else
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         Listen / Watch on {{ $item->platform ?: 'External Site' }}
+                        @endif
                     </div>
                 </div>
+            @if($item->video_path)
+            </div>
+            @else
             </a>
+            @endif
         @empty
             {{-- SERVER-SIDE NO RESULTS MESSAGE --}}
             <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--white); border: 1px dashed var(--ivory3); border-radius: 12px;">
@@ -195,4 +234,40 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script>
+let _vplyr = null;
+function vpPlay(url, title) {
+    const overlay = document.getElementById('vpOverlay');
+    const video   = document.getElementById('vpVideo');
+    document.getElementById('vpTitle').textContent = title;
+    video.innerHTML = '<source src="' + url + '">';
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    _vplyr = new Plyr(video, { autoplay: true, controls: ['play','progress','current-time','duration','mute','volume','fullscreen'] });
+}
+function vpClose() {
+    document.getElementById('vpOverlay').style.display = 'none';
+    document.body.style.overflow = '';
+    if (_vplyr) { _vplyr.pause(); _vplyr.destroy(); _vplyr = null; }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') vpClose(); });
+
+// Hover video preview — lazy-load src on first hover
+document.querySelectorAll('.media-card').forEach(card => {
+    const vid = card.querySelector('.hover-video');
+    if (!vid) return;
+    card.addEventListener('mouseenter', () => {
+        if (!vid.src && vid.dataset.src) {
+            vid.src = vid.dataset.src;
+        }
+        vid.currentTime = 0;
+        vid.play().catch(() => {});
+    });
+    card.addEventListener('mouseleave', () => {
+        vid.pause();
+        vid.currentTime = 0;
+    });
+});
+</script>
 @endpush
