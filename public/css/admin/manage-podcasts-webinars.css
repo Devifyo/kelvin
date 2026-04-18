@@ -24,3 +24,7 @@
 .badge-inactive { background: var(--ivory3); color: var(--muted); }
 .error-msg { color: #ef4444; font-size: 0.75rem; margin-top: 0.4rem; display: block; font-weight: 600; }
 .preview-box { margin-top: 0.75rem; padding: 0.75rem; border: 1px dashed var(--ivory3); border-radius: 8px; display: inline-block; background: var(--ivory2); }
+.source-toggle { display: flex; gap: 0.5rem; }
+.source-toggle .toggle-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1rem; border-radius: 10px; border: 1.5px solid var(--ivory3); background: var(--white); color: var(--muted); font-size: 0.825rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.source-toggle .toggle-btn:hover { border-color: var(--copper); color: var(--copper); }
+.source-toggle .toggle-btn.active { background: var(--copper); border-color: var(--copper); color: var(--white); }
