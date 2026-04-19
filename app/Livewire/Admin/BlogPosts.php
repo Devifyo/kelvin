@@ -53,8 +53,8 @@ class BlogPosts extends Component
             'featured_image' => 'nullable|image|max:2048',
             'attachment' => 'nullable|file|mimes:pdf,doc,docx,zip|max:5120',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:1000', 
-            'meta_keywords' => 'nullable|string|max:500', 
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string|max:255',
             'status' => 'required|in:published,draft,inactive',
             'publish_strategy' => 'required|in:now,custom',
             'published_at' => 'nullable|string', // Validated as string because JS sends an ISO timestamp

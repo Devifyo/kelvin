@@ -43,8 +43,8 @@ class TrainingClasses extends Component
             'prerequisites' => 'nullable|string|max:500',
             'length' => 'nullable|string|max:255',
             'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:1000', 
-            'meta_keywords' => 'nullable|string|max:500', 
+            'meta_description' => 'nullable|string|max:160',
+            'meta_keywords' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];

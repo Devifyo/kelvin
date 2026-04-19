@@ -233,10 +233,10 @@
                         </div>
 
                         <div class="form-divider">SEO Settings</div>
-                        <div class="form-group"><label>Page Meta Title</label><input type="text" wire:model="meta_title" class="form-control"></div>
+                        <div class="form-group"><label>Meta Title <span style="font-weight:400;color:var(--muted);">(max 255 chars)</span></label><input type="text" wire:model="meta_title" class="form-control" maxlength="255">@error('meta_title')<span class="error-msg">{{ $message }}</span>@enderror</div>
                         <div class="form-grid-2">
-                            <div class="form-group"><label>Meta Keywords</label><textarea wire:model="meta_keywords" class="form-control" rows="3"></textarea></div>
-                            <div class="form-group"><label>Meta Description</label><textarea wire:model="meta_description" class="form-control" rows="3"></textarea></div>
+                            <div class="form-group"><label>Meta Keywords <span style="font-weight:400;color:var(--muted);">(max 255 chars)</span></label><textarea wire:model="meta_keywords" class="form-control" rows="3" maxlength="255"></textarea>@error('meta_keywords')<span class="error-msg">{{ $message }}</span>@enderror</div>
+                            <div class="form-group"><label>Meta Description <span style="font-weight:400;color:var(--muted);">(max 160 chars — Google truncates beyond this)</span></label><textarea wire:model="meta_description" class="form-control" rows="3" maxlength="160"></textarea>@error('meta_description')<span class="error-msg">{{ $message }}</span>@enderror</div>
                         </div>
 
                         <div class="form-divider">Publishing Controls</div>
