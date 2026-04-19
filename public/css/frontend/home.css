@@ -274,7 +274,7 @@
   border:1px solid var(--ivory3);
   background:var(--ivory);
   transition:all .32s cubic-bezier(.4,0,.2,1);
-  cursor:default;position:relative;overflow:hidden;
+  cursor:pointer;position:relative;overflow:hidden;
 }
 .svc-item::before{
   content:'';position:absolute;left:0;top:0;bottom:0;
