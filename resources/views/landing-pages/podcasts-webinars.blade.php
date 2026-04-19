@@ -95,8 +95,8 @@
 
 /* Hover video preview */
 .media-img-wrap .hover-video { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease;pointer-events:none; }
-.media-card:hover .hover-video { opacity:1; }
-.media-card:hover .media-img-wrap img { opacity:0; }
+.media-card.has-video:hover .hover-video { opacity:1; }
+.media-card.has-video:hover .media-img-wrap img { opacity:0; }
 
 .play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 2; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
 .play-overlay svg { width: 24px; height: 24px; fill: var(--white); margin-left: 4px; transition: transform 0.3s; }
@@ -173,7 +173,7 @@
         {{-- DYNAMIC CARDS --}}
         @forelse($mediaItems as $item)
             @if($item->video_path)
-            <div class="media-card reveal rv2" style="cursor:pointer;"
+            <div class="media-card has-video reveal rv2" style="cursor:pointer;"
                  onclick="vpPlay('{{ $item->video_url }}', '{{ addslashes($item->title) }}')">
             @else
             <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer" class="media-card reveal rv2">
