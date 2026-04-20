@@ -170,8 +170,16 @@ class BlogPosts extends Component
         $post->update(['status' => $post->status === 'published' ? 'draft' : 'published']); 
     }
     
-    public function deletePost($id) { 
-        Post::destroy($id); 
+    public function deletePost($id) {
+        Post::destroy($id);
+    }
+
+    public function reorder(array $ids, int $offset = 0): void
+    {
+        foreach ($ids as $index => $id) {
+            Post::where('id', $id)->update(['sort_order' => $offset + $index]);
+        }
+        $this->dispatch('notify', message: 'Post order saved.', type: 'success');
     }
 
     public function render()
@@ -180,8 +188,14 @@ class BlogPosts extends Component
         if ($this->searchTitle) { $query->where('title', 'like', '%'.$this->searchTitle.'%'); }
         if ($this->filterStatus !== 'all') { $query->where('status', $this->filterStatus); }
 
+        if ($this->searchTitle) {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->orderByRaw('(sort_order IS NULL) ASC, sort_order ASC, created_at DESC');
+        }
+
         return view('livewire.admin.blog-posts', [
-            'posts' => $query->orderBy('created_at', 'desc')->paginate(10),
+            'posts' => $query->paginate(10),
             'categories' => Category::all()
         ]);
     }

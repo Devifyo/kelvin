@@ -26,8 +26,9 @@ class Post extends Model
         'meta_description',
         'meta_keywords',
         'content', // Text Editor Html
-        'status', 
-        'published_at'
+        'status',
+        'published_at',
+        'sort_order',
     ];
 
     /**

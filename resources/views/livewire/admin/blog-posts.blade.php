@@ -3,6 +3,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link href="{{ asset('css/admin/blog-posts.css') }}" rel="stylesheet">
+    <style>
+    .drag-handle { cursor: grab; padding: 0 0.5rem 0 0; color: var(--muted); display: flex; align-items: center; opacity: 0.3; transition: opacity .2s; flex-shrink: 0; }
+    .service-row:hover .drag-handle { opacity: 0.7; }
+    .drag-handle:active { cursor: grabbing; opacity: 1; }
+    .drag-ghost { opacity: 0.35 !important; background: var(--ivory) !important; border: 2px dashed var(--copper) !important; }
+    </style>
 
     {{-- List Header Controls --}}
     <div class="list-controls">
@@ -24,9 +30,18 @@
     </div>
 
     {{-- Data List --}}
-    <div class="service-list-container">
+    <div class="service-list-container"
+         id="sortable-posts"
+         x-data="{}"
+         x-init="initBlogSortable($el, $wire)"
+         @@livewire:updated.window="$nextTick(() => initBlogSortable($el, $wire))"
+         data-page="{{ $posts->currentPage() }}"
+         data-per-page="{{ $posts->perPage() }}">
         @forelse($posts as $item)
-            <div class="service-row" wire:key="post-{{ $item->id }}">
+            <div class="service-row" data-id="{{ $item->id }}" wire:key="post-{{ $item->id }}">
+                <div class="drag-handle" title="Drag to reorder">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+                </div>
                 <div style="display: flex; align-items: center; gap: 1.25rem; width: 45%;">
                     <div class="service-avatar">
                         @if($item->featured_image_url)
@@ -269,4 +284,24 @@
             </div>
         </div>
     @endif
+
+    <script>
+    function initBlogSortable(el, wire) {
+        if (el._sortable) { try { el._sortable.destroy(); } catch(e) {} el._sortable = null; }
+        if (!el.querySelector('.service-row[data-id]')) return;
+        el._sortable = new Sortable(el, {
+            handle: '.drag-handle',
+            draggable: '.service-row',
+            animation: 150,
+            ghostClass: 'drag-ghost',
+            onEnd() {
+                const page    = parseInt(el.dataset.page)    || 1;
+                const perPage = parseInt(el.dataset.perPage) || 10;
+                const offset  = (page - 1) * perPage;
+                const ids = [...el.querySelectorAll('.service-row[data-id]')].map(e => +e.dataset.id);
+                wire.reorder(ids, offset);
+            }
+        });
+    }
+    </script>
 </div>

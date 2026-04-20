@@ -53,7 +53,7 @@ class FrontendContentService
                       ->orWhereHas('category', fn($qc) => $qc->where('name', 'like', "%{$searchTerm}%"))
                 )
             )
-            ->latest('published_at')
+            ->orderByRaw('(sort_order IS NULL) ASC, sort_order ASC, published_at DESC')
             ->paginate($perPage);
     }
 
