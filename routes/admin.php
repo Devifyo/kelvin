@@ -41,7 +41,7 @@ Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 
 Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars');
 
-Route::get('/visitors', VisitorAnalytics::class)->name('visitors')->middleware('maintenance');
+Route::get('/visitors', VisitorAnalytics::class)->name('visitors');
 
 
 Route::post('/tinymce-upload', function (Request $request) {
