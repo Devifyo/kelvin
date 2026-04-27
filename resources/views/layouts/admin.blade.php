@@ -135,6 +135,11 @@
             flex-direction: column;
             min-height: 100vh;
             transition: margin 0.3s ease;
+            max-width: calc(100vw - 280px);
+        }
+
+        @media (max-width: 1024px) {
+            .admin-main { max-width: 100vw; }
         }
 
         .topbar {
@@ -146,6 +151,11 @@
             justify-content: space-between;
             padding: 0 3rem;
             position: sticky; top: 0; z-index: 40;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .topbar { padding: 0 1rem; }
         }
 
         .topbar-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--slate); }
@@ -158,7 +168,15 @@
             font-weight: 700;
         }
 
-        .content-canvas { padding: 3rem; flex-grow: 1; }
+        .content-canvas { padding: 3rem; flex-grow: 1; max-width: 100%; }
+
+        @media (max-width: 1200px) {
+            .content-canvas { padding: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .content-canvas { padding: 1rem; }
+        }
 
         .mobile-toggle { display: none; background: none; border: none; color: var(--slate); cursor: pointer; }
 
@@ -218,6 +236,7 @@
     </style>
     <link rel="stylesheet" href="/css/admin/app-settings.css">
     @livewireStyles
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     @stack('styles')
 </head>
 <body>
