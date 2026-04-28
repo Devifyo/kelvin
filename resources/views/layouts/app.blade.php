@@ -3,32 +3,127 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
-    <title>@yield('title', 'Kevin Thompson Ph.D. Consulting')</title>
-    <meta name="title" content="@yield('meta_title', 'Kevin Thompson Ph.D. Consulting | Agile Hardware & Software')">
-    <meta name="description" content="@yield('meta_description', 'Expert consulting, training, and methodologies bridging the gap between hardware engineering and Agile software development.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'Agile Hardware, Scrum, Embedded Systems, Agile Consulting, Software Engineering')">
-    <meta name="author" content="Dr. Kevin Thompson">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url('/') }}">
-    <meta property="og:title" content="@yield('title', 'Kevin Thompson Ph.D. Consulting')">
-    <meta property="og:description" content="@yield('meta_description', 'Expert consulting and training for Agile hardware and software development.')">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url('/') }}">
-    <meta property="twitter:title" content="@yield('title', 'Kevin Thompson Ph.D. Consulting')">
-    <meta property="twitter:description" content="@yield('meta_description', 'Expert consulting and training for Agile hardware and software development.')">
 
     @php
         use App\Models\AppSetting;
         use Illuminate\Support\Facades\Storage;
+
+        // Brand
         $_c          = AppSetting::resolvedColors();
         $_favicon    = AppSetting::get('favicon');
         $_faviconUrl = $_favicon ? Storage::disk('public')->url($_favicon) : null;
         $_appIcon    = AppSetting::get('app_icon');
         $_appIconUrl = $_appIcon ? Storage::disk('public')->url($_appIcon) : null;
         $_appName    = AppSetting::get('app_name', AppSetting::DEFAULTS['app_name']);
+
+        // SEO settings (all cached)
+        $_titleSuffix    = AppSetting::get('seo_title_suffix', '');
+        $_defaultDesc    = AppSetting::get('seo_default_desc')
+            ?: 'Expert consulting, training, and methodologies bridging the gap between hardware engineering and Agile software development.';
+        $_ogImage        = AppSetting::get('seo_og_image', '');
+        $_twitterHandle  = ltrim(AppSetting::get('seo_twitter_handle', ''), '@');
+        $_linkedinUrl    = AppSetting::get('seo_linkedin_url', '');
+        $_googleVerify   = AppSetting::get('seo_google_verify', '');
+        $_bingVerify     = AppSetting::get('seo_bing_verify', '');
+        $_ga4Id          = AppSetting::get('seo_ga4_id', '');
+        $_gtmId          = AppSetting::get('seo_gtm_id', '');
+        $_schemaJobTitle = AppSetting::get('seo_schema_job_title') ?: 'Agile Consultant & Trainer, Ph.D.';
+        $_schemaOrgName  = AppSetting::get('seo_schema_org_name')  ?: 'Kevin Thompson Ph.D. Consulting';
+        $_sameAs = array_values(array_filter([
+            $_linkedinUrl,
+            $_twitterHandle ? 'https://x.com/' . $_twitterHandle : '',
+        ]));
+
+        $_suffix  = $_titleSuffix ? ' ' . ltrim($_titleSuffix) : '';
+        $_pageUrl = url()->current();
     @endphp
+
+    {{-- Google Tag Manager (head) --}}
+    @if($_gtmId)
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ $_gtmId }}');</script>
+    @endif
+
+    {{-- Core meta --}}
+    <title>@yield('title', $_appName){{ $_suffix }}</title>
+    <meta name="description" content="@yield('meta_description', $_defaultDesc)">
+    <meta name="keywords"    content="@yield('meta_keywords', 'Agile Hardware, Scrum, Embedded Systems, Agile Consulting, Software Engineering')">
+    <meta name="author"      content="Dr. Kevin Thompson">
+    <link rel="canonical"    href="{{ $_pageUrl }}" />
+
+    {{-- Search engine verification --}}
+    @if($_googleVerify)
+    <meta name="google-site-verification" content="{{ $_googleVerify }}" />
+    @endif
+    @if($_bingVerify)
+    <meta name="msvalidate.01" content="{{ $_bingVerify }}" />
+    @endif
+
+    {{-- Open Graph --}}
+    <meta property="og:type"        content="@yield('og_type', 'website')">
+    <meta property="og:url"         content="{{ $_pageUrl }}">
+    <meta property="og:site_name"   content="{{ $_appName }}">
+    <meta property="og:title"       content="@yield('title', $_appName){{ $_suffix }}">
+    <meta property="og:description" content="@yield('meta_description', $_defaultDesc)">
+    @if($_ogImage || View::hasSection('og_image'))
+    <meta property="og:image"       content="@yield('og_image', $_ogImage)">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    @endif
+
+    {{-- Twitter / X Card --}}
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:url"         content="{{ $_pageUrl }}">
+    <meta name="twitter:title"       content="@yield('title', $_appName){{ $_suffix }}">
+    <meta name="twitter:description" content="@yield('meta_description', $_defaultDesc)">
+    @if($_twitterHandle)
+    <meta name="twitter:site"    content="{{ '@' . $_twitterHandle }}">
+    <meta name="twitter:creator" content="{{ '@' . $_twitterHandle }}">
+    @endif
+    @if($_ogImage || View::hasSection('og_image'))
+    <meta name="twitter:image"       content="@yield('og_image', $_ogImage)">
+    @endif
+
+    {{-- JSON-LD Structured Data --}}
+    @php
+        $_base    = url('/');
+        $_person  = [
+            '@type'    => 'Person',
+            '@id'      => $_base . '/#person',
+            'name'     => 'Kevin Thompson',
+            'jobTitle' => $_schemaJobTitle,
+            'url'      => url('/about-kevin-thompson'),
+        ];
+        if (count($_sameAs)) {
+            $_person['sameAs'] = $_sameAs;
+        }
+        $_jsonLd = [
+            '@context' => 'https://schema.org',
+            '@graph'   => [
+                $_person,
+                [
+                    '@type'   => 'Organization',
+                    '@id'     => $_base . '/#organization',
+                    'name'    => $_schemaOrgName,
+                    'url'     => $_base,
+                    'founder' => ['@id' => $_base . '/#person'],
+                ],
+                [
+                    '@type'     => 'WebSite',
+                    '@id'       => $_base . '/#website',
+                    'url'       => $_base,
+                    'name'      => $_appName,
+                    'publisher' => ['@id' => $_base . '/#organization'],
+                ],
+            ],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($_jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
+
+    {{-- Google Analytics 4 (only if no GTM — GTM handles GA4 via tag) --}}
+    @if($_ga4Id && !$_gtmId)
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $_ga4Id }}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $_ga4Id }}');</script>
+    @endif
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $_faviconUrl ?? '/apple-touch-icon.png' }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ $_faviconUrl ?? '/favicon-32x32.png' }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ $_faviconUrl ?? '/favicon-16x16.png' }}">
