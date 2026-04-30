@@ -34,7 +34,8 @@ class SeoController extends Controller
         $lines[] = 'Sitemap: ' . url('/sitemap.xml');
 
         return response(implode("\n", $lines) . "\n", 200, [
-            'Content-Type' => 'text/plain',
+            'Content-Type'  => 'text/plain',
+            'Cache-Control' => 'public, max-age=86400',
         ]);
     }
 
