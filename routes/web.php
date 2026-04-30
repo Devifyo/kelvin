@@ -45,6 +45,7 @@ Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->n
 // SEO files — no session/cookie middleware so crawlers get clean public responses
 Route::withoutMiddleware([
     \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
     \Illuminate\Cookie\Middleware\EncryptCookies::class,
     \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
     \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
