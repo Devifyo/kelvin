@@ -42,7 +42,15 @@ Route::controller(ContactController::class)->group(function () {
 
 Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->name('visa.eater-sunday');
 
-// SEO files (dynamic — overrides any static files in public/)
-Route::get('/robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
-Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
-Route::get('/llms.txt',    [SeoController::class, 'llms'])->name('seo.llms');
+// SEO files — no session/cookie middleware so crawlers get clean public responses
+Route::withoutMiddleware([
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+    \App\Http\Middleware\TrackVisitor::class,
+])->group(function () {
+    Route::get('/robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
+    Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
+    Route::get('/llms.txt',    [SeoController::class, 'llms'])->name('seo.llms');
+});
