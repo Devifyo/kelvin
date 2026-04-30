@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin
+Disallow: /login
+Disallow: /livewire
+Disallow: /_ignition
+
+Disallow: /telescope
+Disallow: /horizon
+Disallow: /storage/app/
+
+Sitemap: https://kevin.devifyo.cloud/sitemap.xml
