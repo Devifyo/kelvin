@@ -1,115 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://kevin.devifyo.cloud</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/about-kevin-thompson</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-consulting-services</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-training-classes</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-insights-blog</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/podcasts-webinars</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/contact-us</loc>
-        <lastmod>2026-04-30T21:08:53+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/contact-us</loc>
+        <lastmod>2026-05-03T00:15:39+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-insights-blog/scrum-teams-swarming-and-hardware</loc>
-        <lastmod>2026-04-20T18:06:42+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/scrum-teams-swarming-and-hardware</loc>
+        <lastmod>2026-04-21T21:11:29+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-insights-blog/how-hardware-and-software-engineers-differ</loc>
-        <lastmod>2026-04-20T18:06:42+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/how-hardware-and-software-engineers-differ</loc>
+        <lastmod>2026-04-21T21:14:19+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-insights-blog/embedded-software</loc>
-        <lastmod>2026-04-20T18:06:42+00:00</lastmod>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/embedded-software</loc>
+        <lastmod>2026-04-21T21:16:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-insights-blog/agile-hardware-development-with-scrum</loc>
-        <lastmod>2026-04-20T18:06:42+00:00</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-overview-for-executives-and-managers</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-overview-for-executives-and-managers</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-software-development-with-scrum-training</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-software-development-with-scrum-training</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-hardware-development-with-scrum</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-hardware-development-with-scrum</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-project-management-with-kanban</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-project-management-with-kanban</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-program-management-training</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-program-management-training</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/agile-portfolio-management-course</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/agile-portfolio-management-course</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://kevin.devifyo.cloud/agile-training-classes/advanced-product-owner-training</loc>
+        <loc>https://kevinthompsonphd.com/agile-training-classes/advanced-product-owner-training</loc>
         <lastmod>2026-04-19T13:02:40+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>

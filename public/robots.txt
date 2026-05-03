@@ -8,4 +8,4 @@ Disallow: /telescope
 Disallow: /horizon
 Disallow: /storage/app/
 
-Sitemap: https://kevin.devifyo.cloud/sitemap.xml
+Sitemap: https://kevinthompsonphd.com/sitemap.xml
