@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Papers & Presentations | Kelvin Enterprise')
-@section('meta_description', 'Explore Kelvin Enterprise\'s collection of Agile research papers and presentations — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies by Kevin Thompson PhD.')
-@section('meta_keywords', 'Agile research papers, Agile presentations, Agile hardware development, embedded systems Agile, Scrum methodology, Agile case studies, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation research, hardware Agile papers')
+@section('title', 'Papers & Presentations | Kevin Enterprise')
+@section('meta_description', 'Explore Kevin Enterprise\'s collection of Agile research papers and presentations — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies by Kevin Thompson PhD.')
+@section('meta_keywords', 'Agile research papers, Agile presentations, Agile hardware development, embedded systems Agile, Scrum methodology, Agile case studies, Kevin Thompson PhD, Kevin Enterprise, Agile transformation research, hardware Agile papers')
 @section('og_type', 'website')
 
 @push('styles')
@@ -90,7 +90,7 @@
     $_papersJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'CollectionPage',
-        'name'        => 'Papers & Presentations | Kelvin Enterprise',
+        'name'        => 'Papers & Presentations | Kevin Enterprise',
         'description' => 'A comprehensive collection of Agile research papers and presentations by Kevin Thompson PhD — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies.',
         'url'         => url()->current(),
         'author'      => [
@@ -99,7 +99,7 @@
         ],
         'publisher'   => [
             '@type' => 'Organization',
-            'name'  => 'Kelvin Enterprise',
+            'name'  => 'Kevin Enterprise',
             'url'   => url('/'),
         ],
         'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation'],

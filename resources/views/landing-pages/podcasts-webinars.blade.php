@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Podcasts & Webinars | Kelvin Enterprise')
-@section('meta_description', 'Watch and listen to Kelvin Enterprise podcasts and webinars — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation insights by Kevin Thompson PhD.')
-@section('meta_keywords', 'Agile podcasts, Agile webinars, Agile hardware development, embedded systems Agile, Scrum webinars, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation videos, hardware Agile podcast')
+@section('title', 'Podcasts & Webinars | Kevin Enterprise')
+@section('meta_description', 'Watch and listen to Kevin Enterprise podcasts and webinars — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation insights by Kevin Thompson PhD.')
+@section('meta_keywords', 'Agile podcasts, Agile webinars, Agile hardware development, embedded systems Agile, Scrum webinars, Kevin Thompson PhD, Kevin Enterprise, Agile transformation videos, hardware Agile podcast')
 @section('og_type', 'website')
 
 @push('styles')
@@ -245,7 +245,7 @@
     $_mediaJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'CollectionPage',
-        'name'        => 'Podcasts & Webinars | Kelvin Enterprise',
+        'name'        => 'Podcasts & Webinars | Kevin Enterprise',
         'description' => 'A curated collection of Agile podcasts and webinars by Kevin Thompson PhD — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and real-world Agile transformation insights.',
         'url'         => url()->current(),
         'author'      => [
@@ -254,7 +254,7 @@
         ],
         'publisher'   => [
             '@type' => 'Organization',
-            'name'  => 'Kelvin Enterprise',
+            'name'  => 'Kevin Enterprise',
             'url'   => url('/'),
         ],
         'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation', 'Podcasts', 'Webinars'],

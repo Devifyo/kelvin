@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us | Kelvin Enterprise')
-@section('meta_description', 'Get in touch with Kelvin Enterprise — reach out to Kevin Thompson PhD for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.')
-@section('meta_keywords', 'contact Kelvin Enterprise, Agile consulting inquiry, Agile training contact, Kevin Thompson PhD contact, Agile assessment request, Agile transformation inquiry, hire Agile consultant')
+@section('title', 'Contact Us | Kevin Enterprise')
+@section('meta_description', 'Get in touch with Kevin Enterprise — reach out to Kevin Thompson PhD for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.')
+@section('meta_keywords', 'contact Kevin Enterprise, Agile consulting inquiry, Agile training contact, Kevin Thompson PhD contact, Agile assessment request, Agile transformation inquiry, hire Agile consultant')
 @section('og_type', 'website')
 
 @push('styles')
@@ -337,8 +337,8 @@ textarea.form-control {
     $_contactJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'ContactPage',
-        'name'        => 'Contact Us | Kelvin Enterprise',
-        'description' => 'Reach out to Kevin Thompson PhD and Kelvin Enterprise for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.',
+        'name'        => 'Contact Us | Kevin Enterprise',
+        'description' => 'Reach out to Kevin Thompson PhD and Kevin Enterprise for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.',
         'url'         => url()->current(),
         'author'      => [
             '@type' => 'Person',
@@ -346,7 +346,7 @@ textarea.form-control {
         ],
         'publisher'   => [
             '@type' => 'Organization',
-            'name'  => 'Kelvin Enterprise',
+            'name'  => 'Kevin Enterprise',
             'url'   => url('/'),
         ],
         'inLanguage'  => 'en-US',
