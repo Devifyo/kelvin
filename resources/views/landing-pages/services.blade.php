@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+{{-- ─── SEO ─────────────────────────────────────────────────────────────────── --}}
+@section('title', 'Consulting & Training Services | Kelvin Enterprise')
+@section('meta_description', 'Kelvin Enterprise delivers expert Agile consulting and on-site training services — including Agile assessments, advisory coaching, and Agile transformation programs — tailored to your organization.')
+@section('meta_keywords', 'Agile consulting, Agile training, Agile transformation, Agile assessment, Agile coaching, Scrum training, on-site consulting, hardware Agile, embedded systems Agile, Kelvin Enterprise, Kevin Thompson PhD')
+@section('og_type', 'website')
+
 @push('styles')
 <style>
 /* ─────────────────────────────────────────
@@ -421,4 +427,22 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Service offering structured data --}}
+@php
+    $_svcJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'Service',
+        'name'        => 'Agile Consulting & Training Services',
+        'description' => 'Kelvin Enterprise offers expert Agile consulting and on-site training services — including Agile assessments, advisory coaching, and Agile transformation programs — tailored to your organization.',
+        'provider'    => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'areaServed'  => 'US',
+        'serviceType' => ['Agile Consulting', 'Agile Training', 'Agile Transformation', 'Agile Assessment', 'Agile Coaching'],
+        'url'         => url()->current(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_svcJsonLd !!}</script>
 @endpush

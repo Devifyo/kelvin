@@ -343,6 +343,47 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Homepage structured data --}}
+@php
+    $_homeJsonLd = json_encode([
+        '@context' => 'https://schema.org',
+        '@graph'   => [
+            [
+                '@type'           => 'WebSite',
+                '@id'             => url('/') . '#website',
+                'url'             => url('/'),
+                'name'            => 'Kelvin Enterprise',
+                'description'     => $welcomeContent->seo_description ?? 'Kelvin Enterprise delivers expert Agile consulting and on-site training services, specializing in Agile hardware development, embedded systems, and Agile transformation.',
+                'publisher'       => ['@id' => url('/') . '#organization'],
+                'inLanguage'      => 'en-US',
+                'potentialAction' => [
+                    '@type'       => 'SearchAction',
+                    'target'      => ['@type' => 'EntryPoint', 'urlTemplate' => url('/blog') . '?search={search_term_string}'],
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+            [
+                '@type'       => 'Organization',
+                '@id'         => url('/') . '#organization',
+                'name'        => 'Kelvin Enterprise',
+                'url'         => url('/'),
+                'founder'     => ['@id' => url('/') . '#person'],
+                'areaServed'  => 'US',
+                'knowsAbout'  => ['Agile Consulting', 'Agile Training', 'Agile Transformation', 'Hardware Agile', 'Embedded Systems', 'Scrum'],
+            ],
+            [
+                '@type'      => 'Person',
+                '@id'        => url('/') . '#person',
+                'name'       => 'Kevin Thompson PhD',
+                'jobTitle'   => 'Agile Consultant & Founder',
+                'worksFor'   => ['@id' => url('/') . '#organization'],
+                'knowsAbout' => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation', 'Agile Coaching'],
+                'url'        => url('/about'),
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_homeJsonLd !!}</script>
 <script>
     document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {

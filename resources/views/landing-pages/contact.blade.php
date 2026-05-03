@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Contact Us | Kelvin Enterprise')
+@section('meta_description', 'Get in touch with Kelvin Enterprise — reach out to Kevin Thompson PhD for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.')
+@section('meta_keywords', 'contact Kelvin Enterprise, Agile consulting inquiry, Agile training contact, Kevin Thompson PhD contact, Agile assessment request, Agile transformation inquiry, hire Agile consultant')
+@section('og_type', 'website')
+
 @push('styles')
 <style>
 /* ─────────────────────────────────────────
@@ -327,6 +332,27 @@ textarea.form-control {
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Contact page structured data --}}
+@php
+    $_contactJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'ContactPage',
+        'name'        => 'Contact Us | Kelvin Enterprise',
+        'description' => 'Reach out to Kevin Thompson PhD and Kelvin Enterprise for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.',
+        'url'         => url()->current(),
+        'author'      => [
+            '@type' => 'Person',
+            'name'  => 'Kevin Thompson PhD',
+        ],
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'inLanguage'  => 'en-US',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_contactJsonLd !!}</script>
 <script>
 // Wrapped in an IIFE to prevent variable redeclaration errors in Lighthouse
 (function() {

@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Blog | Kelvin Enterprise')
+@section('meta_description', 'Read the Kelvin Enterprise blog — expert articles and insights on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation strategies by Kevin Thompson PhD.')
+@section('meta_keywords', 'Agile blog, Agile articles, Agile hardware development, embedded systems Agile, Scrum insights, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation blog, hardware Agile articles')
+@section('og_type', 'website')
+
 @push('styles')
 <style>
 /* ─────────────────────────────────────────
@@ -390,6 +395,28 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Blog collection structured data --}}
+@php
+    $_blogJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'Blog',
+        'name'        => 'Blog | Kelvin Enterprise',
+        'description' => 'Expert articles and insights on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation strategies by Kevin Thompson PhD.',
+        'url'         => url()->current(),
+        'author'      => [
+            '@type' => 'Person',
+            'name'  => 'Kevin Thompson PhD',
+        ],
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation'],
+        'inLanguage'  => 'en-US',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_blogJsonLd !!}</script>
 <script>
 // Prevent multiple observer declarations via IIFE
 (function() {

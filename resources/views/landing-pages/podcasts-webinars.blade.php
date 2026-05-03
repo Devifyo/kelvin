@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Podcasts & Webinars | Kelvin Enterprise')
+@section('meta_description', 'Watch and listen to Kelvin Enterprise podcasts and webinars — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation insights by Kevin Thompson PhD.')
+@section('meta_keywords', 'Agile podcasts, Agile webinars, Agile hardware development, embedded systems Agile, Scrum webinars, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation videos, hardware Agile podcast')
+@section('og_type', 'website')
+
 @push('styles')
 <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
 <style>
@@ -235,6 +240,28 @@
 
 @push('scripts')
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+{{-- Page-level JSON-LD: Podcasts & webinars collection structured data --}}
+@php
+    $_mediaJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'CollectionPage',
+        'name'        => 'Podcasts & Webinars | Kelvin Enterprise',
+        'description' => 'A curated collection of Agile podcasts and webinars by Kevin Thompson PhD — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and real-world Agile transformation insights.',
+        'url'         => url()->current(),
+        'author'      => [
+            '@type' => 'Person',
+            'name'  => 'Kevin Thompson PhD',
+        ],
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation', 'Podcasts', 'Webinars'],
+        'inLanguage'  => 'en-US',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_mediaJsonLd !!}</script>
 <script>
 let _vplyr = null;
 function vpPlay(url, title) {

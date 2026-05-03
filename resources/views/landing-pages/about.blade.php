@@ -113,5 +113,34 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: About page structured data --}}
+@php
+    $_aboutJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'AboutPage',
+        'name'        => $aboutContent->seo_title ?? 'About Kevin Thompson PhD | Kelvin Enterprise',
+        'description' => $aboutContent->seo_description ?? 'Learn about Kevin Thompson PhD — Agile pioneer, author, and founder of Kelvin Enterprise, specializing in Agile hardware development, embedded systems, and Agile transformation consulting.',
+        'url'         => url()->current(),
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'mainEntity'  => [
+            '@type'       => 'Person',
+            'name'        => 'Kevin Thompson PhD',
+            'jobTitle'    => 'Agile Consultant & Founder',
+            'worksFor'    => [
+                '@type' => 'Organization',
+                'name'  => 'Kelvin Enterprise',
+                'url'   => url('/'),
+            ],
+            'knowsAbout'  => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation', 'Agile Coaching'],
+            'url'         => url()->current(),
+        ],
+        'inLanguage'  => 'en-US',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_aboutJsonLd !!}</script>
 
 @endpush

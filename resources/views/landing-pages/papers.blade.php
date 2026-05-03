@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Papers & Presentations | Kelvin Enterprise')
+@section('meta_description', 'Explore Kelvin Enterprise\'s collection of Agile research papers and presentations — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies by Kevin Thompson PhD.')
+@section('meta_keywords', 'Agile research papers, Agile presentations, Agile hardware development, embedded systems Agile, Scrum methodology, Agile case studies, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation research, hardware Agile papers')
+@section('og_type', 'website')
+
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/frontend/papers.css') }}">
 <style>
@@ -80,6 +85,28 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Research papers collection structured data --}}
+@php
+    $_papersJsonLd = json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'CollectionPage',
+        'name'        => 'Papers & Presentations | Kelvin Enterprise',
+        'description' => 'A comprehensive collection of Agile research papers and presentations by Kevin Thompson PhD — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies.',
+        'url'         => url()->current(),
+        'author'      => [
+            '@type' => 'Person',
+            'name'  => 'Kevin Thompson PhD',
+        ],
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => 'Kelvin Enterprise',
+            'url'   => url('/'),
+        ],
+        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation'],
+        'inLanguage'  => 'en-US',
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_papersJsonLd !!}</script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // Keep the scroll reveal animations
