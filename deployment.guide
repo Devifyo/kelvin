@@ -1,0 +1,81 @@
+# Deployment & Architecture Guide (Docker)
+
+This guide details the current server architecture, which has been fully containerized using Docker to ensure easy deployment and migration.
+
+## Architecture Overview
+
+The application is orchestrated via Docker Compose (`docker-compose.yml`), which manages the following interconnected containers:
+
+1. **`app`**: The Laravel application container running **FrankenPHP / Octane**.
+2. **`db`**: The MySQL 8 database container.
+3. **`phpmyadmin`**: The database management interface, running on the same network.
+4. **`nginx`**: The reverse proxy that maps port `80` to both the Laravel application and phpMyAdmin.
+
+---
+
+## File & Configuration Locations
+
+### 1. Docker Files
+- **Docker Compose**: `/var/www/kelvin/docker-compose.yml`
+- **Laravel Dockerfile**: `/var/www/kelvin/Dockerfile` (Uses `dunglas/frankenphp:php8.3`)
+- **Environment File**: `/var/www/kelvin/.env` (Mapped into containers, `DB_HOST` is set to `db`)
+
+### 2. Nginx (Reverse Proxy Container)
+- **Host Configuration Source**: `/var/www/kelvin/docker-compose/nginx/laravel.conf`
+  - *Maps `location /` to `http://app:8000` (Laravel)*
+  - *Maps `location /dbase/` to `http://phpmyadmin:80` (phpMyAdmin)*
+- **Container Name**: `kelvin_nginx`
+
+### 3. Database & Management
+- **Database Storage Volume**: `/var/www/kelvin/dbdata` (Mapped to `/var/lib/mysql` inside the DB container)
+- **phpMyAdmin Access**: `http://kevinthompsonphd.com/dbase/`
+  - **Host Container**: `kelvin_phpmyadmin`
+
+---
+
+## Common Maintenance Commands
+
+All commands should be executed from the project root (`/var/www/kelvin`).
+
+### Starting & Stopping the Stack
+```bash
+# Start all containers in the background
+docker compose up -d
+
+# Stop all containers
+docker compose down
+
+# Rebuild the containers (if you modified Dockerfile or docker-compose.yml)
+docker compose up -d --build
+```
+
+### Viewing Logs
+```bash
+# View logs for all containers (follow output)
+docker compose logs -f
+
+# View logs for a specific container
+docker compose logs -f app
+docker compose logs -f nginx
+```
+
+### Accessing Containers
+Sometimes you need to run commands inside a container (e.g., running artisan commands).
+```bash
+# Run bash inside the Laravel app container
+docker compose exec app bash
+
+# Run an artisan command (e.g., migrate database)
+docker compose exec app php artisan migrate
+
+# Reload Octane workers without downtime
+docker compose exec app php artisan octane:reload
+```
+
+### Database Credentials
+- **Username**: `root`
+- **Password**: `SecurePassword123!` (Set via `.env` file)
+- **Database Name**: `kelvin`
+
+
+docker compose up -d && docker compose restart nginx app

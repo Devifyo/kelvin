@@ -3,17 +3,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kevin_app
+    container_name: kelvin_app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
       - .:/var/www
     env_file:
       - .env
+    networks:
+      - kelvin_network
 
   db:
     image: mysql:8.0
-    container_name: kevin_db
+    container_name: kelvin_db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -22,28 +24,40 @@ services:
       - ./dbdata:/var/lib/mysql
     env_file:
       - .env
-
-  nginx:
-    image: nginx:alpine
-    container_name: kevin_nginx
-    restart: unless-stopped
-    ports:
-      - "8085:80"
-    volumes:
-      - .:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/
-    depends_on:
-      - app
-      - db
+    networks:
+      - kelvin_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: kevin_phpmyadmin
+    container_name: kelvin_phpmyadmin
     restart: unless-stopped
     environment:
       PMA_HOST: db
-      PMA_ABSOLUTE_URI: https://kevin.devifyo.cloud/dbase/
-    ports:
-      - "8086:80"
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_ABSOLUTE_URI: https://kevinthompsonphd.com/dbase/
     depends_on:
       - db
+    networks:
+      - kelvin_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: kelvin_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - app
+      - phpmyadmin
+    networks:
+      - kelvin_network
+
+networks:
+  kelvin_network:
+    driver: bridge
