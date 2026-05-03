@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('title', $service->meta_title ?: $service->title)
+@section('meta_description', $service->meta_description ?: $service->short_description)
+@section('meta_keywords', $service->meta_keywords ?: 'Agile training, Scrum training, Agile leadership, Agile management, Kelvin Enterprise, Kevin Thompson PhD')
+@section('og_type', 'article')
+@if($service->featured_image)
+    @section('og_image', asset('storage/' . $service->featured_image))
+@endif
+
 @push('styles')
 <style>
 /* ─────────────────────────────────────────
@@ -279,7 +287,6 @@
 @endpush
 
 @section('content')
-
     <section class="page-header">
         <div class="header-content reveal">
             <a href="{{ route('services.training') }}" class="kicker" style="text-decoration: none;">← Back to Curriculum</a>
