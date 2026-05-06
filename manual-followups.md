@@ -21,13 +21,14 @@ Look for: "Course" detected on training pages; "Article" detected on blog posts;
 - Sitemaps → Add new sitemap → `sitemap.xml`
 - Then run "URL Inspection" → "Request Indexing" on the seven main pages plus `/about-kevin-thompson` so Google notices the new titles/schema faster.
 
-### 3. Add a default Open Graph image
-The layout currently emits `og:image` only when `seo_og_image` AppSetting is set. Right now it's empty, so social shares of any page without a per-page image preview will lack a thumbnail.
-- Upload a 1200×630 image (logo + tagline works) via the admin → SEO settings, OR set it via tinker:
-  ```
-  php artisan tinker --execute="\App\Models\AppSetting::set('seo_og_image', 'https://kevinthompsonphd.com/images/og-default.jpg');"
-  ```
-- Same image will be used for `Organization.logo` in schema (already wired).
+### 3. Upload a proper 1200×630 Open Graph image (replaces the headshot fallback)
+**Status:** ✅ Every page now emits `og:image` because the layout falls back to the headshot when `seo_og_image` AppSetting is empty. Social shares are no longer blank — but the headshot is portrait (320×400) and platforms will letterbox/crop it.
+
+For polished sharing, upload a real 1200×630 image (logo + tagline works) via the admin → SEO settings, or:
+```
+php artisan tinker --execute="\App\Models\AppSetting::set('seo_og_image', 'https://kevinthompsonphd.com/images/og-default.jpg');"
+```
+When set, the layout will additionally emit `og:image:width` and `og:image:height` (1200×630 — make sure the uploaded image matches those dims, or remove the conditional in [layouts/app.blade.php](resources/views/layouts/app.blade.php) that hardcodes them).
 
 ### 4. Set the LinkedIn URL and Twitter handle
 The layout exposes `seo_linkedin_url` and `seo_twitter_handle` AppSettings. When set, they populate the `Person.sameAs` and `Organization.sameAs` arrays in JSON-LD — important for Google's knowledge-graph reconciliation.

@@ -20,7 +20,15 @@
         $_titleSuffix    = AppSetting::get('seo_title_suffix', '');
         $_defaultDesc    = AppSetting::get('seo_default_desc')
             ?: 'Expert consulting, training, and methodologies bridging the gap between hardware engineering and Agile software development.';
-        $_ogImage        = AppSetting::get('seo_og_image', '');
+        $_ogImageRaw     = AppSetting::get('seo_og_image', '');
+        // The AppSetting may hold either a full URL (legacy / external CDN)
+        // or a relative storage path uploaded via admin (e.g. "app-settings/og-image.webp").
+        $_ogImage = '';
+        if ($_ogImageRaw) {
+            $_ogImage = preg_match('#^https?://#i', $_ogImageRaw)
+                ? $_ogImageRaw
+                : asset('storage/' . ltrim(preg_replace('#^/?storage/#', '', $_ogImageRaw), '/'));
+        }
         $_twitterHandle  = ltrim(AppSetting::get('seo_twitter_handle', ''), '@');
         $_linkedinUrl    = AppSetting::get('seo_linkedin_url', '');
         $_googleVerify   = AppSetting::get('seo_google_verify', '');
@@ -59,13 +67,20 @@
     @endif
 
     {{-- Open Graph --}}
+    @php
+        // Resolve the og:image with a three-tier fallback so every page has a preview.
+        // 1) page-level @section('og_image')   2) seo_og_image AppSetting   3) headshot fallback
+        $_ogImageDefault = $_ogImage ?: asset('img/frontend/Dr.%20Kevin%20Thompson.webp');
+    @endphp
     <meta property="og:type"        content="@yield('og_type', 'website')">
     <meta property="og:url"         content="{{ $_pageUrl }}">
     <meta property="og:site_name"   content="{{ $_appName }}">
     <meta property="og:title"       content="@yield('title', $_appName){{ $_suffix }}">
     <meta property="og:description" content="@yield('meta_description', $_defaultDesc)">
-    @if($_ogImage || View::hasSection('og_image'))
-    <meta property="og:image"       content="@yield('og_image', $_ogImage)">
+    <meta property="og:locale"      content="en_US">
+    <meta property="og:image"       content="@yield('og_image', $_ogImageDefault)">
+    <meta property="og:image:alt"   content="@yield('og_image_alt', 'Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant')">
+    @if($_ogImage)
     <meta property="og:image:width"  content="1200">
     <meta property="og:image:height" content="630">
     @endif
@@ -75,12 +90,11 @@
     <meta name="twitter:url"         content="{{ $_pageUrl }}">
     <meta name="twitter:title"       content="@yield('title', $_appName){{ $_suffix }}">
     <meta name="twitter:description" content="@yield('meta_description', $_defaultDesc)">
+    <meta name="twitter:image"       content="@yield('og_image', $_ogImageDefault)">
+    <meta name="twitter:image:alt"   content="@yield('og_image_alt', 'Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant')">
     @if($_twitterHandle)
     <meta name="twitter:site"    content="{{ '@' . $_twitterHandle }}">
     <meta name="twitter:creator" content="{{ '@' . $_twitterHandle }}">
-    @endif
-    @if($_ogImage || View::hasSection('og_image'))
-    <meta name="twitter:image"       content="@yield('og_image', $_ogImage)">
     @endif
 
     {{-- JSON-LD Structured Data (sitewide canonical entities — pages reference via @id) --}}

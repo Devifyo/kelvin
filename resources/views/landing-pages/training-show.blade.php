@@ -6,6 +6,7 @@
 @section('og_type', 'article')
 @if($service->featured_image)
     @section('og_image', asset('storage/' . $service->featured_image))
+    @section('og_image_alt', $service->title . ' — Training Class')
 @endif
 
 @push('styles')

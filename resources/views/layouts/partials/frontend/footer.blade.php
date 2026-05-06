@@ -1,7 +1,6 @@
 <footer>
     @php
-        $ftInitials = strtoupper(substr($appName ?? 'KT', 0, 1))
-                    . strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1));
+        $ftInitials = \App\Models\AppSetting::initials($appName ?? null);
     @endphp
     <div class="footer-logo">
         <div class="footer-logo-mark">{{ $ftInitials }}</div>

@@ -224,10 +224,80 @@
                     @error('seoDefaultDesc') <span class="as-error">{{ $message }}</span> @enderror
                 </div>
                 <div class="as-field">
-                    <label class="as-label">Default OG / social share image URL</label>
-                    <input type="text" wire:model="seoOgImage" class="as-input" placeholder="https://yourdomain.com/og-image.jpg" />
-                    <span class="as-hint">Recommended: 1200 × 630 px. Used when a page has no featured image.</span>
-                    @error('seoOgImage') <span class="as-error">{{ $message }}</span> @enderror
+                    <label class="as-label">Default Open Graph / social share image</label>
+                    <span class="as-hint" style="display:block;margin:.25rem 0 .75rem">
+                        Shown on Facebook, LinkedIn, X/Twitter, Slack, and other platforms when this site is shared.
+                        <strong>Recommended size: 1200 × 630 px</strong> (1.91:1 ratio, under 5 MB, JPG/PNG/WebP).
+                        Used as the fallback whenever a page has no featured image of its own.
+                    </span>
+
+                    {{-- Preview --}}
+                    <div style="display:flex;gap:1.25rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:.85rem">
+                        <div style="width:240px;aspect-ratio:1200/630;border:1px solid var(--ivory3,#e6e1d8);border-radius:6px;background:#f7f5f0;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+                            @if($newOgImage)
+                                <img src="{{ $newOgImage->temporaryUrl() }}" alt="New OG image preview" style="width:100%;height:100%;object-fit:cover" />
+                            @elseif($currentOgImageUrl)
+                                <img src="{{ $currentOgImageUrl }}" alt="Current OG image" style="width:100%;height:100%;object-fit:cover" />
+                            @else
+                                <span class="as-hint" style="text-align:center;padding:1rem;font-size:.78rem">
+                                    Falling back to<br><strong>Dr. Kevin Thompson</strong><br>headshot
+                                </span>
+                            @endif
+                        </div>
+
+                        <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:.5rem">
+                            <label class="as-upload-btn" style="align-self:flex-start">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                                {{ $currentOgImageUrl || $newOgImage ? 'Replace Image' : 'Choose Image' }}
+                                <input type="file" wire:model="newOgImage" accept="image/png,image/jpeg,image/webp" class="as-hidden-input" />
+                            </label>
+
+                            @error('newOgImage') <span class="as-error">{{ $message }}</span> @enderror
+
+                            @if($newOgImage)
+                                <span class="as-hint">Selected: <code>{{ $newOgImage->getClientOriginalName() }}</code> · {{ number_format($newOgImage->getSize() / 1024, 0) }} KB</span>
+                                <button wire:click="uploadOgImage" wire:loading.attr="disabled" wire:target="uploadOgImage,newOgImage" class="as-btn-primary" style="align-self:flex-start;margin-top:.25rem">
+                                    <span wire:loading.remove wire:target="uploadOgImage">Upload</span>
+                                    <span wire:loading wire:target="uploadOgImage">Uploading…</span>
+                                </button>
+                            @elseif($currentOgImageUrl)
+                                <span class="as-hint">
+                                    Currently using your uploaded image.
+                                    @if($currentOgImageDimensions)
+                                        Dimensions: <strong>{{ $currentOgImageDimensions }}</strong>
+                                        @php
+                                            preg_match('/(\d+)\s*×\s*(\d+)/', $currentOgImageDimensions, $m);
+                                            $w = (int)($m[1] ?? 0); $h = (int)($m[2] ?? 0);
+                                            $isOptimal = $w === 1200 && $h === 630;
+                                            $aspectOk  = $w > 0 && $h > 0 && abs(($w / $h) - (1200 / 630)) < 0.05;
+                                        @endphp
+                                        @if($isOptimal)
+                                            <span style="color:#16a34a">✓ Optimal</span>
+                                        @elseif($aspectOk)
+                                            <span style="color:#ca8a04">⚠ Right ratio, non-standard size</span>
+                                        @else
+                                            <span style="color:#dc2626">⚠ Recommend 1200 × 630 px for best display</span>
+                                        @endif
+                                    @endif
+                                </span>
+                                <button wire:click="removeOgImage" wire:confirm="Remove the OG image? Pages will fall back to the default headshot." class="as-remove-btn" style="align-self:flex-start">Remove image</button>
+                            @else
+                                <span class="as-hint">No image uploaded — sharing previews will fall back to the default headshot. Upload a 1200 × 630 brand card for best results.</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Optional: external URL fallback for power users / CDN-hosted images --}}
+                    <details style="margin-top:.75rem">
+                        <summary class="as-hint" style="cursor:pointer;user-select:none">
+                            Advanced: use an external URL instead of an upload
+                        </summary>
+                        <div style="margin-top:.5rem">
+                            <input type="text" wire:model="seoOgImage" class="as-input" placeholder="https://cdn.example.com/og-image.jpg" />
+                            <span class="as-hint">If set to a full URL (starting with <code>http://</code> or <code>https://</code>), it overrides the uploaded image. Saved with "Save All SEO Settings" below.</span>
+                            @error('seoOgImage') <span class="as-error">{{ $message }}</span> @enderror
+                        </div>
+                    </details>
                 </div>
             </div>
 

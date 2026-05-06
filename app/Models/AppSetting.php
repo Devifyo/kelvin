@@ -40,6 +40,50 @@ class AppSetting extends Model
         Cache::forget("setting.{$key}");
     }
 
+    /**
+     * Two-letter logo initials derived from the app name (or a passed-in name).
+     * Strips trailing credential / honor suffixes (Ph.D., MBA, Jr., II, etc.) so
+     * the surname's initial is picked correctly — e.g. "Kevin Thompson Ph.D." → "KT".
+     */
+    public static function initials(?string $name = null, string $fallback = 'KT'): string
+    {
+        $name = trim((string) ($name ?? static::get('app_name', '')));
+        if ($name === '') {
+            return $fallback;
+        }
+
+        // Order matters — match longest forms first.
+        $suffixes = [
+            'Ph.D.', 'Ph.D', 'PhD',
+            'M.D.', 'MD',
+            'D.Sc.', 'DSc',
+            'M.B.A.', 'MBA',
+            'C.P.A.', 'CPA',
+            'Esq.', 'Esq',
+            'Jr.', 'Jr',
+            'Sr.', 'Sr',
+            'III', 'IV', 'II', 'V',
+        ];
+        foreach ($suffixes as $suffix) {
+            $name = preg_replace(
+                '/[\s,]+' . preg_quote($suffix, '/') . '\s*$/i',
+                '',
+                $name,
+            );
+        }
+
+        $parts = preg_split('/\s+/', trim($name));
+        $parts = array_values(array_filter($parts, fn($p) => $p !== ''));
+
+        if (empty($parts)) {
+            return $fallback;
+        }
+        if (count($parts) === 1) {
+            return strtoupper(mb_substr($parts[0], 0, 2));
+        }
+        return strtoupper(mb_substr($parts[0], 0, 1) . mb_substr(end($parts), 0, 1));
+    }
+
     // ── Color utilities ───────────────────────────────────────────────────
 
     /**

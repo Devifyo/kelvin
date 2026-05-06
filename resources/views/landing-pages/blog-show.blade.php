@@ -5,7 +5,8 @@
 @section('meta_description', $post->meta_description ?? $post->excerpt)
 @section('og_type', 'article')
 @if($post->featured_image_url)
-    @section('og_image', $post->featured_image_url)
+    @section('og_image', url($post->featured_image_url))
+    @section('og_image_alt', $post->title)
 @endif
 
 @push('styles')

@@ -4,7 +4,7 @@
             @if($appIconUrl ?? null)
                 <img src="{{ $appIconUrl }}" alt="App Icon" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
             @else
-                {{ strtoupper(substr($appName ?? 'KT', 0, 1)) }}{{ strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1)) }}
+                {{ \App\Models\AppSetting::initials($appName ?? null) }}
             @endif
         </div>
         <div class="sidebar-title">

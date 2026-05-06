@@ -59,13 +59,23 @@ The master layout uses Blade's `@yield` directive with sensible defaults. Per-pa
 <meta property="og:site_name"   content="{{ $_appName }}">
 <meta property="og:title"       content="@yield('title', $_appName){{ $_suffix }}">
 <meta property="og:description" content="@yield('meta_description', $_defaultDesc)">
-<meta property="og:image"       content="@yield('og_image', $_ogImage)">
+<meta property="og:locale"      content="en_US">
+<meta property="og:image"       content="@yield('og_image', $_ogImageDefault)">
+<meta property="og:image:alt"   content="@yield('og_image_alt', '...')">
 
 <meta name="twitter:card"        content="summary_large_image">
 <meta name="twitter:title"       content="@yield('title', $_appName){{ $_suffix }}">
 <meta name="twitter:description" content="@yield('meta_description', $_defaultDesc)">
-<meta name="twitter:image"       content="@yield('og_image', $_ogImage)">
+<meta name="twitter:image"       content="@yield('og_image', $_ogImageDefault)">
+<meta name="twitter:image:alt"   content="@yield('og_image_alt', '...')">
 ```
+
+**`og:image` resolution** is a three-tier fallback so every page always serves a preview:
+1. Page-level `@section('og_image', ...)` if set (e.g. blog-show passes the post's featured image).
+2. `seo_og_image` AppSetting if set in admin.
+3. Layout default — the headshot at `/img/frontend/Dr. Kevin Thompson.webp` (always reachable).
+
+`og:image:width` and `og:image:height` are emitted **only when `seo_og_image` AppSetting is set**, because the layout assumes the admin uploaded a proper 1200×630 image. The headshot fallback is portrait (320×400) — platforms detect dimensions automatically when width/height are absent, so this is safe.
 
 ### Per-page — the four things you actually set
 
@@ -111,7 +121,7 @@ Edit via the admin (Livewire `AppSettings` component) or `php artisan tinker`. A
 | `app_name` | Brand name. Used as `og:site_name` and `<title>` fallback. | layout, `SeoGenerator::generateLlms()` |
 | `seo_title_suffix` | String appended to every page title (e.g. " — Brand"). Optional. | layout |
 | `seo_default_desc` | Fallback meta description when a page doesn't set one. | layout |
-| `seo_og_image` | Default OG image URL (1200×630). | layout |
+| `seo_og_image` | Default OG image — accepts either a relative storage path (e.g. `app-settings/og-image.webp`, written by the admin upload UI) or a full external URL (e.g. CDN). The layout transforms paths to absolute URLs via `asset('storage/...')`. **Recommended dimensions: 1200 × 630 px.** When empty, the layout falls back to the headshot at `/img/frontend/Dr. Kevin Thompson.webp`. | layout (resolved at render time) |
 | `seo_twitter_handle` | Twitter / X handle without `@`. Populates `twitter:site` / `twitter:creator` and Person/Organization `sameAs`. | layout |
 | `seo_linkedin_url` | LinkedIn profile URL. Populates Person/Organization `sameAs`. | layout |
 | `seo_google_verify` | Search Console site-verification token. | layout |

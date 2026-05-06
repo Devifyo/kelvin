@@ -1,7 +1,6 @@
 <nav id="nav">
     @php
-        $initials = strtoupper(substr($appName ?? 'KT', 0, 1))
-                  . strtoupper(substr(strrchr($appName ?? 'KT', ' ') ?: 'T', 1, 1));
+        $initials = \App\Models\AppSetting::initials($appName ?? null);
     @endphp
     <a href="{{ route('home') }}" class="logo">
         <div class="logo-mark">

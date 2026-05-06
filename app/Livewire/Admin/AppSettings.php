@@ -74,8 +74,13 @@ class AppSettings extends Component
     #[Validate('nullable|image|mimes:png,jpg,jpeg|max:1024')]
     public $newFavicon = null;
 
+    #[Validate('nullable|image|mimes:png,jpg,jpeg,webp|max:5120')]
+    public $newOgImage = null;
+
     public ?string $currentIconUrl    = null;
     public ?string $currentFaviconUrl = null;
+    public ?string $currentOgImageUrl = null;
+    public ?string $currentOgImageDimensions = null;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────
 
@@ -93,6 +98,7 @@ class AppSettings extends Component
         $this->seoDefaultDesc    = AppSetting::get('seo_default_desc')
             ?: 'Expert consulting, training, and methodologies bridging the gap between hardware engineering and Agile software development.';
         $this->seoOgImage        = AppSetting::get('seo_og_image', '');
+        $this->refreshOgImagePreview();
 
         // Social
         $this->seoTwitterHandle  = AppSetting::get('seo_twitter_handle', '');
@@ -207,6 +213,85 @@ class AppSettings extends Component
         AppSetting::set('favicon', null);
         $this->currentFaviconUrl = null;
         $this->dispatch('notify', message: 'Favicon removed.', type: 'success');
+    }
+
+    public function uploadOgImage(): void
+    {
+        $this->validateOnly('newOgImage');
+
+        if (! $this->newOgImage) {
+            $this->dispatch('notify', message: 'Please choose an image first.', type: 'warning');
+            return;
+        }
+
+        // Replace the previous uploaded OG image (if any) so we don't accumulate orphans.
+        $existing = AppSetting::get('seo_og_image');
+        if ($existing && ! preg_match('#^https?://#i', $existing)) {
+            $oldPath = preg_replace('#^/?storage/#', '', $existing);
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+        }
+
+        $ext  = $this->newOgImage->getClientOriginalExtension();
+        $path = $this->newOgImage->storeAs('app-settings', 'og-image.' . $ext, 'public');
+
+        // Store the relative storage path; the layout resolves to an absolute URL via asset().
+        AppSetting::set('seo_og_image', $path);
+
+        $this->seoOgImage = $path;
+        $this->newOgImage = null;
+        $this->refreshOgImagePreview();
+
+        $this->dispatch('notify', message: 'Open Graph image uploaded.', type: 'success');
+    }
+
+    public function removeOgImage(): void
+    {
+        $value = AppSetting::get('seo_og_image');
+        if ($value && ! preg_match('#^https?://#i', $value)) {
+            $path = preg_replace('#^/?storage/#', '', $value);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+
+        AppSetting::set('seo_og_image', null);
+        $this->seoOgImage = '';
+        $this->currentOgImageUrl = null;
+        $this->currentOgImageDimensions = null;
+
+        $this->dispatch('notify', message: 'Open Graph image removed. Layout will fall back to the default headshot.', type: 'success');
+    }
+
+    private function refreshOgImagePreview(): void
+    {
+        $value = AppSetting::get('seo_og_image');
+        if (! $value) {
+            $this->currentOgImageUrl = null;
+            $this->currentOgImageDimensions = null;
+            return;
+        }
+
+        if (preg_match('#^https?://#i', $value)) {
+            // External URL — show as-is, dimensions unknown.
+            $this->currentOgImageUrl = $value;
+            $this->currentOgImageDimensions = null;
+            return;
+        }
+
+        $path = preg_replace('#^/?storage/#', '', $value);
+        if (Storage::disk('public')->exists($path)) {
+            $this->currentOgImageUrl = asset('storage/' . $path);
+            $absolute = Storage::disk('public')->path($path);
+            $info = @getimagesize($absolute);
+            $this->currentOgImageDimensions = ($info && isset($info[0], $info[1]))
+                ? "{$info[0]} × {$info[1]} px"
+                : null;
+        } else {
+            $this->currentOgImageUrl = null;
+            $this->currentOgImageDimensions = null;
+        }
     }
 
     public function addStaticPage(): void
