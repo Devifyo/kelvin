@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title', 'Agile & Scrum Training for Hardware Teams | Kevin Thompson, Ph.D.')
+@section('meta_description', 'Live, instructor-led Scrum and Agile classes for hardware, embedded, and R&D teams. Taught by Dr. Kevin Thompson — CSP, PMI-ACP, PMP-aligned curricula.')
+@section('meta_keywords', 'agile training, scrum training, agile hardware training, hardware scrum, kanban training, agile portfolio management, Kevin Thompson')
+
 @push('styles')
 <style>
 /* ─────────────────────────────────────────
@@ -266,6 +270,38 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Course list for the training catalog --}}
+@php
+    $_courseList = [];
+    if (! empty($trainingClasses)) {
+        $i = 1;
+        foreach ($trainingClasses as $class) {
+            $_courseList[] = [
+                '@type'    => 'ListItem',
+                'position' => $i++,
+                'item'     => [
+                    '@type'       => 'Course',
+                    'name'        => $class->title,
+                    'url'         => url('/agile-training-classes/' . $class->slug),
+                    'description' => strip_tags($class->meta_description ?: ($class->short_description ?: '')),
+                    'provider'    => ['@id' => url('/') . '/#organization'],
+                    'instructor'  => ['@id' => url('/') . '/#person'],
+                ],
+            ];
+        }
+    }
+    $_trainingListJsonLd = json_encode([
+        '@context'        => 'https://schema.org',
+        '@type'           => 'ItemList',
+        'name'            => 'Agile & Scrum Training Catalog',
+        'description'     => 'Instructor-led training classes by Dr. Kevin Thompson, Ph.D.',
+        'url'             => url()->current(),
+        'numberOfItems'   => count($_courseList),
+        'itemListElement' => $_courseList,
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_trainingListJsonLd !!}</script>
+
 <script>
 const revealObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {

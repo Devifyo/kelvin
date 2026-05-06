@@ -2,8 +2,8 @@
 
 {{-- ─── SEO ─────────────────────────────────────────────────────────────────── --}}
 @section('title', 'Consulting & Training Services | ' . config('app.name'))
-@section('meta_description', 'Kevin Enterprise delivers expert Agile consulting and on-site training services — including Agile assessments, advisory coaching, and Agile transformation programs — tailored to your organization.')
-@section('meta_keywords', 'Agile consulting, Agile training, Agile transformation, Agile assessment, Agile coaching, Scrum training, on-site consulting, hardware Agile, embedded systems Agile, Kevin Enterprise, Kevin Thompson PhD')
+@section('meta_description', 'Agile assessments, advisory coaching, and transformation programs for hardware and R&D organizations. Engagements led by Dr. Kevin Thompson, Ph.D.')
+@section('meta_keywords', 'agile hardware consulting, agile transformation, agile assessment, agile coaching, hardware scrum, Kevin Thompson')
 @section('og_type', 'website')
 
 @push('styles')
@@ -427,20 +427,17 @@
 @endsection
 
 @push('scripts')
-{{-- Page-level JSON-LD: Service offering structured data --}}
+{{-- Page-level JSON-LD: Service — provider referenced by @id from layout --}}
 @php
     $_svcJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'Service',
-        'name'        => 'Agile Consulting & Training Services',
-        'description' => 'Kevin Enterprise offers expert Agile consulting and on-site training services — including Agile assessments, advisory coaching, and Agile transformation programs — tailored to your organization.',
-        'provider'    => [
-            '@type' => 'Organization',
-            'name'  => 'Kevin Enterprise',
-            'url'   => url('/'),
-        ],
-        'areaServed'  => 'US',
-        'serviceType' => ['Agile Consulting', 'Agile Training', 'Agile Transformation', 'Agile Assessment', 'Agile Coaching'],
+        'name'        => 'Agile Consulting & Transformation for Hardware Organizations',
+        'description' => 'Agile assessments, advisory coaching, and transformation programs for hardware and R&D organizations. Engagements led by Dr. Kevin Thompson, Ph.D.',
+        'provider'    => ['@id' => url('/') . '/#organization'],
+        'areaServed'  => 'Worldwide',
+        'serviceType' => ['Agile Consulting', 'Agile Transformation', 'Agile Assessment', 'Agile Coaching'],
+        'audience'    => ['@type' => 'BusinessAudience', 'audienceType' => 'R&D and hardware engineering organizations'],
         'url'         => url()->current(),
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp

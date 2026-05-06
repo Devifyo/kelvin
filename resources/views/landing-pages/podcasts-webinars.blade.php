@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Podcasts & Webinars | ' . config('app.name'))
-@section('meta_description', 'Watch and listen to Kevin Enterprise podcasts and webinars — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation insights by Kevin Thompson PhD.')
-@section('meta_keywords', 'Agile podcasts, Agile webinars, Agile hardware development, embedded systems Agile, Scrum webinars, Kevin Thompson PhD, Kevin Enterprise, Agile transformation videos, hardware Agile podcast')
+@section('meta_description', 'Watch and listen to Dr. Kevin Thompson on Agile hardware development, Scrum at scale, and Agile transformation — podcasts and webinars for engineering leaders.')
+@section('meta_keywords', 'agile hardware podcast, scrum webinar, agile transformation video, Kevin Thompson podcast')
 @section('og_type', 'website')
 
 @push('styles')
@@ -240,24 +240,17 @@
 
 @push('scripts')
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-{{-- Page-level JSON-LD: Podcasts & webinars collection structured data --}}
+{{-- Page-level JSON-LD: Podcasts & webinars collection — author/publisher by @id --}}
 @php
     $_mediaJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'CollectionPage',
-        'name'        => 'Podcasts & Webinars | Kevin Enterprise',
-        'description' => 'A curated collection of Agile podcasts and webinars by Kevin Thompson PhD — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and real-world Agile transformation insights.',
+        'name'        => 'Agile Hardware Podcasts & Webinars',
+        'description' => 'Podcasts and webinars by Dr. Kevin Thompson on Agile hardware development, Scrum at scale, and Agile transformation.',
         'url'         => url()->current(),
-        'author'      => [
-            '@type' => 'Person',
-            'name'  => 'Kevin Thompson PhD',
-        ],
-        'publisher'   => [
-            '@type' => 'Organization',
-            'name'  => 'Kevin Enterprise',
-            'url'   => url('/'),
-        ],
-        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation', 'Podcasts', 'Webinars'],
+        'author'      => ['@id' => url('/') . '/#person'],
+        'publisher'   => ['@id' => url('/') . '/#organization'],
+        'about'       => ['Agile hardware development', 'Scrum', 'Embedded systems', 'Agile transformation'],
         'inLanguage'  => 'en-US',
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp

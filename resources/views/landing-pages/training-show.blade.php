@@ -2,7 +2,7 @@
 
 @section('title', $service->meta_title ?: $service->title)
 @section('meta_description', $service->meta_description ?: $service->short_description)
-@section('meta_keywords', $service->meta_keywords ?: 'Agile training, Scrum training, Agile leadership, Agile management, Kelvin Enterprise, Kevin Thompson PhD')
+@section('meta_keywords', $service->meta_keywords ?: 'agile training, scrum training, agile hardware development, Kevin Thompson')
 @section('og_type', 'article')
 @if($service->featured_image)
     @section('og_image', asset('storage/' . $service->featured_image))
@@ -401,5 +401,42 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Course schema — provider/instructor referenced by @id --}}
+@php
+    $_courseDescription = $service->meta_description
+        ?: ($service->short_description ?: 'Instructor-led Agile training class taught by Dr. Kevin Thompson, Ph.D.');
 
+    $_courseInstance = [
+        '@type'      => 'CourseInstance',
+        'courseMode' => 'onsite',
+        'instructor' => ['@id' => url('/') . '/#person'],
+    ];
+    if (! empty($service->length)) {
+        $_courseInstance['courseWorkload'] = $service->length;
+    }
+
+    $_courseJsonLd = json_encode([
+        '@context'         => 'https://schema.org',
+        '@type'            => 'Course',
+        'name'             => $service->title,
+        'description'      => strip_tags($_courseDescription),
+        'url'              => url()->current(),
+        'provider'         => ['@id' => url('/') . '/#organization'],
+        'instructor'       => ['@id' => url('/') . '/#person'],
+        'educationalLevel' => 'Professional',
+        'courseMode'       => ['onsite', 'online'],
+        'inLanguage'       => 'en-US',
+        'hasCourseInstance'=> [$_courseInstance],
+        'offers'           => [
+            '@type'        => 'Offer',
+            'category'     => 'Professional Training',
+            'url'          => url('/contact-us'),
+            'availability' => 'https://schema.org/InStock',
+        ],
+        'image'            => $service->featured_image
+            ? asset('storage/' . $service->featured_image)
+            : null,
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_courseJsonLd !!}</script>
 @endpush

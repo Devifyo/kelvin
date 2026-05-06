@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Blog | Kelvin Enterprise')
-@section('meta_description', 'Read the Kelvin Enterprise blog — expert articles and insights on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation strategies by Kevin Thompson PhD.')
-@section('meta_keywords', 'Agile blog, Agile articles, Agile hardware development, embedded systems Agile, Scrum insights, Kevin Thompson PhD, Kelvin Enterprise, Agile transformation blog, hardware Agile articles')
+@section('title', 'Agile Hardware Insights — Blog | Kevin Thompson, Ph.D.')
+@section('meta_description', 'Practical articles on Agile hardware development, Scrum, Kanban, and Agile transformation by Dr. Kevin Thompson, Ph.D. — written for R&D and engineering leaders.')
+@section('meta_keywords', 'agile hardware blog, scrum hardware, agile transformation, embedded systems agile, Kevin Thompson, agile insights')
 @section('og_type', 'website')
 
 @push('styles')
@@ -395,24 +395,17 @@
 @endsection
 
 @push('scripts')
-{{-- Page-level JSON-LD: Blog collection structured data --}}
+{{-- Page-level JSON-LD: Blog index — Person/Organization referenced by @id from layout --}}
 @php
     $_blogJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'Blog',
-        'name'        => 'Blog | Kelvin Enterprise',
-        'description' => 'Expert articles and insights on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation strategies by Kevin Thompson PhD.',
+        'name'        => 'Agile Hardware Insights',
+        'description' => 'Articles on Agile hardware development, Scrum, Kanban, and Agile transformation by Dr. Kevin Thompson, Ph.D.',
         'url'         => url()->current(),
-        'author'      => [
-            '@type' => 'Person',
-            'name'  => 'Kevin Thompson PhD',
-        ],
-        'publisher'   => [
-            '@type' => 'Organization',
-            'name'  => 'Kelvin Enterprise',
-            'url'   => url('/'),
-        ],
-        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation'],
+        'author'      => ['@id' => url('/') . '/#person'],
+        'publisher'   => ['@id' => url('/') . '/#organization'],
+        'about'       => ['Agile hardware development', 'Scrum', 'Embedded systems', 'Agile transformation'],
         'inLanguage'  => 'en-US',
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp

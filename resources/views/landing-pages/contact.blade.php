@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Contact Us | ' . config('app.name'))
-@section('meta_description', 'Get in touch with Kevin Enterprise — reach out to Kevin Thompson PhD for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.')
-@section('meta_keywords', 'contact Kevin Enterprise, Agile consulting inquiry, Agile training contact, Kevin Thompson PhD contact, Agile assessment request, Agile transformation inquiry, hire Agile consultant')
+@section('meta_description', 'Schedule a consult with Dr. Kevin Thompson for Agile hardware training, assessments, or transformation programs. Reply within one business day.')
+@section('meta_keywords', 'contact Kevin Thompson, agile consulting inquiry, agile training, agile assessment, hire agile consultant')
 @section('og_type', 'website')
 
 @push('styles')
@@ -332,23 +332,16 @@ textarea.form-control {
 @endsection
 
 @push('scripts')
-{{-- Page-level JSON-LD: Contact page structured data --}}
+{{-- Page-level JSON-LD: Contact page — author/publisher by @id from layout --}}
 @php
     $_contactJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'ContactPage',
-        'name'        => 'Contact Us | Kevin Enterprise',
-        'description' => 'Reach out to Kevin Thompson PhD and Kevin Enterprise for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.',
+        'name'        => 'Contact Dr. Kevin Thompson',
+        'description' => 'Schedule a consult with Dr. Kevin Thompson for Agile hardware training, assessments, or transformation programs.',
         'url'         => url()->current(),
-        'author'      => [
-            '@type' => 'Person',
-            'name'  => 'Kevin Thompson PhD',
-        ],
-        'publisher'   => [
-            '@type' => 'Organization',
-            'name'  => 'Kevin Enterprise',
-            'url'   => url('/'),
-        ],
+        'about'       => ['@id' => url('/') . '/#person'],
+        'publisher'   => ['@id' => url('/') . '/#organization'],
         'inLanguage'  => 'en-US',
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp

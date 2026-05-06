@@ -3,6 +3,10 @@
 {{-- Dynamically inject SEO Meta Tags if you have them in your layout --}}
 @section('title', $post->meta_title ?? $post->title)
 @section('meta_description', $post->meta_description ?? $post->excerpt)
+@section('og_type', 'article')
+@if($post->featured_image_url)
+    @section('og_image', $post->featured_image_url)
+@endif
 
 @push('styles')
     <link rel="stylesheet" href="/css/frontend/blog-view.css">
@@ -70,9 +74,11 @@
                 </div>
             @endif
 
-            {{-- DYNAMIC CONTENT (Unescaped HTML from TinyMCE) --}}
+            {{-- DYNAMIC CONTENT (Unescaped HTML from TinyMCE).
+                 Demote any <h1> inside authored content to <h2> so there is only
+                 one H1 on the page (the article title rendered above). --}}
             <div class="rich-content">
-                {!! $post->content !!}
+                {!! preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', $post->content) !!}
             </div>
 
             <div class="article-footer">
@@ -123,6 +129,28 @@
 @endsection
 
 @push('scripts')
+{{-- Page-level JSON-LD: Article — author/publisher referenced by @id from layout --}}
+@php
+    $_articleDate = $post->published_at ?: $post->created_at;
+    $_articleJsonLd = json_encode(array_filter([
+        '@context'         => 'https://schema.org',
+        '@type'            => 'Article',
+        'mainEntityOfPage' => url()->current(),
+        'headline'         => mb_substr($post->title, 0, 110),
+        'description'      => $post->meta_description ?: $post->excerpt,
+        'image'            => $post->featured_image_url ? url($post->featured_image_url) : null,
+        'datePublished'    => optional($_articleDate)->toAtomString(),
+        'dateModified'     => optional($post->updated_at)->toAtomString(),
+        'author'           => ['@id' => url('/') . '/#person'],
+        'publisher'        => ['@id' => url('/') . '/#organization'],
+        'articleSection'   => optional($post->category)->name,
+        'wordCount'        => str_word_count(strip_tags($post->content)),
+        'inLanguage'       => 'en-US',
+        'url'              => url()->current(),
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@endphp
+<script type="application/ld+json">{!! $_articleJsonLd !!}</script>
+
 <script>
 // Prevent multiple observer declarations via IIFE
 (function() {

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Papers & Presentations | ' . config('app.name'))
-@section('meta_description', 'Explore Kevin Enterprise\'s collection of Agile research papers and presentations — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies by Kevin Thompson PhD.')
-@section('meta_keywords', 'Agile research papers, Agile presentations, Agile hardware development, embedded systems Agile, Scrum methodology, Agile case studies, Kevin Thompson PhD, Kevin Enterprise, Agile transformation research, hardware Agile papers')
+@section('meta_description', 'Peer-reviewed papers, conference talks, and case studies on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.')
+@section('meta_keywords', 'agile hardware research, scrum case studies, embedded systems agile, agile transformation papers, Kevin Thompson')
 @section('og_type', 'website')
 
 @push('styles')
@@ -85,24 +85,17 @@
 @endsection
 
 @push('scripts')
-{{-- Page-level JSON-LD: Research papers collection structured data --}}
+{{-- Page-level JSON-LD: Research papers collection — author/publisher by @id --}}
 @php
     $_papersJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'CollectionPage',
-        'name'        => 'Papers & Presentations | Kevin Enterprise',
-        'description' => 'A comprehensive collection of Agile research papers and presentations by Kevin Thompson PhD — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies.',
+        'name'        => 'Agile Hardware Research Papers & Presentations',
+        'description' => 'Peer-reviewed papers, conference talks, and case studies on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.',
         'url'         => url()->current(),
-        'author'      => [
-            '@type' => 'Person',
-            'name'  => 'Kevin Thompson PhD',
-        ],
-        'publisher'   => [
-            '@type' => 'Organization',
-            'name'  => 'Kevin Enterprise',
-            'url'   => url('/'),
-        ],
-        'about'       => ['Agile Development', 'Hardware Agile', 'Embedded Systems', 'Scrum', 'Agile Transformation'],
+        'author'      => ['@id' => url('/') . '/#person'],
+        'publisher'   => ['@id' => url('/') . '/#organization'],
+        'about'       => ['Agile hardware development', 'Embedded systems', 'Scrum', 'Agile transformation'],
         'inLanguage'  => 'en-US',
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp

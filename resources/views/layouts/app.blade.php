@@ -83,41 +83,84 @@
     <meta name="twitter:image"       content="@yield('og_image', $_ogImage)">
     @endif
 
-    {{-- JSON-LD Structured Data --}}
+    {{-- JSON-LD Structured Data (sitewide canonical entities — pages reference via @id) --}}
     @php
-        $_base    = url('/');
-        $_person  = [
-            '@type'    => 'Person',
-            '@id'      => $_base . '/#person',
-            'name'     => 'Kevin Thompson',
-            'jobTitle' => $_schemaJobTitle,
-            'url'      => url('/about-kevin-thompson'),
+        $_base = url('/');
+        $_person = [
+            '@type'            => 'Person',
+            '@id'              => $_base . '/#person',
+            'name'             => 'Kevin Thompson',
+            'givenName'        => 'Kevin',
+            'familyName'       => 'Thompson',
+            'honorificSuffix'  => 'Ph.D.',
+            'jobTitle'         => $_schemaJobTitle,
+            'description'      => 'Agile hardware development consultant, trainer, and author. Helps R&D and hardware teams adopt Scrum and scale Agile.',
+            'url'              => url('/about-kevin-thompson'),
+            'worksFor'         => ['@id' => $_base . '/#organization'],
+            'knowsAbout'       => [
+                'Agile hardware development',
+                'Scrum',
+                'Kanban',
+                'Agile transformation',
+                'Agile portfolio management',
+                'Embedded systems development',
+            ],
         ];
         if (count($_sameAs)) {
             $_person['sameAs'] = $_sameAs;
         }
+
+        $_organization = [
+            '@type'         => 'Organization',
+            '@id'           => $_base . '/#organization',
+            'name'          => $_schemaOrgName,
+            'alternateName' => 'Kevin Enterprise',
+            'url'           => $_base,
+            'founder'       => ['@id' => $_base . '/#person'],
+            'knowsAbout'    => [
+                'Agile hardware development',
+                'Scrum',
+                'Kanban',
+                'Agile transformation',
+                'Embedded systems development',
+            ],
+            'areaServed'    => 'Worldwide',
+        ];
+        if ($_ogImage) {
+            $_organization['logo'] = [
+                '@type' => 'ImageObject',
+                'url'   => $_ogImage,
+            ];
+        }
+        if (count($_sameAs)) {
+            $_organization['sameAs'] = $_sameAs;
+        }
+
+        $_website = [
+            '@type'           => 'WebSite',
+            '@id'             => $_base . '/#website',
+            'url'             => $_base,
+            'name'            => $_appName,
+            'inLanguage'      => 'en-US',
+            'publisher'       => ['@id' => $_base . '/#organization'],
+            'potentialAction' => [
+                '@type'       => 'SearchAction',
+                'target'      => [
+                    '@type'       => 'EntryPoint',
+                    'urlTemplate' => url('/agile-insights-blog') . '?search={search_term_string}',
+                ],
+                'query-input' => 'required name=search_term_string',
+            ],
+        ];
+
         $_jsonLd = [
             '@context' => 'https://schema.org',
-            '@graph'   => [
-                $_person,
-                [
-                    '@type'   => 'Organization',
-                    '@id'     => $_base . '/#organization',
-                    'name'    => $_schemaOrgName,
-                    'url'     => $_base,
-                    'founder' => ['@id' => $_base . '/#person'],
-                ],
-                [
-                    '@type'     => 'WebSite',
-                    '@id'       => $_base . '/#website',
-                    'url'       => $_base,
-                    'name'      => $_appName,
-                    'publisher' => ['@id' => $_base . '/#organization'],
-                ],
-            ],
+            '@graph'   => [$_person, $_organization, $_website],
         ];
     @endphp
     <script type="application/ld+json">{!! json_encode($_jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}</script>
+
+    @stack('schema')
 
     {{-- Google Analytics 4 (only if no GTM — GTM handles GA4 via tag) --}}
     @if($_ga4Id && !$_gtmId)
