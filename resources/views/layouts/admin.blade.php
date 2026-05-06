@@ -1,7 +1,7 @@
 @php
     use App\Models\AppSetting;
     $c       = AppSetting::resolvedColors();
-    $appName = AppSetting::get('app_name', AppSetting::DEFAULTS['app_name']);
+    $appName = AppSetting::get('app_name');
     $favicon = AppSetting::get('favicon');
     $appIcon = AppSetting::get('app_icon');
     $faviconUrl = $favicon ? Storage::disk('public')->url($favicon) : '/favicon-32x32.png';

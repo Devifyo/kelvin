@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us | Kevin Enterprise')
+@section('title', 'Contact Us | ' . config('app.name'))
 @section('meta_description', 'Get in touch with Kevin Enterprise — reach out to Kevin Thompson PhD for Agile consulting, on-site training, Agile assessments, and transformation programs tailored to your organization.')
 @section('meta_keywords', 'contact Kevin Enterprise, Agile consulting inquiry, Agile training contact, Kevin Thompson PhD contact, Agile assessment request, Agile transformation inquiry, hire Agile consultant')
 @section('og_type', 'website')

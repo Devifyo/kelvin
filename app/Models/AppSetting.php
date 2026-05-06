@@ -11,12 +11,18 @@ class AppSetting extends Model
 
     // ── Defaults ─────────────────────────────────────────────────────────
     public const DEFAULTS = [
-        'app_name'     => 'Kevin Thompson',
         'color_copper' => '#b5722a',
         'color_slate'  => '#1a2332',
         'app_icon'     => null,
         'favicon'      => null,
     ];
+
+    public static function defaults(): array
+    {
+        return array_merge(static::DEFAULTS, [
+            'app_name' => config('app.name'),
+        ]);
+    }
 
     // ── CRUD helpers ──────────────────────────────────────────────────────
 
@@ -24,7 +30,7 @@ class AppSetting extends Model
     {
         return Cache::remember("setting.{$key}", 3600, function () use ($key, $default) {
             $row = static::where('key', $key)->first();
-            return $row?->value ?? $default ?? static::DEFAULTS[$key] ?? null;
+            return $row?->value ?? $default ?? static::defaults()[$key] ?? null;
         });
     }
 

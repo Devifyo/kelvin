@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Papers & Presentations | Kevin Enterprise')
+@section('title', 'Papers & Presentations | ' . config('app.name'))
 @section('meta_description', 'Explore Kevin Enterprise\'s collection of Agile research papers and presentations — covering Agile hardware development, embedded systems, Scrum methodologies, and real-world transformation case studies by Kevin Thompson PhD.')
 @section('meta_keywords', 'Agile research papers, Agile presentations, Agile hardware development, embedded systems Agile, Scrum methodology, Agile case studies, Kevin Thompson PhD, Kevin Enterprise, Agile transformation research, hardware Agile papers')
 @section('og_type', 'website')

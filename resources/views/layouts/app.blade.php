@@ -14,7 +14,7 @@
         $_faviconUrl = $_favicon ? Storage::disk('public')->url($_favicon) : null;
         $_appIcon    = AppSetting::get('app_icon');
         $_appIconUrl = $_appIcon ? Storage::disk('public')->url($_appIcon) : null;
-        $_appName    = AppSetting::get('app_name', AppSetting::DEFAULTS['app_name']);
+        $_appName    = AppSetting::get('app_name');
 
         // SEO settings (all cached)
         $_titleSuffix    = AppSetting::get('seo_title_suffix', '');

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Podcasts & Webinars | Kevin Enterprise')
+@section('title', 'Podcasts & Webinars | ' . config('app.name'))
 @section('meta_description', 'Watch and listen to Kevin Enterprise podcasts and webinars — featuring expert discussions on Agile hardware development, embedded systems, Scrum methodologies, and Agile transformation insights by Kevin Thompson PhD.')
 @section('meta_keywords', 'Agile podcasts, Agile webinars, Agile hardware development, embedded systems Agile, Scrum webinars, Kevin Thompson PhD, Kevin Enterprise, Agile transformation videos, hardware Agile podcast')
 @section('og_type', 'website')

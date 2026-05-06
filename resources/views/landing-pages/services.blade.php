@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 {{-- ─── SEO ─────────────────────────────────────────────────────────────────── --}}
-@section('title', 'Consulting & Training Services | Kevin Enterprise')
+@section('title', 'Consulting & Training Services | ' . config('app.name'))
 @section('meta_description', 'Kevin Enterprise delivers expert Agile consulting and on-site training services — including Agile assessments, advisory coaching, and Agile transformation programs — tailored to your organization.')
 @section('meta_keywords', 'Agile consulting, Agile training, Agile transformation, Agile assessment, Agile coaching, Scrum training, on-site consulting, hardware Agile, embedded systems Agile, Kevin Enterprise, Kevin Thompson PhD')
 @section('og_type', 'website')

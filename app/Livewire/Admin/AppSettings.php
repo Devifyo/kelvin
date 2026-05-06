@@ -81,7 +81,7 @@ class AppSettings extends Component
 
     public function mount(): void
     {
-        $this->appName     = AppSetting::get('app_name',     AppSetting::DEFAULTS['app_name']);
+        $this->appName     = AppSetting::get('app_name');
         $this->colorCopper = AppSetting::get('color_copper', AppSetting::DEFAULTS['color_copper']);
         $this->colorSlate  = AppSetting::get('color_slate',  AppSetting::DEFAULTS['color_slate']);
 

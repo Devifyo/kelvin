@@ -18,10 +18,10 @@
 - [Agile Overview for Executives and Managers](https://kevinthompsonphd.com/agile-training-classes/agile-overview-for-executives-and-managers): Understand new roles and responsibilities in an Agile world.
 - [Agile Software Development with Scrum](https://kevinthompsonphd.com/agile-training-classes/agile-software-development-with-scrum-training): Practical details of the Scrum process framework, as applied to the development of software products.
 - [Agile Hardware Development with Scrum](https://kevinthompsonphd.com/agile-training-classes/agile-hardware-development-with-scrum): Practical details of the Scrum process framework, as applied to the development of hardware products.
-- [Agile Project Management with Kanban](https://kevinthompsonphd.com/agile-training-classes/agile-project-management-with-kanban): Ideal for groups dealing with rapidly-changing priorities and repeatable workflows.
-- [Agile Program Management](https://kevinthompsonphd.com/agile-training-classes/agile-program-management-training): Organize a large-scale Agile development process for multiple Scrum Teams.
-- [Agile Portfolio Management](https://kevinthompsonphd.com/agile-training-classes/agile-portfolio-management-course): Practical techniques for the effective management of Portfolios of business initiatives.
-- [Advanced Product Owner](https://kevinthompsonphd.com/agile-training-classes/advanced-product-owner-training): In-depth training in the complete set of skills Product Owners require to refine a high-level product concept.
+- [Agile Work Management with Kanban](https://kevinthompsonphd.com/agile-training-classes/agile-work-management-with-kanban): Ideal for groups dealing with rapidly-changing priorities and repeatable workflows.
+- [Agile Program Management](https://kevinthompsonphd.com/agile-training-classes/agile-program-management): Organize a large-scale Agile development process for multiple Scrum Teams.
+- [Agile Portfolio Management](https://kevinthompsonphd.com/agile-training-classes/agile-portfolio-management): Practical techniques for the effective management of Portfolios of business initiatives.
+- [Advanced Product Owner](https://kevinthompsonphd.com/agile-training-classes/advanced-product-owner): In-depth training in the complete set of skills Product Owners require to refine a high-level product concept.
 
 ## Papers & Presentations
 
