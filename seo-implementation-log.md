@@ -17,6 +17,11 @@ Date: 2026-05-06
 | [resources/views/landing-pages/training.blade.php](resources/views/landing-pages/training.blade.php) | **Critical fix.** Added `@section('title')`, `@section('meta_description')`, `@section('meta_keywords')` (page had none — `<title>` was just "Kevin Thompson"). Added Course `ItemList` JSON-LD generated from `$trainingClasses`. |
 | [resources/views/landing-pages/training-show.blade.php](resources/views/landing-pages/training-show.blade.php) | Removed "Kelvin Enterprise" from default meta_keywords. Added full Course JSON-LD (with `provider`/`instructor` via `@id`, `hasCourseInstance`, `offers`) generated from the `Service` model. |
 | [resources/views/landing-pages/blog-show.blade.php](resources/views/landing-pages/blog-show.blade.php) | Added `og_type = article` and `og_image` from `featured_image_url`. Added Article JSON-LD with `headline`, absolute `image`, `datePublished`, `dateModified`, `author`/`publisher` via `@id`, `articleSection`, `wordCount`. Demoted any `<h1>` inside the TinyMCE-rendered post body to `<h2>` so there is exactly one H1 per page. |
+| [resources/views/errors/layout.blade.php](resources/views/errors/layout.blade.php) (new) | Shared error-page template extending `layouts.app`. Renders a branded hero (slate background, copper accents, Cormorant Garamond serif), six helpful-link cards (Consulting / Training / Blog / Papers / Podcasts / About), a "Back to Home" + "Report this Issue" CTA, and a blog search box. Pushes `<meta name="robots" content="noindex, follow">` via the layout's `@stack('schema')` so error pages do not get indexed. |
+| [resources/views/errors/404.blade.php](resources/views/errors/404.blade.php) (new) | Extends `errors.layout`, sets the 404 copy. Replaces Laravel's default unbranded 404 page. |
+| [resources/views/errors/403.blade.php](resources/views/errors/403.blade.php) (new) | Same shape, 403 copy. |
+| [resources/views/errors/500.blade.php](resources/views/errors/500.blade.php) (new) | Same shape, 500 copy. |
+| [resources/views/errors/503.blade.php](resources/views/errors/503.blade.php) (new) | Same shape, 503 copy (maintenance). |
 
 ## Database changes
 

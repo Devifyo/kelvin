@@ -15,7 +15,7 @@ class FrontendContentService
     }
 
     public function getTrainingClasses(): Collection
-    {
+    {   
         return Service::active()->training()->ordered()->get();
     }
 
