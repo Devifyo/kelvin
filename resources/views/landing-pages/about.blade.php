@@ -32,9 +32,19 @@
     <div class="about-grid">
         
         <aside class="about-sidebar reveal">
-            <div class="profile-img-wrap">
-                <img src="{{ $aboutContent->profile_image ?? '/img/frontend/Dr. Kevin Thompson.webp' }}" alt="Dr. Kevin Thompson" width="320" height="400" loading="eager" fetchpriority="high">
-            </div>
+            <figure class="profile-img-wrap" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                <link itemprop="url" href="{{ $aboutContent->profile_image ?? asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}">
+                <meta itemprop="width" content="320">
+                <meta itemprop="height" content="400">
+                <img
+                    src="{{ $aboutContent->profile_image ?? asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}"
+                    alt="Portrait of Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant, trainer, and author"
+                    title="Dr. Kevin Thompson, Ph.D. — Agile Hardware Consultant"
+                    width="320" height="400"
+                    loading="eager" fetchpriority="high" decoding="async"
+                    itemprop="contentUrl">
+                <figcaption itemprop="caption" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Dr. Kevin Thompson, Ph.D. — Principal Agile consultant specializing in hardware development, Scrum at scale, and Agile transformation.</figcaption>
+            </figure>
             
             <div>
                 <div class="kicker-small">{{ $aboutContent->sidebar_kicker ?? 'Education & Certifications' }}</div>

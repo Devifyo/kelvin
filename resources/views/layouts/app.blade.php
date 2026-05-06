@@ -86,6 +86,7 @@
     {{-- JSON-LD Structured Data (sitewide canonical entities — pages reference via @id) --}}
     @php
         $_base = url('/');
+        $_portraitUrl = asset('img/frontend/Dr.%20Kevin%20Thompson.webp');
         $_person = [
             '@type'            => 'Person',
             '@id'              => $_base . '/#person',
@@ -96,6 +97,13 @@
             'jobTitle'         => $_schemaJobTitle,
             'description'      => 'Agile hardware development consultant, trainer, and author. Helps R&D and hardware teams adopt Scrum and scale Agile.',
             'url'              => url('/about-kevin-thompson'),
+            'image'            => [
+                '@type'  => 'ImageObject',
+                'url'    => $_portraitUrl,
+                'width'  => 320,
+                'height' => 400,
+                'caption'=> 'Dr. Kevin Thompson, Ph.D. — Agile hardware consultant',
+            ],
             'worksFor'         => ['@id' => $_base . '/#organization'],
             'knowsAbout'       => [
                 'Agile hardware development',

@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kevinthompsonphd.com</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/img/frontend/Dr.%20Kevin%20Thompson.webp</image:loc>
+            <image:title>Dr. Kevin Thompson, Ph.D.</image:title>
+            <image:caption>Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/img/frontend/Dr.%20Kevin%20Thompson.webp</image:loc>
+            <image:title>Dr. Kevin Thompson, Ph.D.</image:title>
+            <image:caption>Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-training-classes</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/contact-us</loc>
-        <lastmod>2026-05-06T10:12:37+00:00</lastmod>
+        <lastmod>2026-05-06T10:50:30+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -53,18 +64,33 @@
         <lastmod>2026-04-21T21:11:29+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/q57jeUxCsgFnGStJFkSDyWS3I6VqynSgsK4eazx4.jpg</image:loc>
+            <image:title>Scrum Teams, Swarming, and Hardware</image:title>
+            <image:caption>Swarming and Cross-Functional Teams are two of the most important concepts in the adoption of Scrum for software-development work. They play out very differently in the worlds of software and hardware development.</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/how-hardware-and-software-engineers-differ</loc>
         <lastmod>2026-04-21T21:14:19+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/XJQu3xqeNrhRqMOJcYcDA7DsAJ1arAxImAoCKfha.jpg</image:loc>
+            <image:title>How Hardware and Software Engineers Differ</image:title>
+            <image:caption>Hardware and software engineers are similar in that they both make things. It is obvious that they employ different skills in their work. What is not so obvious is the implications of the differences in their skills when it comes to collaboration within teams.</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/embedded-software</loc>
         <lastmod>2026-04-21T21:16:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/gIAjWAMuShJ9p4yhjJzYPQE3yjCrhDBtDRhW8wnx.jpg</image:loc>
+            <image:title>Embedded Software</image:title>
+            <image:caption>From an Agile perspective, the development of embedded software is not difficult, provided proper team definitions exist. This post addresses collaboration and cross-team dynamics to identify the optimum strategy for embedded software development.</image:caption>
+        </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-training-classes/agile-overview-for-executives-and-managers</loc>

@@ -47,17 +47,40 @@ class SeoGenerator
     {
         $urls = static::staticPages();
 
+        // Decorate the homepage and About page with the canonical headshot
+        // so they appear in Google Images.
+        $portraitAbsolute = url('/img/frontend/' . rawurlencode('Dr. Kevin Thompson.webp'));
+        $portraitImage = [
+            'loc'     => $portraitAbsolute,
+            'caption' => 'Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant',
+            'title'   => 'Dr. Kevin Thompson, Ph.D.',
+        ];
+        foreach ($urls as &$staticUrl) {
+            if ($staticUrl['loc'] === url('/') || $staticUrl['loc'] === url('/about-kevin-thompson')) {
+                $staticUrl['images'][] = $portraitImage;
+            }
+        }
+        unset($staticUrl);
+
         if (AppSetting::get('seo_sitemap_blog', '1') === '1') {
             Post::where('status', 'published')
                 ->orderByDesc('published_at')
-                ->get(['slug', 'updated_at'])
+                ->get(['slug', 'title', 'excerpt', 'featured_image', 'updated_at'])
                 ->each(function ($post) use (&$urls) {
-                    $urls[] = [
+                    $entry = [
                         'loc'        => url('/agile-insights-blog/' . $post->slug),
                         'lastmod'    => $post->updated_at->toAtomString(),
                         'changefreq' => 'monthly',
                         'priority'   => '0.6',
                     ];
+                    if (! empty($post->featured_image)) {
+                        $entry['images'][] = [
+                            'loc'     => url(\Illuminate\Support\Facades\Storage::url($post->featured_image)),
+                            'title'   => $post->title,
+                            'caption' => $post->excerpt ?: $post->title,
+                        ];
+                    }
+                    $urls[] = $entry;
                 });
         }
 
@@ -65,14 +88,22 @@ class SeoGenerator
             Service::where('type', 'training')
                 ->where('is_active', true)
                 ->orderBy('sort_order')
-                ->get(['slug', 'updated_at'])
+                ->get(['slug', 'title', 'short_description', 'featured_image', 'updated_at'])
                 ->each(function ($service) use (&$urls) {
-                    $urls[] = [
+                    $entry = [
                         'loc'        => url('/agile-training-classes/' . $service->slug),
                         'lastmod'    => $service->updated_at->toAtomString(),
                         'changefreq' => 'monthly',
                         'priority'   => '0.7',
                     ];
+                    if (! empty($service->featured_image)) {
+                        $entry['images'][] = [
+                            'loc'     => url(\Illuminate\Support\Facades\Storage::url($service->featured_image)),
+                            'title'   => $service->title,
+                            'caption' => $service->short_description ?: $service->title,
+                        ];
+                    }
+                    $urls[] = $entry;
                 });
         }
 
@@ -84,7 +115,8 @@ class SeoGenerator
         });
 
         $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
+        $xml .= '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' . "\n";
 
         foreach ($urls as $url) {
             $xml .= "    <url>\n";
@@ -92,6 +124,17 @@ class SeoGenerator
             if (isset($url['lastmod']))    $xml .= '        <lastmod>'    . $url['lastmod']    . "</lastmod>\n";
             if (isset($url['changefreq'])) $xml .= '        <changefreq>' . $url['changefreq'] . "</changefreq>\n";
             if (isset($url['priority']))   $xml .= '        <priority>'   . $url['priority']   . "</priority>\n";
+
+            if (! empty($url['images'])) {
+                foreach ($url['images'] as $img) {
+                    $xml .= "        <image:image>\n";
+                    $xml .= '            <image:loc>' . htmlspecialchars($img['loc']) . "</image:loc>\n";
+                    if (! empty($img['title']))   $xml .= '            <image:title>'   . htmlspecialchars($img['title'])   . "</image:title>\n";
+                    if (! empty($img['caption'])) $xml .= '            <image:caption>' . htmlspecialchars($img['caption']) . "</image:caption>\n";
+                    $xml .= "        </image:image>\n";
+                }
+            }
+
             $xml .= "    </url>\n";
         }
 

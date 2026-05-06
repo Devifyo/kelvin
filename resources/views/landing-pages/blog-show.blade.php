@@ -30,7 +30,7 @@
         <h1 class="page-title">{{ $post->title }}</h1>
         
         <div class="article-meta-wrapper">
-            <img src="https://kevin.devifyo.cloud/img/frontend/Dr.%20Kevin%20Thompson.webp" alt="{{ $post->author->name ?? 'Dr. Kevin Thompson' }}" class="meta-avatar">
+            <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" alt="{{ $post->author->name ?? 'Dr. Kevin Thompson, Ph.D. — Agile hardware consultant' }}" class="meta-avatar" width="48" height="48" loading="lazy" decoding="async">
             <div class="meta-info">
                 <strong>{{ $post->author->name ?? 'Dr. Kevin Thompson' }}</strong>
                 <div class="meta-details">
@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="author-bio-box">
-                    <img src="https://kevin.devifyo.cloud/img/frontend/Dr.%20Kevin%20Thompson.webp" alt="Dr. Kevin Thompson">
+                    <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" alt="Dr. Kevin Thompson, Ph.D. — Agile hardware consultant" width="80" height="80" loading="lazy" decoding="async">
                     <div class="author-bio-text">
                         <h4>Dr. Kevin Thompson, Ph.D.</h4>
                         <p>Principal Consultant specializing in Agile hardware development. Dr. Thompson has successfully guided over 100 enterprise transformations, bridging the gap between hardware engineering and Agile software methodologies.</p>
