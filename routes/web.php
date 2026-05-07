@@ -40,7 +40,7 @@ Route::controller(ContactController::class)->group(function () {
 });
 
 
-Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->name('visa.eater-sunday');
+// Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->name('visa.eater-sunday');
 
 // SEO files — no session/cookie middleware so crawlers get clean public responses
 Route::withoutMiddleware([
