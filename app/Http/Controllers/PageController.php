@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\FrontendContentService;
 use App\Models\WelcomePageContent;
 use App\Models\AboutPageContent;
+use App\Models\PrivacyPageContent;
+use App\Models\TermsPageContent;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -80,5 +82,17 @@ class PageController extends Controller
         $mediaItems = $this->contentService->getPodcastsWebinars($currentFilter);
 
         return view('landing-pages.podcasts-webinars', compact('mediaItems', 'currentFilter'));
+    }
+
+    public function privacy()
+    {
+        $privacyContent = PrivacyPageContent::first();
+        return view('landing-pages.privacy', compact('privacyContent'));
+    }
+
+    public function terms()
+    {
+        $termsContent = TermsPageContent::first();
+        return view('landing-pages.terms', compact('termsContent'));
     }
 }
