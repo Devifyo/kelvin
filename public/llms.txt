@@ -1,6 +1,6 @@
-# Kevin Thompson Ph.D.
+# Kevin Thompson
 
-> Kevin Thompson Ph.D. provides expert agile consulting, training, and research for hardware development teams. Specializing in Scrum, SAFe, Kanban, and Lean methodologies applied to complex hardware and software engineering environments.
+> Kevin Thompson Ph.D. provides expert agile consulting, training, and research for hardware development teams. Specializing in Scrum, Kanban, and Lean methodologies applied to complex hardware and software engineering environments.
 
 ## Pages
 
