@@ -31,8 +31,8 @@ Route::get('/profile', ProfileSettings::class)->name('profile');
 Route::get('/app-settings', AppSettings::class)->name('app-settings');
 Route::get('/welcome-page', WelcomePageSettings::class)->name('welcome-page');
 Route::get('/about-page', AboutPageSettings::class)->name('about-page');
-Route::get('/privacy-page', PrivacyPageSettings::class)->name('privacy-page')->middleware('maintenance');
-Route::get('/terms-page', TermsPageSettings::class)->name('terms-page')->middleware('maintenance');
+Route::get('/privacy-page', PrivacyPageSettings::class)->name('privacy-page');
+Route::get('/terms-page', TermsPageSettings::class)->name('terms-page');
 
 Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
 Route::get('/consulting-services', ConsultingServices::class)->name('services.index');

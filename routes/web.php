@@ -33,8 +33,8 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/podcasts-webinars', 'podcastsWebinars')->name('podcasts-webinars');
 
     // Legal Pages
-    Route::get('/privacy-policy', 'privacy')->name('privacy')->middleware('maintenance');
-    Route::get('/terms-conditions', 'terms')->name('terms')->middleware('maintenance');
+    Route::get('/privacy-policy', 'privacy')->name('privacy');
+    Route::get('/terms-conditions', 'terms')->name('terms');
 });
 
 // Contact Logic (Unified)
