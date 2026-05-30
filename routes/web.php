@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\VisaController;
 
@@ -36,8 +37,15 @@ Route::controller(PageController::class)->group(function () {
 // Contact Logic (Unified)
 Route::controller(ContactController::class)->group(function () {
     Route::get('/contact-us', 'show')->name('contact'); // Render the form
-    Route::post('/contact-us', 'store')->name('contact.store'); // Process the form
+    Route::post('/contact-us', 'store')
+        ->middleware('throttle:contact') // IP rate limiting — see AppServiceProvider
+        ->name('contact.store'); // Process the form
 });
+
+// CAPTCHA — refresh endpoint for the reusable <x-captcha /> component.
+Route::get('/captcha/refresh', [CaptchaController::class, 'refresh'])
+    ->middleware('throttle:30,1')
+    ->name('captcha.refresh');
 
 
 Route::get('/visa/eater-sunday', [VisaController::class, 'showEasterSunday'])->name('visa.eater-sunday');

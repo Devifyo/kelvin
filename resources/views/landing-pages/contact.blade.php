@@ -228,6 +228,21 @@ textarea.form-control {
     gap: .75rem;
 }
 
+/* Error / rate-limit Alert */
+.alert-error {
+    background: rgba(214,69,63,.08);
+    border: 1px solid rgba(214,69,63,.55);
+    color: #c23a34;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    font-family: -apple-system, sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
 /* ─────────────────────────────────────────
    RESPONSIVE DESIGN
 ───────────────────────────────────────── */
@@ -289,6 +304,13 @@ textarea.form-control {
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="alert-error">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <form action="{{ route('contact.store') }}" method="POST">
                 @csrf
                 
@@ -317,6 +339,8 @@ textarea.form-control {
                     <textarea id="message" name="message" class="form-control" required placeholder="Tell us about your organization's challenges...">{{ old('message') }}</textarea>
                     @error('message') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                 </div>
+
+                <x-captcha />
 
                 <button type="submit" class="btn-submit">
                     Send Message
