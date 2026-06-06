@@ -314,6 +314,30 @@
     .service-card { padding: 2rem 1.5rem; }
     .consulting-grid { grid-template-columns: 1fr; }
 }
+
+/* Mobile */
+@media(max-width: 576px) {
+    .page-header { padding: 7rem 1.25rem 3rem; }
+    .page-subtitle { font-size: .95rem; line-height: 1.7; }
+    .kicker { font-size: .6rem; letter-spacing: .25em; }
+    .content-section, .training-section { padding: 3.5rem 1.25rem; }
+    .section-lead { font-size: 1rem; margin-bottom: 2.5rem; }
+    .consulting-grid { gap: 1.25rem; }
+    .service-card { padding: 1.85rem 1.4rem; }
+    .service-title { font-size: 1.5rem; }
+    .training-wrap { gap: 2.5rem; }
+    .training-intro p { font-size: 1rem; }
+    .course-link { padding: 1rem 1.1rem; font-size: .92rem; }
+}
+
+/* Small phones */
+@media(max-width: 380px) {
+    .page-header { padding: 6.5rem 1rem 2.5rem; }
+    .content-section, .training-section { padding: 3rem 1rem; }
+    .service-card { padding: 1.6rem 1.2rem; }
+    .service-title { font-size: 1.4rem; }
+    .course-link { padding: .9rem 1rem; font-size: .88rem; }
+}
 </style>
 @endpush
 

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\BlockedEmail;
 use App\Mail\ContactInquiryMail;
 use App\Rules\Captcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class ContactController extends Controller
 {   
@@ -29,6 +31,13 @@ class ContactController extends Controller
             'message' => 'required|string',
             'captcha' => ['required', 'string', new Captcha],
         ]);
+
+        // Reject submissions from emails an admin has blocked.
+        if (BlockedEmail::isBlocked($validated['email'])) {
+            throw ValidationException::withMessages([
+                'email' => 'This email address is not permitted to submit the contact form. Please reach out to us directly if you believe this is a mistake.',
+            ]);
+        }
 
         // The captcha answer is only a gate — never persist or mail it.
         $data = collect($validated)->only(['name', 'email', 'subject', 'message'])->all();

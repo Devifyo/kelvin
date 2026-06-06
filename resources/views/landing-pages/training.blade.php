@@ -169,6 +169,27 @@
     .card-footer { flex-direction: column; align-items: flex-start; gap: 2rem; }
     .meta-info { flex-direction: column; gap: 1rem; }
 }
+
+/* Mobile */
+@media(max-width: 576px) {
+    .page-header { padding: 7rem 1.25rem 3rem; }
+    .short-desc { font-size: .95rem; line-height: 1.7; }
+    .kicker { font-size: .6rem; letter-spacing: .25em; }
+    .training-wrapper { padding: 3.5rem 1.25rem; }
+    .course-card { padding: 2rem 1.5rem; margin-bottom: 2rem; gap: 1.1rem; }
+    .course-card h2 { font-size: 1.7rem; }
+    .course-card p { font-size: 1rem; }
+    .card-footer { padding-top: 1.5rem; gap: 1.5rem; }
+    .btn-outline { width: 100%; justify-content: center; }
+}
+
+/* Small phones */
+@media(max-width: 380px) {
+    .page-header { padding: 6.5rem 1rem 2.5rem; }
+    .training-wrapper { padding: 3rem 1rem; }
+    .course-card { padding: 1.7rem 1.25rem; }
+    .course-card h2 { font-size: 1.55rem; }
+}
 </style>
 @endpush
 

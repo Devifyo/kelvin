@@ -177,7 +177,14 @@
         font-weight: 400;
         margin-bottom: 2rem;
         flex-grow: 1; /* Pushes the button to the bottom */
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
+    /* Keep editor-pasted media/tables from overflowing the card on small screens */
+    .paper-desc img,
+    .paper-desc table,
+    .paper-desc pre { max-width: 100%; height: auto; }
+    .paper-desc table { display: block; overflow-x: auto; }
 
     .download-btn {
         display: inline-flex;
@@ -215,9 +222,47 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Tablet */
     @media(max-width: 900px) {
-        .papers-grid { grid-template-columns: 1fr; }
+        .papers-grid { grid-template-columns: 1fr; gap: 2rem; }
         .page-header { padding: 9rem 2.5rem 4rem; }
         .content-section { padding: 4rem 2.5rem; }
         .filter-container { padding: 1.5rem; }
+    }
+
+    /* Mobile */
+    @media(max-width: 576px) {
+        .page-header { padding: 7rem 1.25rem 3rem; }
+        .page-subtitle { font-size: .95rem; line-height: 1.7; }
+        .kicker { font-size: .6rem; letter-spacing: .25em; }
+
+        .filter-container { padding: 1.25rem 1rem; }
+        .filter-menu {
+            width: 100%;
+            gap: .4rem;
+            padding: .4rem;
+            border-radius: 18px;
+        }
+        .filter-btn {
+            flex: 1 1 calc(50% - .4rem);
+            text-align: center;
+            padding: .7rem .75rem;
+            font-size: .68rem;
+            letter-spacing: .05em;
+        }
+
+        .content-section { padding: 3rem 1.25rem; }
+        .papers-grid { gap: 1.5rem; }
+        .paper-card { padding: 2rem 1.5rem; }
+        .paper-title { font-size: 1.5rem; }
+        .paper-desc { font-size: .9rem; margin-bottom: 1.5rem; }
+        .no-results { padding: 3rem 1.5rem !important; font-size: 1.4rem; }
+    }
+
+    /* Small phones */
+    @media(max-width: 380px) {
+        .page-header { padding: 6.5rem 1rem 2.5rem; }
+        .filter-btn { flex-basis: 100%; }
+        .paper-card { padding: 1.75rem 1.25rem; }
+        .paper-meta { flex-wrap: wrap; gap: .5rem; }
     }
