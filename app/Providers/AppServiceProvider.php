@@ -7,7 +7,10 @@ use App\Models\Paper;
 use App\Models\Post;
 use App\Models\Service;
 use App\Services\SeoGenerator;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use SocialiteProviders\Manager\SocialiteWasCalled;
@@ -27,7 +30,28 @@ class AppServiceProvider extends ServiceProvider
             \SocialiteProviders\Apple\AppleExtendSocialite::class, 'handle',
         ]);
 
+        $this->registerRateLimiters();
         $this->registerSeoHooks();
+    }
+
+    /**
+     * Named rate limiters for public-facing forms.
+     */
+    private function registerRateLimiters(): void
+    {
+        // Contact form: cap submissions per IP to blunt spam floods and
+        // brute-forcing of the captcha. Two tiers — a short burst guard and a
+        // longer-window cap — and a friendly redirect-back instead of a raw 429.
+        RateLimiter::for('contact', function (Request $request) {
+            $tooMany = fn () => back()
+                ->withInput($request->except(['captcha', '_captcha_token', '_captcha_hp', '_token']))
+                ->with('error', 'You\'re sending messages a little too quickly. Please wait a minute and try again.');
+
+            return [
+                Limit::perMinute(5)->by('contact-min:' . $request->ip())->response($tooMany),
+                Limit::perHour(20)->by('contact-hr:' . $request->ip())->response($tooMany),
+            ];
+        });
     }
 
     private function registerSeoHooks(): void

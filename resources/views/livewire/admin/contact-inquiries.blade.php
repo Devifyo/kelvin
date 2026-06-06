@@ -13,6 +13,7 @@
             <button wire:click="setFilter('all')" class="filter-pill {{ $filterStatus === 'all' ? 'active' : '' }}">All</button>
             <button wire:click="setFilter('unread')" class="filter-pill {{ $filterStatus === 'unread' ? 'active' : '' }}">Unread</button>
             <button wire:click="setFilter('read')" class="filter-pill {{ $filterStatus === 'read' ? 'active' : '' }}">Read</button>
+            <button wire:click="setFilter('blocked')" class="filter-pill filter-pill-blocked {{ $filterStatus === 'blocked' ? 'active' : '' }}">Blocked</button>
         </div>
     </div>
 
@@ -20,7 +21,8 @@
     <div class="inquiry-list-container">
         <div class="inquiry-list">
             @forelse($inquiries as $item)
-                <div class="inquiry-row {{ !$item->is_read ? 'is-unread' : '' }}" wire:key="inquiry-{{ $item->id }}">
+                @php $isBlocked = $blockedEmails->has($item->email); @endphp
+                <div class="inquiry-row {{ !$item->is_read ? 'is-unread' : '' }} {{ $isBlocked ? 'is-blocked' : '' }}" wire:key="inquiry-{{ $item->id }}">
                     
                     {{-- Left: Avatar & Info --}}
                     <div class="inquiry-sender">
@@ -38,6 +40,13 @@
                         <div class="status-badge {{ $item->is_read ? 'badge-read' : 'badge-unread' }}">
                             {{ $item->is_read ? 'Read' : 'New' }}
                         </div>
+                        @if($isBlocked)
+                            @php $block = $blockedEmails->get($item->email); @endphp
+                            <div class="status-badge badge-blocked"
+                                title="Blocked since {{ $block->created_at->format('M d, Y') }}{{ $block->blocked_until ? ' · until ' . $block->blocked_until->format('M d, Y') : ' · until unblocked' }}">
+                                Blocked
+                            </div>
+                        @endif
                         <div class="subject-text" title="{{ $item->subject }}">
                             {{ Str::limit($item->subject, 50) }}
                         </div>
@@ -48,6 +57,14 @@
                         <div class="datetime-block">
                             <div class="date-text">{{ $item->created_at->format('M d, Y') }}</div>
                             <div class="time-text">{{ $item->created_at->format('g:i A') }}</div>
+                            @if($isBlocked)
+                                <div class="blocked-since-text">
+                                    Blocked {{ $block->created_at->format('M d, Y') }}
+                                    @if($block->blocked_until)
+                                        · til {{ $block->blocked_until->format('M d, Y') }}
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                         
                         <div class="inquiry-actions">
@@ -59,8 +76,41 @@
                                 </svg>
                             </button>
                             
+                            {{-- Block / Unblock Button --}}
+                            @if($isBlocked)
+                                <button title="Unblock Email"
+                                    x-data
+                                    x-on:click="
+                                        Swal.fire({
+                                            title: 'Unblock Email?',
+                                            text: '{{ $item->email }} will be able to submit the contact form again.',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#b5722a',
+                                            cancelButtonColor: '#e5e7eb',
+                                            confirmButtonText: 'Unblock',
+                                            cancelButtonText: '<span style=\'color: #374151\'>Cancel</span>'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $wire.unblockEmail({{ $item->id }})
+                                            }
+                                        })
+                                    "
+                                    class="icon-btn unblock">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                    </svg>
+                                </button>
+                            @else
+                                <button title="Block Email" wire:click="openBlockModal({{ $item->id }})" class="icon-btn block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                </button>
+                            @endif
+
                             {{-- Delete Button --}}
-                            <button title="Delete" 
+                            <button title="Delete"
                                 x-data 
                                 x-on:click="
                                     Swal.fire({
@@ -100,6 +150,9 @@
 
     {{-- View Modal Include --}}
     @include('livewire.admin.partials.contact-inquiries.view-modal')
+
+    {{-- Block Modal Include --}}
+    @include('livewire.admin.partials.contact-inquiries.block-modal')
 
     <link href="{{ asset('css/admin/contact-inquiries.css') }}" rel="stylesheet">
 </div>
