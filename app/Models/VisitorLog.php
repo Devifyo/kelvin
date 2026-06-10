@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -10,6 +12,8 @@ class VisitorLog extends Model
 {
     protected $fillable = [
         'ip_address',
+        'visitor_id',
+        'session_id',
         'country',
         'country_code',
         'city',
@@ -23,12 +27,21 @@ class VisitorLog extends Model
         'session_duration',
         'is_bounce',
         'is_new_visitor',
+        'is_bot',
+        'bot_reason',
     ];
 
     protected $casts = [
         'is_bounce'      => 'boolean',
         'is_new_visitor' => 'boolean',
+        'is_bot'         => 'boolean',
     ];
+
+    /**
+     * Per-page duration cap (seconds). A single page longer than the session
+     * timeout means the visitor left and came back, so we don't count the gap.
+     */
+    private const SESSION_CAP = 1800;
 
     // ── Scopes ──────────────────────────────────────────
 
@@ -42,64 +55,173 @@ class VisitorLog extends Model
         return $query->where('created_at', '>=', now()->subDays($days)->startOfDay());
     }
 
-    // ── Aggregates ──────────────────────────────────────
-
-    public static function stats(string $period = 'today'): array
+    /** Real human traffic only — excludes classified bots/crawlers. */
+    public function scopeHumans(Builder $query): Builder
     {
-        $query = match ($period) {
-            'week'  => static::lastDays(7),
-            'month' => static::lastDays(30),
-            default => static::today(),
+        return $query->where('is_bot', false);
+    }
+
+    /** Filtered automated traffic only. */
+    public function scopeBots(Builder $query): Builder
+    {
+        return $query->where('is_bot', true);
+    }
+
+    // ── Period helpers ──────────────────────────────────
+
+    /**
+     * Resolve a period (preset or custom range) to [start, end] timestamps.
+     * 'custom' uses the supplied from/to dates (inclusive whole days); the
+     * presets are relative to now.
+     *
+     * @return array{0: CarbonInterface, 1: CarbonInterface}
+     */
+    private static function bounds(string $period, ?string $from = null, ?string $to = null): array
+    {
+        if ($period === 'custom' && $from && $to) {
+            return [Carbon::parse($from)->startOfDay(), Carbon::parse($to)->endOfDay()];
+        }
+
+        return match ($period) {
+            'week'  => [now()->subDays(7)->startOfDay(), now()],
+            'month' => [now()->subDays(30)->startOfDay(), now()],
+            default => [today(), now()],
         };
+    }
 
-        // Each row = one page view; visitors = distinct IPs
-        $pageviews = (clone $query)->count();
-        $visitors  = (clone $query)->distinct('ip_address')->count('ip_address');
+    private static function periodScope(string $period, ?string $from = null, ?string $to = null): Builder
+    {
+        [$start, $end] = self::bounds($period, $from, $to);
 
-        // Average session duration: sum page durations per IP per day (one "session" = one IP per day),
-        // then average those session totals. Cap each page duration at 1800s (30 min) to exclude
-        // stale records where the user left and came back hours later within the same cache window.
-        $avgSec = DB::table(
-                (clone $query)
-                    ->selectRaw('SUM(LEAST(COALESCE(session_duration, 0), 1800)) as total')
-                    ->groupBy('ip_address', DB::raw('DATE(created_at)'))
-                    ->toBase(),
-                'sessions'
-            )->avg('total') ?? 0;
+        return static::whereBetween('created_at', [$start, $end]);
+    }
 
-        // Bounce: visitors who only loaded 1 page in this period
-        $bounced = (clone $query)
-            ->selectRaw('ip_address, COUNT(*) as cnt')
-            ->groupBy('ip_address')
-            ->havingRaw('COUNT(*) = 1')
-            ->get()
-            ->count();
+    private static function periodStart(string $period, ?string $from = null, ?string $to = null): CarbonInterface
+    {
+        return self::bounds($period, $from, $to)[0];
+    }
 
-        // New visitors: first-ever visit (is_new_visitor set once per IP lifetime)
-        $new = (clone $query)->where('is_new_visitor', true)->count();
+    /** Base query for a period restricted to human traffic. */
+    private static function humanPeriod(string $period, ?string $from = null, ?string $to = null): Builder
+    {
+        return static::periodScope($period, $from, $to)->humans();
+    }
 
-        $m = intdiv((int) $avgSec, 60);
-        $s = (int) $avgSec % 60;
+    /**
+     * SQL that caps a page's duration at SESSION_CAP — portable across MySQL
+     * and SQLite (avoids LEAST(), which SQLite lacks).
+     */
+    private static function cappedDurationSql(): string
+    {
+        $cap = self::SESSION_CAP;
 
+        return "SUM(CASE WHEN COALESCE(session_duration, 0) > {$cap} THEN {$cap} ELSE COALESCE(session_duration, 0) END)";
+    }
+
+    /**
+     * GROUP BY expressions that collapse rows into sessions: one group per
+     * session_id, falling back to IP + day for legacy rows that predate
+     * session tracking. Portable (CASE + DATE work on MySQL and SQLite).
+     *
+     * @return array<int, mixed>
+     */
+    private static function sessionGrouping(): array
+    {
         return [
-            'visitors'        => $visitors,
-            'pageviews'       => $pageviews,
-            'avg_session'     => "{$m}m {$s}s",
-            'avg_session_sec' => (int) $avgSec,
-            'bounce_rate'     => $visitors > 0 ? round($bounced / $visitors * 100) . '%' : '0%',
-            'bounce_pct'      => $visitors > 0 ? (int) round($bounced / $visitors * 100) : 0,
-            'new_visitors'    => $new,
+            'session_id',
+            DB::raw('CASE WHEN session_id IS NULL THEN ip_address END'),
+            DB::raw('CASE WHEN session_id IS NULL THEN DATE(created_at) END'),
         ];
     }
 
-    public static function topCountries(string $period = 'today'): array
-    {
-        $query = match ($period) {
-            'week'  => static::lastDays(7),
-            'month' => static::lastDays(30),
-            default => static::today(),
-        };
+    // ── Aggregates ──────────────────────────────────────
 
+    public static function stats(string $period = 'today', ?string $from = null, ?string $to = null): array
+    {
+        $human = static::humanPeriod($period, $from, $to);
+
+        $pageviews = (clone $human)->count();
+        $visitors  = (int) (clone $human)
+            ->selectRaw('COUNT(DISTINCT COALESCE(visitor_id, ip_address)) as c')
+            ->value('c');
+
+        // Per-session duration totals (carrying location for the peak session).
+        $sessionTotals = (clone $human)
+            ->selectRaw('MAX(country) as country, MAX(city) as city, ' . self::cappedDurationSql() . ' as total')
+            ->groupBy(...self::sessionGrouping())
+            ->toBase();
+
+        $sessionCount = DB::table($sessionTotals, 's')->count();
+        $avgSec       = (int) round(DB::table($sessionTotals, 's')->avg('total') ?? 0);
+
+        // Peak (longest) session — the most engaged visitor, with their location.
+        $peak    = DB::table($sessionTotals, 's')->orderByDesc('total')->first();
+        $maxSec  = (int) ($peak->total ?? 0);
+        $maxFrom = $peak ? trim(($peak->city ? $peak->city . ', ' : '') . ($peak->country ?? '')) : '';
+
+        // Pages per session — engagement depth.
+        $pagesPerSession = $sessionCount > 0 ? round($pageviews / $sessionCount, 1) : 0.0;
+
+        // Returning visitors — cookie ids seen for the first time before this
+        // period (i.e. they came back). Cookieless/legacy traffic is excluded.
+        $returning = (clone $human)
+            ->whereNotNull('visitor_id')
+            ->whereIn('visitor_id', function ($sub) use ($period, $from, $to) {
+                $sub->from('visitor_logs')
+                    ->select('visitor_id')
+                    ->whereNotNull('visitor_id')
+                    ->where('created_at', '<', self::periodStart($period, $from, $to));
+            })
+            ->distinct()
+            ->count('visitor_id');
+
+        $new = (clone $human)->where('is_new_visitor', true)
+            ->selectRaw('COUNT(DISTINCT COALESCE(visitor_id, ip_address)) as c')
+            ->value('c');
+
+        // Bounce — single-page-view sessions (kept for re-enabling the card).
+        $bounced = DB::table(
+            (clone $human)
+                ->selectRaw('COUNT(*) as views')
+                ->groupBy(...self::sessionGrouping())
+                ->toBase(),
+            's'
+        )->where('views', 1)->count();
+
+        // Human vs filtered bot volume for the same period.
+        $botPageviews = (int) static::periodScope($period, $from, $to)->bots()->count();
+        $totalTraffic = $pageviews + $botPageviews;
+        $botPct       = $totalTraffic > 0 ? (int) round($botPageviews / $totalTraffic * 100) : 0;
+
+        return [
+            'visitors'          => $visitors,
+            'pageviews'         => $pageviews,
+            'sessions'          => $sessionCount,
+            'avg_session'       => self::formatDuration($avgSec),
+            'avg_session_sec'   => $avgSec,
+            'max_session'       => self::formatDuration($maxSec),
+            'max_session_sec'   => $maxSec,
+            'max_session_from'  => $maxFrom,
+            'pages_per_session' => number_format($pagesPerSession, 1),
+            'returning_visitors' => (int) $returning,
+            'new_visitors'      => (int) $new,
+            'bounce_rate'       => $sessionCount > 0 ? round($bounced / $sessionCount * 100) . '%' : '0%',
+            'bounce_pct'        => $sessionCount > 0 ? (int) round($bounced / $sessionCount * 100) : 0,
+            // Traffic-quality split
+            'human_pageviews'   => $pageviews,
+            'bot_pageviews'     => $botPageviews,
+            'bot_pct'           => $botPct,
+        ];
+    }
+
+    private static function formatDuration(int $seconds): string
+    {
+        return intdiv($seconds, 60) . 'm ' . ($seconds % 60) . 's';
+    }
+
+    public static function topCountries(string $period = 'today', ?string $from = null, ?string $to = null): array
+    {
+        $query = static::humanPeriod($period, $from, $to);
         $total = max((clone $query)->count(), 1);
 
         return (clone $query)
@@ -118,14 +240,9 @@ class VisitorLog extends Model
             ->all();
     }
 
-    public static function deviceBreakdown(string $period = 'today'): array
+    public static function deviceBreakdown(string $period = 'today', ?string $from = null, ?string $to = null): array
     {
-        $query = match ($period) {
-            'week'  => static::lastDays(7),
-            'month' => static::lastDays(30),
-            default => static::today(),
-        };
-
+        $query = static::humanPeriod($period, $from, $to);
         $total = max((clone $query)->count(), 1);
 
         $colors = ['Desktop' => '#b5722a', 'Mobile' => '#d4924e', 'Tablet' => '#edb97a'];
@@ -144,14 +261,9 @@ class VisitorLog extends Model
             ->all();
     }
 
-    public static function browserBreakdown(string $period = 'today'): array
+    public static function browserBreakdown(string $period = 'today', ?string $from = null, ?string $to = null): array
     {
-        $query = match ($period) {
-            'week'  => static::lastDays(7),
-            'month' => static::lastDays(30),
-            default => static::today(),
-        };
-
+        $query = static::humanPeriod($period, $from, $to);
         $total = max((clone $query)->count(), 1);
 
         $icons = ['Chrome' => 'C', 'Safari' => 'S', 'Firefox' => 'F', 'Edge' => 'E'];
@@ -172,7 +284,8 @@ class VisitorLog extends Model
 
     public static function recentVisitors(int $limit = 10): array
     {
-        return static::latest()
+        return static::humans()
+            ->latest()
             ->limit($limit)
             ->get()
             ->map(function ($r) {
@@ -196,12 +309,11 @@ class VisitorLog extends Model
     }
 
     /**
-     * All-time geographic data for the world map.
-     * Returns country bubbles and city dots with visitor counts + coordinates.
+     * All-time geographic data for the world map (human traffic only).
      */
     public static function mapData(): array
     {
-        $countries = static::query()
+        $countries = static::humans()
             ->selectRaw('country, country_code, ROUND(AVG(lat), 4) as lat, ROUND(AVG(lon), 4) as lon, COUNT(DISTINCT ip_address) as visitors')
             ->whereNotNull('lat')
             ->whereNotNull('lon')
@@ -219,7 +331,7 @@ class VisitorLog extends Model
             ->values()
             ->all();
 
-        $cities = static::query()
+        $cities = static::humans()
             ->selectRaw('city, country, ROUND(AVG(lat), 4) as lat, ROUND(AVG(lon), 4) as lon, COUNT(DISTINCT ip_address) as visitors')
             ->whereNotNull('lat')
             ->whereNotNull('lon')
@@ -241,14 +353,9 @@ class VisitorLog extends Model
         return ['countries' => $countries, 'cities' => $cities];
     }
 
-    public static function topPages(string $period = 'today'): array
+    public static function topPages(string $period = 'today', ?string $from = null, ?string $to = null): array
     {
-        $query = match ($period) {
-            'week'  => static::lastDays(7),
-            'month' => static::lastDays(30),
-            default => static::today(),
-        };
-
+        $query = static::humanPeriod($period, $from, $to);
         $total = max((clone $query)->count(), 1);
 
         return (clone $query)

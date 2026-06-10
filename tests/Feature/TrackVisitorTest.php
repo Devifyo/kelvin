@@ -88,6 +88,14 @@ class TrackVisitorTest extends TestCase
         $this->assertDatabaseCount('visitor_logs', 0);
     }
 
+    public function test_ignores_auth_routes(): void
+    {
+        $this->track($this->makeRequest('/login'));
+        $this->track($this->makeRequest('/logout'));
+
+        $this->assertDatabaseCount('visitor_logs', 0);
+    }
+
     public function test_ignores_debugbar_routes(): void
     {
         $this->track($this->makeRequest('/_debugbar/assets/stylesheets'));
@@ -102,7 +110,9 @@ class TrackVisitorTest extends TestCase
         $this->assertDatabaseCount('visitor_logs', 0);
     }
 
-    public function test_ignores_known_bots(): void
+    // ── 2b. Bot traffic — recorded but flagged (not counted as human) ─────
+
+    public function test_known_bots_are_recorded_but_flagged_as_bots(): void
     {
         $bots = [
             'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
@@ -111,11 +121,43 @@ class TrackVisitorTest extends TestCase
             'Twitterbot/1.0',
         ];
 
-        foreach ($bots as $ua) {
-            $this->track($this->makeRequest('/', 'GET', '1.2.3.4', $ua));
+        // Unique paths so the IP+page cooldown doesn't dedup them.
+        foreach ($bots as $i => $ua) {
+            $this->track($this->makeRequest("/p{$i}", 'GET', '1.2.3.4', $ua));
         }
 
-        $this->assertDatabaseCount('visitor_logs', 0);
+        $this->assertDatabaseCount('visitor_logs', 4);
+        $this->assertEquals(4, VisitorLog::bots()->count());
+        $this->assertEquals(0, VisitorLog::humans()->count());
+    }
+
+    public function test_empty_user_agent_is_flagged_as_bot(): void
+    {
+        $this->track($this->makeRequest('/', 'GET', '8.8.8.8', ''));
+
+        $log = VisitorLog::first();
+        $this->assertTrue($log->is_bot);
+        $this->assertEquals('empty-user-agent', $log->bot_reason);
+        $this->assertEquals('Bot', $log->device);
+    }
+
+    public function test_http_client_user_agent_is_flagged_as_bot(): void
+    {
+        $this->track($this->makeRequest('/', 'GET', '8.8.4.4', 'python-requests/2.31.0'));
+
+        $log = VisitorLog::first();
+        $this->assertTrue($log->is_bot);
+        $this->assertEquals('http-client', $log->bot_reason);
+    }
+
+    public function test_human_pageview_is_not_flagged_as_bot(): void
+    {
+        $this->track($this->makeRequest('/', 'GET', '9.9.9.9'));
+
+        $log = VisitorLog::first();
+        $this->assertFalse($log->is_bot);
+        $this->assertNull($log->bot_reason);
+        $this->assertNotNull($log->session_id);
     }
 
     // ── 3. Deduplication ─────────────────────────────────────────────────
@@ -255,7 +297,9 @@ class TrackVisitorTest extends TestCase
 
         $this->track($this->makeRequest('/', 'GET', $ip));
 
-        $secondLog = VisitorLog::where('ip_address', $ip)->latest()->first();
+        // Order by id, not created_at: both rows can share the same second, so
+        // latest() would be a non-deterministic tie.
+        $secondLog = VisitorLog::where('ip_address', $ip)->orderByDesc('id')->first();
         $this->assertFalse((bool) $secondLog->is_new_visitor, 'IP already in DB — not a new visitor');
     }
 
@@ -362,5 +406,65 @@ class TrackVisitorTest extends TestCase
         $this->track($this->makeRequest('/'));
 
         $this->assertDatabaseHas('visitor_logs', ['session_duration' => 0]);
+    }
+
+    // ── 9. Session tracking ───────────────────────────────────────────────
+
+    public function test_session_id_is_assigned_and_reused_within_window(): void
+    {
+        $ip = '10.5.5.5';
+
+        $this->track($this->makeRequest('/a', 'GET', $ip));
+        $this->track($this->makeRequest('/b', 'GET', $ip));
+
+        $first  = VisitorLog::where('page', '/a')->first();
+        $second = VisitorLog::where('page', '/b')->first();
+
+        $this->assertNotNull($first->session_id);
+        $this->assertEquals($first->session_id, $second->session_id, 'Same active visit shares a session id');
+    }
+
+    public function test_new_session_id_after_session_timeout(): void
+    {
+        $ip = '10.5.5.6';
+
+        $this->track($this->makeRequest('/a', 'GET', $ip));
+        $first = VisitorLog::first();
+
+        // Backdate the session cache beyond the timeout to simulate a return visit.
+        $sessKey = 'sess_' . md5($ip);
+        Cache::put($sessKey, ['id' => $first->session_id, 'last' => now()->timestamp - (31 * 60)], TrackVisitor::SESSION_TIMEOUT);
+
+        $this->track($this->makeRequest('/b', 'GET', $ip));
+        $second = VisitorLog::where('page', '/b')->first();
+
+        $this->assertNotEquals($first->session_id, $second->session_id, 'A gap > 30 min starts a new session');
+    }
+
+    // ── 10. Visitor cookie (handle phase) ─────────────────────────────────
+
+    public function test_visitor_cookie_is_queued_on_first_request(): void
+    {
+        $request = $this->makeRequest('/');
+
+        (new TrackVisitor())->handle($request, fn () => $this->ok());
+
+        $queued = cookie()->queued(TrackVisitor::VISITOR_COOKIE);
+        $this->assertNotNull($queued, 'A visitor id cookie should be queued');
+        $this->assertTrue(\Illuminate\Support\Str::isUuid($queued->getValue()));
+        // And the resolved id is stashed for terminate().
+        $this->assertEquals($queued->getValue(), $request->attributes->get(TrackVisitor::VISITOR_COOKIE));
+    }
+
+    public function test_existing_visitor_cookie_is_reused(): void
+    {
+        $existing = (string) \Illuminate\Support\Str::uuid();
+        $request  = $this->makeRequest('/');
+        $request->cookies->set(TrackVisitor::VISITOR_COOKIE, $existing);
+
+        (new TrackVisitor())->handle($request, fn () => $this->ok());
+
+        $this->assertNull(cookie()->queued(TrackVisitor::VISITOR_COOKIE), 'No new cookie when one exists');
+        $this->assertEquals($existing, $request->attributes->get(TrackVisitor::VISITOR_COOKIE));
     }
 }
