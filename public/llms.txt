@@ -44,6 +44,7 @@
 
 ## Blog Posts
 
+- [Thermo Fisher Scientific Lesson 2](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-2): Lesson #2: In hardware development, Release planning is essential.
 - [Thermo Fisher Scientific Lesson 1](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-1): Lesson #1: In hardware development, the Product Owner is often a team member.
 - [Thermo Fisher Scientific: Introduction](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-introduction): Introduction to the Thermo Fisher Scientific engagement.
 - [Scrum Teams, Swarming, and Hardware](https://kevinthompsonphd.com/agile-insights-blog/scrum-teams-swarming-and-hardware): Swarming and Cross-Functional Teams are two of the most important concepts in the adoption of Scrum for software-development work. They play out very differently in the worlds of software and hardware development.
