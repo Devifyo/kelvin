@@ -14,5 +14,6 @@ class WelcomePageContent extends Model
         'pain_list' => 'array',
         'section_order' => 'array',
         'trusted_enabled' => 'boolean',
+        'principal_portrait_enabled' => 'boolean',
     ];
 }

@@ -4,12 +4,17 @@ namespace App\Livewire\Admin;
 
 use App\Models\WelcomePageContent;
 use App\Services\FrontendContentService;
+use App\Services\ImageOptimizer;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.admin')]
 class WelcomePageSettings extends Component
 {
+    use WithFileUploads;
+
     public $contentId;
 
     public $tab = 'hero';
@@ -54,6 +59,12 @@ class WelcomePageSettings extends Component
     public $principal_p2;
 
     public $principal_p3;
+
+    public $principal_portrait_image;        // stored path on the public disk
+
+    public $principal_portrait_upload;       // temp uploaded file
+
+    public $principal_portrait_enabled = true;
 
     // Book info
     public $principal_book_image;
@@ -110,6 +121,8 @@ class WelcomePageSettings extends Component
             $this->principal_p1 = $content->principal_p1;
             $this->principal_p2 = $content->principal_p2;
             $this->principal_p3 = $content->principal_p3;
+            $this->principal_portrait_image = $content->principal_portrait_image;
+            $this->principal_portrait_enabled = (bool) ($content->principal_portrait_enabled ?? true);
 
             $this->principal_book_image = $content->principal_book_image;
             $this->principal_book_title = $content->principal_book_title;
@@ -153,6 +166,8 @@ class WelcomePageSettings extends Component
             'principal_book_title' => 'nullable|string|max:255',
             'principal_book_desc' => 'nullable|string',
             'principal_book_url' => 'nullable|string|max:1024',
+            'principal_portrait_upload' => 'nullable|image|max:2048',
+            'principal_portrait_enabled' => 'boolean',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string',
             'seo_keywords' => 'nullable|string|max:255',
@@ -165,6 +180,17 @@ class WelcomePageSettings extends Component
         ]);
 
         $painListArray = array_filter(array_map('trim', explode("\n", $this->pain_list_string)));
+
+        // Handle a newly uploaded principal portrait: store, optimise, replace the old one.
+        if ($this->principal_portrait_upload) {
+            if ($this->principal_portrait_image) {
+                Storage::disk('public')->delete($this->principal_portrait_image);
+            }
+            $path = $this->principal_portrait_upload->store('welcome', 'public');
+            ImageOptimizer::optimize($path, 800); // portraits can be a touch larger than logos
+            $this->principal_portrait_image = $path;
+            $this->principal_portrait_upload = null;
+        }
 
         $data = [
             'hero_kicker' => $this->hero_kicker,
@@ -189,6 +215,8 @@ class WelcomePageSettings extends Component
             'principal_book_title' => $this->principal_book_title,
             'principal_book_desc' => $this->principal_book_desc,
             'principal_book_url' => $this->principal_book_url,
+            'principal_portrait_image' => $this->principal_portrait_image,
+            'principal_portrait_enabled' => $this->principal_portrait_enabled,
             'seo_title' => $this->seo_title,
             'seo_description' => $this->seo_description,
             'seo_keywords' => $this->seo_keywords,
@@ -208,6 +236,21 @@ class WelcomePageSettings extends Component
         }
 
         session()->flash('success', 'Welcome page settings updated successfully.');
+    }
+
+    public function removePortrait()
+    {
+        if ($this->principal_portrait_image) {
+            Storage::disk('public')->delete($this->principal_portrait_image);
+        }
+        $this->principal_portrait_image = null;
+        $this->principal_portrait_upload = null;
+
+        if ($this->contentId) {
+            WelcomePageContent::where('id', $this->contentId)->update(['principal_portrait_image' => null]);
+        }
+
+        session()->flash('success', 'Portrait reset to the default photo.');
     }
 
     public function setTab($tabName)

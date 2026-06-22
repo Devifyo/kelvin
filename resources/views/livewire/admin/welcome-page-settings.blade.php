@@ -497,6 +497,47 @@
                 <!-- ─── BIO TAB ──────────────────────────────── -->
                 @if($tab === 'bio')
                 <div wire:key="tab-bio">
+                    <div class="wps-section-label">Principal Portrait</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;">
+                            <input type="checkbox" wire:model.live="principal_portrait_enabled" style="width:18px; height:18px; accent-color:var(--copper);">
+                            Show the portrait photo on the homepage
+                        </label>
+                        <div class="wps-hint">Turn off to hide the photo and show just the name &amp; bio.</div>
+                    </div>
+
+                    <div class="wps-field" style="opacity: {{ $principal_portrait_enabled ? '1' : '0.5' }};">
+                        <label class="wps-label">Portrait Photo</label>
+                        <div style="display:flex; gap:1.25rem; align-items:flex-start; flex-wrap:wrap;">
+                            {{-- Live thumbnail: uploaded preview → saved upload → default headshot --}}
+                            <div style="width:104px; height:130px; border:1px solid var(--ivory3); border-radius:8px; overflow:hidden; background:var(--ivory); flex-shrink:0; position:relative;">
+                                <div wire:loading.flex wire:target="principal_portrait_upload" style="position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(255,255,255,.7); font-size:.7rem; color:var(--muted);">Uploading…</div>
+                                @if($principal_portrait_upload)
+                                    <img src="{{ $principal_portrait_upload->temporaryUrl() }}" style="width:100%; height:100%; object-fit:cover;">
+                                @elseif($principal_portrait_image)
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($principal_portrait_image) }}" style="width:100%; height:100%; object-fit:cover;">
+                                @else
+                                    <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" style="width:100%; height:100%; object-fit:cover;">
+                                @endif
+                            </div>
+                            <div style="flex:1; min-width:220px;">
+                                <input type="file" wire:model="principal_portrait_upload" accept="image/*" class="wps-input" style="padding:0.5rem;">
+                                @error('principal_portrait_upload')<div class="wps-hint" style="color:#dc2626;">{{ $message }}</div>@enderror
+                                <div class="wps-hint">JPG/PNG/WebP, portrait orientation works best. Max 2MB. Auto-optimised on upload.</div>
+                                @if($principal_portrait_image)
+                                    <button type="button" wire:click="removePortrait"
+                                            onclick="return confirm('Reset to the default photo?')"
+                                            style="margin-top:.5rem; background:none; border:none; color:#dc2626; font-size:.78rem; font-weight:600; cursor:pointer; padding:0;">
+                                        Reset to default photo
+                                    </button>
+                                @else
+                                    <div class="wps-hint" style="margin-top:.4rem; font-style:italic;">Using the default headshot.</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="wps-section-label">Principal Bio</div>
 
                     <div class="wps-field">
@@ -789,8 +830,25 @@
                 <section id="principal" style="background: var(--white); padding: 8rem 4.5rem;">
                     <div class="principal-wrap">
                         <div class="bio reveal in" style="opacity:1; transform:none;">
+                            @if($principal_portrait_enabled)
+                                @php
+                                    $previewPortrait = $principal_portrait_upload
+                                        ? $principal_portrait_upload->temporaryUrl()
+                                        : ($principal_portrait_image
+                                            ? \Illuminate\Support\Facades\Storage::url($principal_portrait_image)
+                                            : asset('img/frontend/Dr.%20Kevin%20Thompson.webp'));
+                                @endphp
+                                <div class="bio-head">
+                                    <figure class="bio-portrait"><img src="{{ $previewPortrait }}" alt="Dr. Kevin Thompson" width="320" height="400"></figure>
+                                    <div class="bio-head-text">
+                                        <div class="kicker">{{ $principal_kicker ?: 'Our Principal' }}</div>
+                                        <h2 class="section-h">{{ $principal_h2_name ?: 'Dr. Kevin' }} <em>{{ $principal_h2_em ?: 'Thompson' }}</em></h2>
+                                    </div>
+                                </div>
+                            @else
                             <div class="kicker">{{ $principal_kicker ?: 'Our Principal' }}</div>
                             <h2 class="section-h">{{ $principal_h2_name ?: 'Dr. Kevin' }} <em>{{ $principal_h2_em ?: 'Thompson' }}</em></h2>
+                            @endif
                             <div class="ornament"></div>
                             <p>{!! nl2br(e($principal_p1)) !!}</p>
                             <p>{!! nl2br(e($principal_p2)) !!}</p>

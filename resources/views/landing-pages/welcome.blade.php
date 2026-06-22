@@ -262,10 +262,31 @@
     <section id="principal">
         <div class="principal-wrap">
             
+            @php
+                $portraitEnabled = $welcomeContent->principal_portrait_enabled ?? true;
+                $portraitSrc = ($welcomeContent && $welcomeContent->principal_portrait_image)
+                    ? \Illuminate\Support\Facades\Storage::url($welcomeContent->principal_portrait_image)
+                    : asset('img/frontend/Dr.%20Kevin%20Thompson.webp');
+            @endphp
             <div class="bio reveal">
+                @if($portraitEnabled)
+                <div class="bio-head">
+                    <figure class="bio-portrait">
+                        <img src="{{ $portraitSrc }}"
+                             alt="Portrait of Dr. Kevin Thompson, Ph.D. — Agile hardware development consultant"
+                             width="320" height="400" loading="lazy" decoding="async">
+                    </figure>
+                    <div class="bio-head-text">
+                        <div class="kicker">{{ $welcomeContent->principal_kicker ?? 'Our Principal' }}</div>
+                        <h2 class="section-h">{{ $welcomeContent->principal_h2_name ?? 'Dr. Kevin' }} <em>{{ $welcomeContent->principal_h2_em ?? 'Thompson' }}</em></h2>
+                        <div class="ornament"></div>
+                    </div>
+                </div>
+                @else
                 <div class="kicker">{{ $welcomeContent->principal_kicker ?? 'Our Principal' }}</div>
                 <h2 class="section-h">{{ $welcomeContent->principal_h2_name ?? 'Dr. Kevin' }} <em>{{ $welcomeContent->principal_h2_em ?? 'Thompson' }}</em></h2>
                 <div class="ornament"></div>
+                @endif
 
                 <p>
                     {{ $welcomeContent->principal_p1 ?? 'Our Principal, Dr. Kevin Thompson, Ph.D. (Physics) is one of the most experienced Agile consultants in the field, having successfully completed more than 100 client engagements.' }}
