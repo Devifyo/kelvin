@@ -270,6 +270,21 @@
     </div>
 </section>
 
+@include('landing-pages.partials.faq-block', [
+    'kicker'  => 'Training FAQ',
+    'title'   => 'Training',
+    'titleEm' => 'Questions',
+    'ctaText' => 'Book a class',
+    'ctaUrl'  => route('contact'),
+    'items'   => [
+        ['q' => 'Are classes live or self-paced?', 'a' => 'All classes are live and instructor-led, taught by Dr. Kevin Thompson personally — delivered on-site at your location or remotely for distributed teams.'],
+        ['q' => 'Is the training specific to hardware, or generic Agile?', 'a' => 'Both options exist. We teach Scrum and Kanban for software teams and, distinctively, Scrum applied to hardware and embedded development — covering lead time, integration, and the realities of physical product development that generic Agile training ignores.'],
+        ['q' => 'Do your classes apply in regulated environments like FDA-controlled medical devices?', 'a' => 'Yes. Agile and design controls coexist — the FDA and IEC 62304 are methodology-neutral. Dr. Thompson has written specifically on Agile for FDA-regulated products, and that perspective is built into the relevant classes.'],
+        ['q' => 'How large should a class be?', 'a' => 'Classes are tailored to your team. They work well for a single Scrum team up to multiple teams in a program; we will recommend the right format when scoping.'],
+        ['q' => 'Can training be combined with coaching?', 'a' => 'Yes — and it usually should be. Training builds shared understanding; follow-on coaching during your first sprints is what makes the change actually stick.'],
+    ],
+])
+
 @endsection
 
 @push('scripts')

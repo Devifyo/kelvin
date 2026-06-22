@@ -77,6 +77,7 @@ class AppSettings extends Component
         ['url' => '/agile-insights-blog',                     'changefreq' => 'daily',   'priority' => '0.7', 'enabled' => true],
         ['url' => '/podcasts-webinars',                       'changefreq' => 'weekly',  'priority' => '0.6', 'enabled' => true],
         ['url' => '/clients',                                 'changefreq' => 'monthly', 'priority' => '0.7', 'enabled' => true],
+        ['url' => '/faq',                                     'changefreq' => 'monthly', 'priority' => '0.6', 'enabled' => true],
         ['url' => '/contact-us',                              'changefreq' => 'monthly', 'priority' => '0.6', 'enabled' => true],
     ];
 

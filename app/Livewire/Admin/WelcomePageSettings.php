@@ -95,6 +95,17 @@ class WelcomePageSettings extends Component
 
     public $trusted_cta_text;
 
+    // FAQ Section
+    public $faq_enabled = true;
+
+    public $faq_kicker;
+
+    public $faq_title;
+
+    public $faq_title_em;
+
+    public $faq_items = [];
+
     public function mount()
     {
         $content = WelcomePageContent::first();
@@ -139,7 +150,24 @@ class WelcomePageSettings extends Component
             $this->trusted_title_em = $content->trusted_title_em;
             $this->trusted_count_label = $content->trusted_count_label;
             $this->trusted_cta_text = $content->trusted_cta_text;
+
+            $this->faq_enabled = (bool) ($content->faq_enabled ?? true);
+            $this->faq_kicker = $content->faq_kicker;
+            $this->faq_title = $content->faq_title;
+            $this->faq_title_em = $content->faq_title_em;
+            $this->faq_items = $content->faq_items ?: [];
         }
+    }
+
+    public function addFaqItem()
+    {
+        $this->faq_items[] = ['q' => '', 'a' => ''];
+    }
+
+    public function removeFaqItem($index)
+    {
+        unset($this->faq_items[$index]);
+        $this->faq_items = array_values($this->faq_items);
     }
 
     public function save()
@@ -177,6 +205,13 @@ class WelcomePageSettings extends Component
             'trusted_title_em' => 'nullable|string|max:255',
             'trusted_count_label' => 'nullable|string|max:255',
             'trusted_cta_text' => 'nullable|string|max:255',
+            'faq_enabled' => 'boolean',
+            'faq_kicker' => 'nullable|string|max:255',
+            'faq_title' => 'nullable|string|max:255',
+            'faq_title_em' => 'nullable|string|max:255',
+            'faq_items' => 'array',
+            'faq_items.*.q' => 'nullable|string|max:300',
+            'faq_items.*.a' => 'nullable|string|max:2000',
         ]);
 
         $painListArray = array_filter(array_map('trim', explode("\n", $this->pain_list_string)));
@@ -226,6 +261,15 @@ class WelcomePageSettings extends Component
             'trusted_title_em' => $this->trusted_title_em,
             'trusted_count_label' => $this->trusted_count_label,
             'trusted_cta_text' => $this->trusted_cta_text,
+            'faq_enabled' => $this->faq_enabled,
+            'faq_kicker' => $this->faq_kicker,
+            'faq_title' => $this->faq_title,
+            'faq_title_em' => $this->faq_title_em,
+            'faq_items' => collect($this->faq_items)
+                ->map(fn ($i) => ['q' => trim($i['q'] ?? ''), 'a' => trim($i['a'] ?? '')])
+                ->filter(fn ($i) => $i['q'] !== '' && $i['a'] !== '')
+                ->values()
+                ->all(),
         ];
 
         if ($this->contentId) {

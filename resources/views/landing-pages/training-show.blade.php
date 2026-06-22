@@ -440,4 +440,16 @@
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp
 <script type="application/ld+json">{!! $_courseJsonLd !!}</script>
+@php
+    $_trainingCrumbs = json_encode([
+        '@context' => 'https://schema.org',
+        '@type'    => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Agile Training Classes', 'item' => route('training')],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $service->title, 'item' => url()->current()],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+@endphp
+<script type="application/ld+json">{!! $_trainingCrumbs !!}</script>
 @endpush

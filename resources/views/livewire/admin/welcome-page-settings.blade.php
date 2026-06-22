@@ -402,6 +402,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 Clients
             </button>
+            <button type="button" wire:click="setTab('faq')" class="wps-tab {{ $tab === 'faq' ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                FAQ
+            </button>
         </div>
 
         <!-- Form -->
@@ -673,6 +677,60 @@
                 </div>
                 @endif
 
+                <!-- ─── FAQ TAB ──────────────────────────────── -->
+                @if($tab === 'faq')
+                <div wire:key="tab-faq">
+                    <div class="wps-section-label">FAQ Section</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;">
+                            <input type="checkbox" wire:model.live="faq_enabled" style="width:18px; height:18px; accent-color:var(--copper);">
+                            Show the FAQ section on the homepage
+                        </label>
+                        <div class="wps-hint">Appears near the bottom of the homepage and powers FAQ structured data (helps AI search &amp; Google understand your answers).</div>
+                    </div>
+
+                    <div class="wps-field">
+                        <label class="wps-label">Kicker</label>
+                        <input type="text" wire:model.live.debounce.500ms="faq_kicker" class="wps-input" placeholder="Common Questions">
+                    </div>
+                    <div class="wps-grid-2">
+                        <div class="wps-field">
+                            <label class="wps-label">Heading (bold)</label>
+                            <input type="text" wire:model.live.debounce.500ms="faq_title" class="wps-input" placeholder="Frequently Asked">
+                        </div>
+                        <div class="wps-field">
+                            <label class="wps-label">Heading (italic)</label>
+                            <input type="text" wire:model.live.debounce.500ms="faq_title_em" class="wps-input" placeholder="Questions">
+                        </div>
+                    </div>
+
+                    <div class="wps-subsection">Questions &amp; Answers</div>
+                    @if(empty($faq_items))
+                        <div class="wps-hint" style="margin-bottom:1rem;">No custom questions yet — the homepage shows a sensible default set. Add items below to override them.</div>
+                    @endif
+
+                    @foreach($faq_items as $i => $item)
+                        <div wire:key="faq-{{ $i }}" style="border:1px solid var(--ivory3); border-radius:10px; padding:1rem 1.1rem; margin-bottom:0.9rem; background:#fff;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem;">
+                                <strong style="font-size:.78rem; color:var(--muted); letter-spacing:.05em;">Q{{ $i + 1 }}</strong>
+                                <button type="button" wire:click="removeFaqItem({{ $i }})" style="background:none; border:none; color:#dc2626; font-size:.75rem; font-weight:700; cursor:pointer;">Remove</button>
+                            </div>
+                            <div class="wps-field" style="margin-bottom:.6rem;">
+                                <input type="text" wire:model.live.debounce.500ms="faq_items.{{ $i }}.q" class="wps-input" placeholder="Question…">
+                            </div>
+                            <div class="wps-field" style="margin-bottom:0;">
+                                <textarea wire:model.live.debounce.500ms="faq_items.{{ $i }}.a" class="wps-input" style="min-height:80px;" placeholder="Answer (2–4 sentences, answer first)…"></textarea>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    <button type="button" wire:click="addFaqItem" class="wps-input" style="cursor:pointer; text-align:center; font-weight:700; color:var(--copper); background:var(--ivory); border-style:dashed;">
+                        + Add question
+                    </button>
+                </div>
+                @endif
+
             </div>{{-- /wps-form-body --}}
 
             <!-- Sticky Save Footer -->
@@ -913,6 +971,28 @@
                             {{ $trusted_count_label ?: 'Clients Served' }}
                         </div>
                         <a href="#" class="cta-primary" style="display: inline-block; margin-top: 1.5rem;">{{ $trusted_cta_text ?: 'View All Clients' }}</a>
+                    </div>
+                </section>
+                @endif
+
+                <!-- FAQ BLOCK -->
+                @if($faq_enabled)
+                @php
+                    $previewFaqs = collect($faq_items)->filter(fn ($i) => trim($i['q'] ?? '') !== '')->values()->all();
+                @endphp
+                <section style="background: var(--ivory); padding: 4rem 4.5rem; border-top: 1px solid var(--ivory3);">
+                    <div style="max-width: 760px; margin: 0 auto; text-align:center;">
+                        <div class="kicker" style="justify-content:center;">{{ $faq_kicker ?: 'Common Questions' }}</div>
+                        <h2 class="section-h" style="margin-bottom: 2rem;">{{ $faq_title ?: 'Frequently Asked' }} <em>{{ $faq_title_em ?: 'Questions' }}</em></h2>
+                        <div style="text-align:left;">
+                            @forelse($previewFaqs as $f)
+                                <div style="border-top:1px solid var(--ivory3); padding:1.1rem 0; font-weight:600; color:var(--slate); display:flex; justify-content:space-between; gap:1rem;">
+                                    <span>{{ $f['q'] }}</span><span style="color:var(--copper);">+</span>
+                                </div>
+                            @empty
+                                <p style="font-size:0.85rem; color:var(--muted); text-align:center;">Using the default question set. Add questions in the form to customise.</p>
+                            @endforelse
+                        </div>
                     </div>
                 </section>
                 @endif

@@ -52,6 +52,11 @@ class PageController extends Controller
         return view('landing-pages.about', compact('aboutContent'));
     }
 
+    public function faq()
+    {
+        return view('landing-pages.faq');
+    }
+
     public function services()
     {
         return view('landing-pages.services', [

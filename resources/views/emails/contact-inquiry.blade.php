@@ -24,7 +24,7 @@
         <div class="value" style="white-space: pre-wrap;">{{ $data['message'] }}</div>
 
         <div class="footer">
-            This message was sent via the contact form on kevinthompsonphd.com
+            This message was sent via the contact form on {{ parse_url(config('app.url'), PHP_URL_HOST) ?: config('app.url') }}
         </div>
     </div>
 </body>

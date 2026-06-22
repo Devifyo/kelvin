@@ -15,5 +15,7 @@ class WelcomePageContent extends Model
         'section_order' => 'array',
         'trusted_enabled' => 'boolean',
         'principal_portrait_enabled' => 'boolean',
+        'faq_enabled' => 'boolean',
+        'faq_items' => 'array',
     ];
 }

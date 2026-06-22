@@ -300,7 +300,7 @@
 
                 <div class="book">
                     <div class="book-img">
-                        <img src="{{ $welcomeContent->principal_book_image ?? 'https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg' }}" alt="{{ $welcomeContent->principal_book_title ?? 'Book Cover' }}">
+                        <img src="{{ $welcomeContent->principal_book_image ?? 'https://m.media-amazon.com/images/I/61+CCARmhVL._SY522_.jpg' }}" alt="{{ $welcomeContent->principal_book_title ?? 'Book Cover' }}" width="320" height="480" loading="lazy" decoding="async">
                     </div>
                     <div class="book-details">
                         <strong>{{ $welcomeContent->principal_book_title ?? 'Solutions for Agile Governance in the Enterprise (Sage)' }}</strong>
@@ -362,6 +362,8 @@
     </section>
 
     @include('landing-pages.partials.trusted-by')
+
+    @include('landing-pages.partials.faq')
 
 @endsection
 
