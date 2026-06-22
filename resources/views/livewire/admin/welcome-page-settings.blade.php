@@ -398,6 +398,10 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 SEO
             </button>
+            <button type="button" wire:click="setTab('clients')" class="wps-tab {{ $tab === 'clients' ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Clients
+            </button>
         </div>
 
         <!-- Form -->
@@ -575,6 +579,55 @@
                         <label class="wps-label">Meta Keywords</label>
                         <input type="text" wire:model.live.debounce.500ms="seo_keywords" class="wps-input" placeholder="hardware consulting, agile, product development">
                         <div class="wps-hint">Comma-separated. Less critical for modern SEO, but still read by some tools.</div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- ─── CLIENTS / TRUSTED BY TAB ─────────────── -->
+                @if($tab === 'clients')
+                <div wire:key="tab-clients">
+                    <div class="wps-section-label">Trusted By Section</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;">
+                            <input type="checkbox" wire:model.live="trusted_enabled" style="width: 18px; height: 18px; accent-color: var(--copper);">
+                            Show the "Trusted By" section on the homepage
+                        </label>
+                        <div class="wps-hint">When enabled, featured clients appear in a logo strip near the bottom of the homepage. Manage which clients are featured under <strong>Client Showcase</strong>.</div>
+                    </div>
+
+                    <div class="wps-field">
+                        <label class="wps-label">Kicker / Eyebrow</label>
+                        <input type="text" wire:model.live.debounce.500ms="trusted_kicker" class="wps-input" placeholder="Our Clients">
+                        <div class="wps-hint">Short label shown above the heading.</div>
+                    </div>
+
+                    <div class="wps-subsection">Heading</div>
+
+                    <div class="wps-grid-2">
+                        <div class="wps-field">
+                            <label class="wps-label">Bold Part</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_title" class="wps-input" placeholder="Trusted By">
+                        </div>
+                        <div class="wps-field">
+                            <label class="wps-label">Italic Part</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_title_em" class="wps-input" placeholder="Industry Leaders">
+                        </div>
+                    </div>
+
+                    <div class="wps-subsection">Footer</div>
+
+                    <div class="wps-grid-2">
+                        <div class="wps-field" style="margin-bottom: 0;">
+                            <label class="wps-label">Count Label</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_count_label" class="wps-input" placeholder="Clients Served">
+                            <div class="wps-hint">The number (e.g. "70+") is counted automatically from active clients.</div>
+                        </div>
+                        <div class="wps-field" style="margin-bottom: 0;">
+                            <label class="wps-label">Button Text</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_cta_text" class="wps-input" placeholder="View All Clients">
+                            <div class="wps-hint">Links to the public <strong>/clients</strong> page.</div>
+                        </div>
                     </div>
                 </div>
                 @endif
@@ -779,6 +832,32 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- TRUSTED BY / CLIENTS BLOCK -->
+                @if($trusted_enabled && ($featuredClients ?? collect())->isNotEmpty())
+                <section style="background: var(--ivory); padding: 5rem 4.5rem; border-top: 1px solid var(--ivory3); text-align: center;">
+                    <div style="max-width: 1180px; margin: 0 auto;">
+                        <div class="kicker" style="justify-content: center;">{{ $trusted_kicker ?: 'Our Clients' }}</div>
+                        <h2 class="section-h" style="margin-bottom: 2.5rem;">{{ $trusted_title ?: 'Trusted By' }} <em>{{ $trusted_title_em ?: 'Industry Leaders' }}</em></h2>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; align-items: center;">
+                            @foreach($featuredClients as $client)
+                            <div style="display: flex; align-items: center; justify-content: center; height: 70px; padding: 0.75rem; background: var(--white); border: 1px solid var(--ivory3); border-radius: 8px;">
+                                @if($client->logo_url)
+                                    <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                @else
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--muted);">{{ $client->name }}</span>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                        <div style="margin-top: 2.5rem; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--slate);">
+                            <strong style="color: var(--copper);">{{ ($clientsCount ?? 0) >= 10 ? (floor(($clientsCount ?? 0) / 10) * 10) . '+' : ($clientsCount ?? 0) }}</strong>
+                            {{ $trusted_count_label ?: 'Clients Served' }}
+                        </div>
+                        <a href="#" class="cta-primary" style="display: inline-block; margin-top: 1.5rem;">{{ $trusted_cta_text ?: 'View All Clients' }}</a>
+                    </div>
+                </section>
+                @endif
 
                 @include('layouts.partials.frontend.footer')
             </div>{{-- /wps-preview-inner --}}

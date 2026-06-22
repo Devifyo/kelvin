@@ -340,6 +340,8 @@
         </div>
     </section>
 
+    @include('landing-pages.partials.trusted-by')
+
 @endsection
 
 @push('scripts')

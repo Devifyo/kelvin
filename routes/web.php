@@ -29,6 +29,9 @@ Route::controller(PageController::class)->group(function () {
     // Papers & Presentations (Library)
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');
 
+    // Previous Clients showcase
+    Route::get('/clients', 'clients')->name('clients')->middleware('maintenance');
+
     Route::get('/agile-insights-blog', 'blog')->name('blog');
     Route::get('/agile-insights-blog/{slug}', 'showBlog')->name('blog.show');
     Route::get('/podcasts-webinars', 'podcastsWebinars')->name('podcasts-webinars');

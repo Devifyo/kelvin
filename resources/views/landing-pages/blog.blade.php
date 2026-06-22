@@ -385,7 +385,7 @@
         {{-- Laravel Pagination --}}
         @if($posts->hasPages())
             <div class="pagination-wrapper reveal rv2">
-                {{ $posts->withQueryString()->links() }}
+                {{ $posts->withQueryString()->links('vendor.pagination.frontend-theme') }}
             </div>
         @endif
 

@@ -2,51 +2,87 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\WelcomePageContent;
+use App\Services\FrontendContentService;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.admin')]
 class WelcomePageSettings extends Component
 {
     public $contentId;
+
     public $tab = 'hero';
-    
+
     // Hero Section
     public $hero_kicker;
+
     public $hero_h1_em;
+
     public $hero_h1_strong;
+
     public $hero_p1;
+
     public $hero_p2;
+
     public $hero_cta_primary_text;
+
     public $hero_cta_primary_link;
+
     public $hero_cta_secondary_text;
+
     public $hero_cta_secondary_link;
 
     // Pain List Section
     public $pain_title;
+
     public $pain_list = [];
+
     public $pain_list_string = ''; // for textarea editing
+
     public $pain_footer;
 
     // Principal Section
     public $principal_kicker;
+
     public $principal_h2_name;
+
     public $principal_h2_em;
+
     public $principal_p1;
+
     public $principal_p2;
+
     public $principal_p3;
 
     // Book info
     public $principal_book_image;
+
     public $principal_book_title;
+
     public $principal_book_desc;
+
     public $principal_book_url;
 
     // SEO Settings
     public $seo_title;
+
     public $seo_description;
+
     public $seo_keywords;
+
+    // Trusted By / Client Showcase Section
+    public $trusted_enabled = true;
+
+    public $trusted_kicker;
+
+    public $trusted_title;
+
+    public $trusted_title_em;
+
+    public $trusted_count_label;
+
+    public $trusted_cta_text;
 
     public function mount()
     {
@@ -83,12 +119,19 @@ class WelcomePageSettings extends Component
             $this->seo_title = $content->seo_title;
             $this->seo_description = $content->seo_description;
             $this->seo_keywords = $content->seo_keywords;
+
+            $this->trusted_enabled = (bool) $content->trusted_enabled;
+            $this->trusted_kicker = $content->trusted_kicker;
+            $this->trusted_title = $content->trusted_title;
+            $this->trusted_title_em = $content->trusted_title_em;
+            $this->trusted_count_label = $content->trusted_count_label;
+            $this->trusted_cta_text = $content->trusted_cta_text;
         }
     }
 
     public function save()
     {
-            $this->validate([
+        $this->validate([
             'hero_kicker' => 'nullable|string|max:255',
             'hero_h1_em' => 'nullable|string|max:255',
             'hero_h1_strong' => 'nullable|string|max:255',
@@ -113,6 +156,12 @@ class WelcomePageSettings extends Component
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string',
             'seo_keywords' => 'nullable|string|max:255',
+            'trusted_enabled' => 'boolean',
+            'trusted_kicker' => 'nullable|string|max:255',
+            'trusted_title' => 'nullable|string|max:255',
+            'trusted_title_em' => 'nullable|string|max:255',
+            'trusted_count_label' => 'nullable|string|max:255',
+            'trusted_cta_text' => 'nullable|string|max:255',
         ]);
 
         $painListArray = array_filter(array_map('trim', explode("\n", $this->pain_list_string)));
@@ -143,6 +192,12 @@ class WelcomePageSettings extends Component
             'seo_title' => $this->seo_title,
             'seo_description' => $this->seo_description,
             'seo_keywords' => $this->seo_keywords,
+            'trusted_enabled' => $this->trusted_enabled,
+            'trusted_kicker' => $this->trusted_kicker,
+            'trusted_title' => $this->trusted_title,
+            'trusted_title_em' => $this->trusted_title_em,
+            'trusted_count_label' => $this->trusted_count_label,
+            'trusted_cta_text' => $this->trusted_cta_text,
         ];
 
         if ($this->contentId) {
@@ -162,14 +217,16 @@ class WelcomePageSettings extends Component
 
     public function render()
     {
-        // Load services to pass to preview
-        $contentService = app(\App\Services\FrontendContentService::class);
+        // Load services + featured clients to feed the live preview pane
+        $contentService = app(FrontendContentService::class);
         $consultingServices = $contentService->getConsultingServices();
         $trainingClasses = $contentService->getTrainingClasses();
 
         return view('livewire.admin.welcome-page-settings', [
             'consultingServices' => $consultingServices,
-            'trainingClasses' => $trainingClasses
+            'trainingClasses' => $trainingClasses,
+            'featuredClients' => $contentService->getFeaturedClients(),
+            'clientsCount' => $contentService->getActiveClientsCount(),
         ])->title('Welcome Page Settings');
     }
 }
