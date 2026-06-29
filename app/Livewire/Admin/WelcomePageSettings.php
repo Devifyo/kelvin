@@ -155,19 +155,39 @@ class WelcomePageSettings extends Component
             $this->faq_kicker = $content->faq_kicker;
             $this->faq_title = $content->faq_title;
             $this->faq_title_em = $content->faq_title_em;
-            $this->faq_items = $content->faq_items ?: [];
+            // Attach a stable transient _id to each item for reliable drag-and-drop
+            // keying. It is stripped again on save (only q/a are persisted).
+            $this->faq_items = collect($content->faq_items ?: [])
+                ->map(fn ($i) => ['_id' => uniqid('faq_', true), 'q' => $i['q'] ?? '', 'a' => $i['a'] ?? ''])
+                ->all();
         }
     }
 
     public function addFaqItem()
     {
-        $this->faq_items[] = ['q' => '', 'a' => ''];
+        $this->faq_items[] = ['_id' => uniqid('faq_', true), 'q' => '', 'a' => ''];
     }
 
     public function removeFaqItem($index)
     {
         unset($this->faq_items[$index]);
         $this->faq_items = array_values($this->faq_items);
+    }
+
+    /**
+     * Reorder FAQ items to match the order of _id values from the drag-and-drop UI.
+     *
+     * @param  array<int, string>  $ids
+     */
+    public function reorderFaqItems($ids)
+    {
+        $byId = collect($this->faq_items)->keyBy('_id');
+
+        $this->faq_items = collect($ids)
+            ->map(fn ($id) => $byId->get($id))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public function save()

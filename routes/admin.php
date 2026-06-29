@@ -10,6 +10,7 @@ use App\Livewire\Admin\BlogPosts;
 use App\Livewire\Admin\ManagePapers;
 use App\Livewire\Admin\ManagePodcastsWebinars;
 use App\Livewire\Admin\Clients;
+use App\Livewire\Admin\Faqs;
 use App\Livewire\Admin\VisitorAnalytics;
 use App\Livewire\Admin\WelcomePageSettings;
 use App\Livewire\Admin\AboutPageSettings;
@@ -47,6 +48,8 @@ Route::get('/blog-posts', BlogPosts::class)->name('blog.index');
 Route::get('/podcasts-webinars', ManagePodcastsWebinars::class)->name('podcasts-webinars');
 
 Route::get('/clients', Clients::class)->name('clients.index')->middleware('maintenance');
+
+Route::get('/faqs', Faqs::class)->name('faqs.index');
 
 Route::get('/visitors', VisitorAnalytics::class)->name('visitors');
 

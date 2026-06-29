@@ -30,7 +30,7 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');
 
     // Previous Clients showcase
-    Route::get('/clients', 'clients')->name('clients')->middleware('maintenance');
+    Route::get('/clients', 'clients')->name('clients');
 
     // FAQ
     Route::get('/faq', 'faq')->name('faq');

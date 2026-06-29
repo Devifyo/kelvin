@@ -706,24 +706,51 @@
                     </div>
 
                     <div class="wps-subsection">Questions &amp; Answers</div>
-                    @if(empty($faq_items))
-                        <div class="wps-hint" style="margin-bottom:1rem;">No custom questions yet — the homepage shows a sensible default set. Add items below to override them.</div>
-                    @endif
+                    <div class="wps-hint" style="margin-bottom:1rem;">
+                        @if(empty($faq_items))
+                            No questions yet — add some below. With none, the FAQ section is hidden on the homepage.
+                        @else
+                            Drag the <span style="vertical-align:middle;">⠿</span> handle to reorder questions, then Save.
+                        @endif
+                    </div>
+                    <style>
+                        .faq-drag-handle:active { cursor:grabbing; }
+                        .faq-drag-ghost { opacity:.4; background:var(--ivory) !important; }
+                    </style>
 
-                    @foreach($faq_items as $i => $item)
-                        <div wire:key="faq-{{ $i }}" style="border:1px solid var(--ivory3); border-radius:10px; padding:1rem 1.1rem; margin-bottom:0.9rem; background:#fff;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem;">
-                                <strong style="font-size:.78rem; color:var(--muted); letter-spacing:.05em;">Q{{ $i + 1 }}</strong>
-                                <button type="button" wire:click="removeFaqItem({{ $i }})" style="background:none; border:none; color:#dc2626; font-size:.75rem; font-weight:700; cursor:pointer;">Remove</button>
+                    <div id="sortable-faqs"
+                         x-data
+                         x-init="if (typeof Sortable !== 'undefined') {
+                             Sortable.create($el, {
+                                 animation: 150,
+                                 handle: '.faq-drag-handle',
+                                 ghostClass: 'faq-drag-ghost',
+                                 onEnd() {
+                                     const ids = Array.from($el.children).map(el => el.getAttribute('data-id'));
+                                     $wire.reorderFaqItems(ids);
+                                 }
+                             });
+                         }">
+                        @foreach($faq_items as $i => $item)
+                            <div wire:key="faq-{{ $item['_id'] ?? $i }}" data-id="{{ $item['_id'] ?? $i }}" style="border:1px solid var(--ivory3); border-radius:10px; padding:1rem 1.1rem; margin-bottom:0.9rem; background:#fff;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem;">
+                                    <div style="display:flex; align-items:center; gap:.55rem;">
+                                        <span class="faq-drag-handle" title="Drag to reorder" style="cursor:grab; color:var(--muted); display:flex; align-items:center; touch-action:none;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                                        </span>
+                                        <strong style="font-size:.78rem; color:var(--muted); letter-spacing:.05em;">Q{{ $i + 1 }}</strong>
+                                    </div>
+                                    <button type="button" wire:click="removeFaqItem({{ $i }})" style="background:none; border:none; color:#dc2626; font-size:.75rem; font-weight:700; cursor:pointer;">Remove</button>
+                                </div>
+                                <div class="wps-field" style="margin-bottom:.6rem;">
+                                    <input type="text" wire:model.live.debounce.500ms="faq_items.{{ $i }}.q" class="wps-input" placeholder="Question…">
+                                </div>
+                                <div class="wps-field" style="margin-bottom:0;">
+                                    <textarea wire:model.live.debounce.500ms="faq_items.{{ $i }}.a" class="wps-input" style="min-height:80px;" placeholder="Answer (2–4 sentences, answer first)…"></textarea>
+                                </div>
                             </div>
-                            <div class="wps-field" style="margin-bottom:.6rem;">
-                                <input type="text" wire:model.live.debounce.500ms="faq_items.{{ $i }}.q" class="wps-input" placeholder="Question…">
-                            </div>
-                            <div class="wps-field" style="margin-bottom:0;">
-                                <textarea wire:model.live.debounce.500ms="faq_items.{{ $i }}.a" class="wps-input" style="min-height:80px;" placeholder="Answer (2–4 sentences, answer first)…"></textarea>
-                            </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
 
                     <button type="button" wire:click="addFaqItem" class="wps-input" style="cursor:pointer; text-align:center; font-weight:700; color:var(--copper); background:var(--ivory); border-style:dashed;">
                         + Add question

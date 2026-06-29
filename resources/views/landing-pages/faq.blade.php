@@ -29,37 +29,10 @@
     </div>
 </section>
 
-@php
-    $faqBasics = [
-        ['q' => 'What is Agile hardware development?', 'a' => 'Agile hardware development applies iterative, feedback-driven principles — short cycles, early integration, and risk-focused prioritisation — to the design of physical products. Unlike software, hardware sprints deliver demonstrable progress (CAD models, board routing, design reviews, parts on order) rather than shippable features, and they must be sequenced around procurement lead time.'],
-        ['q' => 'Does Agile/Scrum really work for hardware, or only software?', 'a' => 'It works, but it must be adapted rather than copied from software. The framework is the same; the mechanics differ because of lead time, physical iteration cost, and integration risk. Dr. Thompson pioneered Agile for hardware and authored the foundational paper on it.'],
-        ['q' => 'How is Scrum for hardware different from Scrum for software?', 'a' => 'Hardware sprints are often roughly twice the length of software sprints and are sequenced to account for procurement lead time; the Product Owner is frequently a team member; and a sprint produces demonstrable progress rather than a releasable feature. Each of these is tailored to your product and organisation.'],
-        ['q' => 'How long should a hardware sprint be?', 'a' => 'There is no universal number, but hardware sprints commonly run longer than the two-week software norm — frequently around twice as long — and are timed so planning cycles line up with parts lead times. The right cadence depends on your product and supply chain.'],
-    ];
-    $faqLogistics = [
-        ['q' => 'Will I work with Dr. Thompson directly?', 'a' => 'Yes. This is a senior, hands-on practice — you work directly with Dr. Kevin Thompson, Ph.D., not a junior assigned after the sale.'],
-        ['q' => 'Have you worked in regulated environments like FDA-controlled medical devices?', 'a' => 'Yes. Agile and regulatory compliance are not mutually exclusive — the FDA and IEC 62304 are methodology-neutral and require that design controls are documented, not that you use waterfall. Dr. Thompson has written specifically on Agile development for FDA-regulated medical products.'],
-        ['q' => 'How long does an engagement take, and how is it priced?', 'a' => 'It is scoped to your goal — from a short assessment or training through multi-month transformation and coaching. Share your situation and you will receive a tailored proposal.'],
-        ['q' => 'Do you work on-site, remotely, or hybrid?', 'a' => 'Both. Engagements are delivered on-site at your facilities and include remote coaching for distributed hardware and software teams across locations and time zones.'],
-        ['q' => 'What results do clients typically see?', 'a' => 'Common outcomes are earlier discovery of design and integration problems, shorter and more predictable development cycles, and tighter alignment between hardware and software teams — fewer expensive late-stage surprises.'],
-        ['q' => 'Does the change last after you leave?', 'a' => 'That is the objective. Coaching is paired with training and executive alignment so your teams own the process — the goal is durable capability, not dependence on a consultant.'],
-    ];
-@endphp
-
-@include('landing-pages.partials.faq-block', ['kicker' => 'The Basics', 'title' => 'Agile for Hardware', 'titleEm' => 'Explained', 'schema' => false, 'items' => $faqBasics])
-
-@include('landing-pages.partials.faq-block', ['kicker' => 'Working Together', 'title' => 'Engagements &', 'titleEm' => 'Logistics', 'ctaText' => 'Get in touch', 'ctaUrl' => route('contact'), 'schema' => false, 'items' => $faqLogistics])
+@include('landing-pages.partials.page-faqs', [
+    'page'    => 'faq',
+    'ctaText' => 'Get in touch',
+    'ctaUrl'  => route('contact'),
+])
 
 @endsection
-
-@push('scripts')
-{{-- Single combined FAQPage for this URL --}}
-<script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type'    => 'FAQPage',
-    'mainEntity' => collect(array_merge($faqBasics, $faqLogistics))->map(fn ($f) => [
-        '@type' => 'Question', 'name' => $f['q'],
-        'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
-    ])->all(),
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
-@endpush

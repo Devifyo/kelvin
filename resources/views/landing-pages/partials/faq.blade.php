@@ -11,34 +11,13 @@
     $faqTitle   = $tc?->faq_title    ?: 'Frequently Asked';
     $faqTitleEm = $tc?->faq_title_em ?: 'Questions';
 
-    // Editable defaults — answer-first, grounded in Dr. Thompson's actual positioning.
-    $defaultFaqs = [
-        ['q' => 'Does Agile really work for hardware, not just software?',
-         'a' => 'Yes — but it must be adapted, not copied from software. Hardware has longer lead times, physical iteration costs, and integration risk, so sprints deliver progress (CAD, board routing, design reviews, parts on order) rather than shippable features. Dr. Thompson pioneered Agile for hardware and authored the foundational paper on it; this is the core of every engagement.'],
-        ['q' => 'Will I work with Dr. Thompson directly, or a junior consultant?',
-         'a' => 'You work directly with Dr. Kevin Thompson, Ph.D. This is a senior, hands-on practice — not a staffing firm that sells you an expert and delivers a junior.'],
-        ['q' => 'Have you worked in regulated environments like medical devices or FDA design controls?',
-         'a' => 'Yes. Agile and regulatory compliance are not mutually exclusive — the FDA and IEC 62304 are methodology-neutral and care that design controls are documented, not that you use waterfall. Dr. Thompson has written specifically on Agile development for FDA-regulated medical products and how iterative work actually improves traceability and risk discovery.'],
-        ['q' => 'How long does an engagement take, and how is it priced?',
-         'a' => 'It depends on your goal. Engagements range from short assessments and targeted training through multi-month transformation and coaching programs, scoped to your organization’s size and complexity. Reach out with your situation and you’ll get a tailored proposal.'],
-        ['q' => 'Do you work on-site, remote, or hybrid?',
-         'a' => 'Both. Engagements are delivered on-site at your facilities and can include remote coaching for distributed hardware and software teams across locations and time zones.'],
-        ['q' => 'What results do clients typically see?',
-         'a' => 'Common outcomes are earlier discovery of design and integration problems, shorter and more predictable development cycles, and tighter alignment between hardware and software teams — fewer expensive late-stage surprises. Our Thermo Fisher Scientific case study walks through a real Agile hardware transformation.'],
-        ['q' => 'How is Scrum different for hardware versus software?',
-         'a' => 'The framework is the same; the mechanics differ. Hardware sprints are often roughly twice the length of software sprints and must be sequenced around procurement lead time, the Product Owner is frequently a team member, and a sprint’s output is demonstrable progress rather than a releasable feature. We tailor each of these to your product.'],
-        ['q' => 'Does the change stick after you leave?',
-         'a' => 'That’s the point. Engagements pair assessment and training with hands-on coaching and executive alignment so your teams own the process — the goal is durable capability, not dependence on a consultant.'],
-    ];
-
+    // Homepage FAQ content is seeded into (and edited via) WelcomePageContent.faq_items
+    // in /admin/welcome-page. Empty items simply hide the section.
     $faqs = collect($tc?->faq_items ?? [])
         ->map(fn ($i) => ['q' => trim($i['q'] ?? ''), 'a' => trim($i['a'] ?? '')])
         ->filter(fn ($i) => $i['q'] !== '' && $i['a'] !== '')
         ->values()
         ->all();
-    if (empty($faqs)) {
-        $faqs = $defaultFaqs;
-    }
 @endphp
 
 @if($faqEnabled && count($faqs))

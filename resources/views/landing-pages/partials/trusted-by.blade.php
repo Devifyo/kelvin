@@ -129,7 +129,8 @@
             @if($clientsCount > 0)
                 <div class="trusted-count">
                     {{-- Round down to the nearest 10 for a "70+" style figure; show exact for small counts. --}}
-                    <strong>{{ $clientsCount >= 10 ? (floor($clientsCount / 10) * 10) . '+' : $clientsCount }}</strong> {{ $trustedCountLabel }}
+                    <!-- <strong>{{ $clientsCount >= 10 ? (floor($clientsCount / 10) * 10) . '+' : $clientsCount }}</strong>  -->
+                    {{ $trustedCountLabel }}
                 </div>
             @endif
             <a href="{{ route('clients') }}" class="trusted-cta">

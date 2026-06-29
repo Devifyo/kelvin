@@ -448,19 +448,10 @@
     </div>
 </section>
 
-@include('landing-pages.partials.faq-block', [
-    'kicker'  => 'Consulting FAQ',
-    'title'   => 'Engagement',
-    'titleEm' => 'Questions',
+@include('landing-pages.partials.page-faqs', [
+    'page'    => 'services',
     'ctaText' => 'Discuss your project',
     'ctaUrl'  => route('contact'),
-    'items'   => [
-        ['q' => 'What does an Agile assessment involve?', 'a' => 'A focused review of how your hardware and software teams plan, prioritise, and integrate — interviews, process review, and a look at your delivery data — resulting in concrete, prioritised recommendations you can act on. It is the fastest way to find what is actually slowing your program down.'],
-        ['q' => 'Who do you work with inside an organization?', 'a' => 'Everyone from hands-on engineers to the C-suite. Durable change needs both team-level coaching and executive alignment, so engagements are tailored to reach the levels that matter for your specific goal.'],
-        ['q' => 'How long does an engagement take, and how is it priced?', 'a' => 'It is scoped to your goal — from a short assessment or training through multi-month transformation and coaching. Reach out with your situation and you will get a tailored proposal rather than a one-size package.'],
-        ['q' => 'Do you deliver on-site or remotely?', 'a' => 'Both. Engagements are delivered on-site at your facilities and include remote coaching for distributed hardware and software teams across locations and time zones.'],
-        ['q' => 'Will the improvements last after the engagement ends?', 'a' => 'That is the objective. Coaching is paired with training and executive alignment so your teams own the process — the goal is durable capability, not dependence on a consultant.'],
-    ],
 ])
 
 @endsection
