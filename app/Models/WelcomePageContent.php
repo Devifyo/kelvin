@@ -13,5 +13,9 @@ class WelcomePageContent extends Model
     protected $casts = [
         'pain_list' => 'array',
         'section_order' => 'array',
+        'trusted_enabled' => 'boolean',
+        'principal_portrait_enabled' => 'boolean',
+        'faq_enabled' => 'boolean',
+        'faq_items' => 'array',
     ];
 }

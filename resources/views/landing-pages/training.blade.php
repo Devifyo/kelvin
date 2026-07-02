@@ -270,6 +270,12 @@
     </div>
 </section>
 
+@include('landing-pages.partials.page-faqs', [
+    'page'    => 'training',
+    'ctaText' => 'Book a class',
+    'ctaUrl'  => route('contact'),
+])
+
 @endsection
 
 @push('scripts')

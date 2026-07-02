@@ -136,7 +136,6 @@
             '@type'         => 'Organization',
             '@id'           => $_base . '/#organization',
             'name'          => $_schemaOrgName,
-            'alternateName' => 'Kevin Enterprise',
             'url'           => $_base,
             'founder'       => ['@id' => $_base . '/#person'],
             'knowsAbout'    => [
@@ -196,6 +195,12 @@
     <link rel="shortcut icon" href="{{ $_faviconUrl ?? '/favicon.ico' }}">
     <meta name="theme-color" content="{{ $_c['slate'] }}">
 
+    {{-- Cormorant Garamond — the site's display serif (referenced throughout the CSS).
+         Preconnect + font-display:swap so it loads fast without blocking render. --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/css/frontend/main.css">
 
     {{-- Dynamic color override — keeps main.css static, just replaces the tokens --}}
@@ -212,15 +217,24 @@
         }
         /* main.css hardcodes the pinned nav color as rgba() — override it here */
         #nav.pinned { background: {{ $_c['slate'] }}f7 !important; }
+        /* Accessibility: skip-to-content link, visible only on keyboard focus */
+        .skip-link {
+            position: absolute; left: -9999px; top: 0; z-index: 1000;
+            background: var(--slate); color: #fff; padding: 0.75rem 1.25rem;
+            font-family: -apple-system, sans-serif; font-size: 0.85rem; font-weight: 600; border-radius: 0 0 8px 0;
+        }
+        .skip-link:focus { left: 0; }
     </style>
 
     @stack('styles')
 </head>
 <body>
 
+    <a href="#main" class="skip-link">Skip to content</a>
+
     @include('layouts.partials.frontend.header', ['appName' => $_appName, 'appIconUrl' => $_appIconUrl])
 
-    <main>
+    <main id="main">
         @yield('content')
     </main>
 

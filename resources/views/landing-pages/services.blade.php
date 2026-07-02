@@ -448,6 +448,12 @@
     </div>
 </section>
 
+@include('landing-pages.partials.page-faqs', [
+    'page'    => 'services',
+    'ctaText' => 'Discuss your project',
+    'ctaUrl'  => route('contact'),
+])
+
 @endsection
 
 @push('scripts')

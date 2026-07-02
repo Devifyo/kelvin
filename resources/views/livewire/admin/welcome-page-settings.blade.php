@@ -398,6 +398,14 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 SEO
             </button>
+            <button type="button" wire:click="setTab('clients')" class="wps-tab {{ $tab === 'clients' ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Clients
+            </button>
+            <button type="button" wire:click="setTab('faq')" class="wps-tab {{ $tab === 'faq' ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                FAQ
+            </button>
         </div>
 
         <!-- Form -->
@@ -493,6 +501,47 @@
                 <!-- ─── BIO TAB ──────────────────────────────── -->
                 @if($tab === 'bio')
                 <div wire:key="tab-bio">
+                    <div class="wps-section-label">Principal Portrait</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;">
+                            <input type="checkbox" wire:model.live="principal_portrait_enabled" style="width:18px; height:18px; accent-color:var(--copper);">
+                            Show the portrait photo on the homepage
+                        </label>
+                        <div class="wps-hint">Turn off to hide the photo and show just the name &amp; bio.</div>
+                    </div>
+
+                    <div class="wps-field" style="opacity: {{ $principal_portrait_enabled ? '1' : '0.5' }};">
+                        <label class="wps-label">Portrait Photo</label>
+                        <div style="display:flex; gap:1.25rem; align-items:flex-start; flex-wrap:wrap;">
+                            {{-- Live thumbnail: uploaded preview → saved upload → default headshot --}}
+                            <div style="width:104px; height:130px; border:1px solid var(--ivory3); border-radius:8px; overflow:hidden; background:var(--ivory); flex-shrink:0; position:relative;">
+                                <div wire:loading.flex wire:target="principal_portrait_upload" style="position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(255,255,255,.7); font-size:.7rem; color:var(--muted);">Uploading…</div>
+                                @if($principal_portrait_upload)
+                                    <img src="{{ $principal_portrait_upload->temporaryUrl() }}" style="width:100%; height:100%; object-fit:cover;">
+                                @elseif($principal_portrait_image)
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($principal_portrait_image) }}" style="width:100%; height:100%; object-fit:cover;">
+                                @else
+                                    <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" style="width:100%; height:100%; object-fit:cover;">
+                                @endif
+                            </div>
+                            <div style="flex:1; min-width:220px;">
+                                <input type="file" wire:model="principal_portrait_upload" accept="image/*" class="wps-input" style="padding:0.5rem;">
+                                @error('principal_portrait_upload')<div class="wps-hint" style="color:#dc2626;">{{ $message }}</div>@enderror
+                                <div class="wps-hint">JPG/PNG/WebP, portrait orientation works best. Max 2MB. Auto-optimised on upload.</div>
+                                @if($principal_portrait_image)
+                                    <button type="button" wire:click="removePortrait"
+                                            onclick="return confirm('Reset to the default photo?')"
+                                            style="margin-top:.5rem; background:none; border:none; color:#dc2626; font-size:.78rem; font-weight:600; cursor:pointer; padding:0;">
+                                        Reset to default photo
+                                    </button>
+                                @else
+                                    <div class="wps-hint" style="margin-top:.4rem; font-style:italic;">Using the default headshot.</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="wps-section-label">Principal Bio</div>
 
                     <div class="wps-field">
@@ -576,6 +625,136 @@
                         <input type="text" wire:model.live.debounce.500ms="seo_keywords" class="wps-input" placeholder="hardware consulting, agile, product development">
                         <div class="wps-hint">Comma-separated. Less critical for modern SEO, but still read by some tools.</div>
                     </div>
+                </div>
+                @endif
+
+                <!-- ─── CLIENTS / TRUSTED BY TAB ─────────────── -->
+                @if($tab === 'clients')
+                <div wire:key="tab-clients">
+                    <div class="wps-section-label">Trusted By Section</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;">
+                            <input type="checkbox" wire:model.live="trusted_enabled" style="width: 18px; height: 18px; accent-color: var(--copper);">
+                            Show the "Trusted By" section on the homepage
+                        </label>
+                        <div class="wps-hint">When enabled, featured clients appear in a logo strip near the bottom of the homepage. Manage which clients are featured under <strong>Client Showcase</strong>.</div>
+                    </div>
+
+                    <div class="wps-field">
+                        <label class="wps-label">Kicker / Eyebrow</label>
+                        <input type="text" wire:model.live.debounce.500ms="trusted_kicker" class="wps-input" placeholder="Our Clients">
+                        <div class="wps-hint">Short label shown above the heading.</div>
+                    </div>
+
+                    <div class="wps-subsection">Heading</div>
+
+                    <div class="wps-grid-2">
+                        <div class="wps-field">
+                            <label class="wps-label">Bold Part</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_title" class="wps-input" placeholder="Trusted By">
+                        </div>
+                        <div class="wps-field">
+                            <label class="wps-label">Italic Part</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_title_em" class="wps-input" placeholder="Industry Leaders">
+                        </div>
+                    </div>
+
+                    <div class="wps-subsection">Footer</div>
+
+                    <div class="wps-grid-2">
+                        <div class="wps-field" style="margin-bottom: 0;">
+                            <label class="wps-label">Count Label</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_count_label" class="wps-input" placeholder="Clients Served">
+                            <div class="wps-hint">The number (e.g. "70+") is counted automatically from active clients.</div>
+                        </div>
+                        <div class="wps-field" style="margin-bottom: 0;">
+                            <label class="wps-label">Button Text</label>
+                            <input type="text" wire:model.live.debounce.500ms="trusted_cta_text" class="wps-input" placeholder="View All Clients">
+                            <div class="wps-hint">Links to the public <strong>/clients</strong> page.</div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- ─── FAQ TAB ──────────────────────────────── -->
+                @if($tab === 'faq')
+                <div wire:key="tab-faq">
+                    <div class="wps-section-label">FAQ Section</div>
+
+                    <div class="wps-field">
+                        <label class="wps-label" style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;">
+                            <input type="checkbox" wire:model.live="faq_enabled" style="width:18px; height:18px; accent-color:var(--copper);">
+                            Show the FAQ section on the homepage
+                        </label>
+                        <div class="wps-hint">Appears near the bottom of the homepage and powers FAQ structured data (helps AI search &amp; Google understand your answers).</div>
+                    </div>
+
+                    <div class="wps-field">
+                        <label class="wps-label">Kicker</label>
+                        <input type="text" wire:model.live.debounce.500ms="faq_kicker" class="wps-input" placeholder="Common Questions">
+                    </div>
+                    <div class="wps-grid-2">
+                        <div class="wps-field">
+                            <label class="wps-label">Heading (bold)</label>
+                            <input type="text" wire:model.live.debounce.500ms="faq_title" class="wps-input" placeholder="Frequently Asked">
+                        </div>
+                        <div class="wps-field">
+                            <label class="wps-label">Heading (italic)</label>
+                            <input type="text" wire:model.live.debounce.500ms="faq_title_em" class="wps-input" placeholder="Questions">
+                        </div>
+                    </div>
+
+                    <div class="wps-subsection">Questions &amp; Answers</div>
+                    <div class="wps-hint" style="margin-bottom:1rem;">
+                        @if(empty($faq_items))
+                            No questions yet — add some below. With none, the FAQ section is hidden on the homepage.
+                        @else
+                            Drag the <span style="vertical-align:middle;">⠿</span> handle to reorder questions, then Save.
+                        @endif
+                    </div>
+                    <style>
+                        .faq-drag-handle:active { cursor:grabbing; }
+                        .faq-drag-ghost { opacity:.4; background:var(--ivory) !important; }
+                    </style>
+
+                    <div id="sortable-faqs"
+                         x-data
+                         x-init="if (typeof Sortable !== 'undefined') {
+                             Sortable.create($el, {
+                                 animation: 150,
+                                 handle: '.faq-drag-handle',
+                                 ghostClass: 'faq-drag-ghost',
+                                 onEnd() {
+                                     const ids = Array.from($el.children).map(el => el.getAttribute('data-id'));
+                                     $wire.reorderFaqItems(ids);
+                                 }
+                             });
+                         }">
+                        @foreach($faq_items as $i => $item)
+                            <div wire:key="faq-{{ $item['_id'] ?? $i }}" data-id="{{ $item['_id'] ?? $i }}" style="border:1px solid var(--ivory3); border-radius:10px; padding:1rem 1.1rem; margin-bottom:0.9rem; background:#fff;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem;">
+                                    <div style="display:flex; align-items:center; gap:.55rem;">
+                                        <span class="faq-drag-handle" title="Drag to reorder" style="cursor:grab; color:var(--muted); display:flex; align-items:center; touch-action:none;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                                        </span>
+                                        <strong style="font-size:.78rem; color:var(--muted); letter-spacing:.05em;">Q{{ $i + 1 }}</strong>
+                                    </div>
+                                    <button type="button" wire:click="removeFaqItem({{ $i }})" style="background:none; border:none; color:#dc2626; font-size:.75rem; font-weight:700; cursor:pointer;">Remove</button>
+                                </div>
+                                <div class="wps-field" style="margin-bottom:.6rem;">
+                                    <input type="text" wire:model.live.debounce.500ms="faq_items.{{ $i }}.q" class="wps-input" placeholder="Question…">
+                                </div>
+                                <div class="wps-field" style="margin-bottom:0;">
+                                    <textarea wire:model.live.debounce.500ms="faq_items.{{ $i }}.a" class="wps-input" style="min-height:80px;" placeholder="Answer (2–4 sentences, answer first)…"></textarea>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button type="button" wire:click="addFaqItem" class="wps-input" style="cursor:pointer; text-align:center; font-weight:700; color:var(--copper); background:var(--ivory); border-style:dashed;">
+                        + Add question
+                    </button>
                 </div>
                 @endif
 
@@ -736,8 +915,25 @@
                 <section id="principal" style="background: var(--white); padding: 8rem 4.5rem;">
                     <div class="principal-wrap">
                         <div class="bio reveal in" style="opacity:1; transform:none;">
+                            @if($principal_portrait_enabled)
+                                @php
+                                    $previewPortrait = $principal_portrait_upload
+                                        ? $principal_portrait_upload->temporaryUrl()
+                                        : ($principal_portrait_image
+                                            ? \Illuminate\Support\Facades\Storage::url($principal_portrait_image)
+                                            : asset('img/frontend/Dr.%20Kevin%20Thompson.webp'));
+                                @endphp
+                                <div class="bio-head">
+                                    <figure class="bio-portrait"><img src="{{ $previewPortrait }}" alt="Dr. Kevin Thompson" width="320" height="400"></figure>
+                                    <div class="bio-head-text">
+                                        <div class="kicker">{{ $principal_kicker ?: 'Our Principal' }}</div>
+                                        <h2 class="section-h">{{ $principal_h2_name ?: 'Dr. Kevin' }} <em>{{ $principal_h2_em ?: 'Thompson' }}</em></h2>
+                                    </div>
+                                </div>
+                            @else
                             <div class="kicker">{{ $principal_kicker ?: 'Our Principal' }}</div>
                             <h2 class="section-h">{{ $principal_h2_name ?: 'Dr. Kevin' }} <em>{{ $principal_h2_em ?: 'Thompson' }}</em></h2>
+                            @endif
                             <div class="ornament"></div>
                             <p>{!! nl2br(e($principal_p1)) !!}</p>
                             <p>{!! nl2br(e($principal_p2)) !!}</p>
@@ -779,6 +975,54 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- TRUSTED BY / CLIENTS BLOCK -->
+                @if($trusted_enabled && ($featuredClients ?? collect())->isNotEmpty())
+                <section style="background: var(--ivory); padding: 5rem 4.5rem; border-top: 1px solid var(--ivory3); text-align: center;">
+                    <div style="max-width: 1180px; margin: 0 auto;">
+                        <div class="kicker" style="justify-content: center;">{{ $trusted_kicker ?: 'Our Clients' }}</div>
+                        <h2 class="section-h" style="margin-bottom: 2.5rem;">{{ $trusted_title ?: 'Trusted By' }} <em>{{ $trusted_title_em ?: 'Industry Leaders' }}</em></h2>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; align-items: center;">
+                            @foreach($featuredClients as $client)
+                            <div style="display: flex; align-items: center; justify-content: center; height: 70px; padding: 0.75rem; background: var(--white); border: 1px solid var(--ivory3); border-radius: 8px;">
+                                @if($client->logo_url)
+                                    <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                @else
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--muted);">{{ $client->name }}</span>
+                                @endif
+                            </div>
+                            @endforeach
+                        </div>
+                        <div style="margin-top: 2.5rem; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--slate);">
+                            <strong style="color: var(--copper);">{{ ($clientsCount ?? 0) >= 10 ? (floor(($clientsCount ?? 0) / 10) * 10) . '+' : ($clientsCount ?? 0) }}</strong>
+                            {{ $trusted_count_label ?: 'Clients Served' }}
+                        </div>
+                        <a href="#" class="cta-primary" style="display: inline-block; margin-top: 1.5rem;">{{ $trusted_cta_text ?: 'View All Clients' }}</a>
+                    </div>
+                </section>
+                @endif
+
+                <!-- FAQ BLOCK -->
+                @if($faq_enabled)
+                @php
+                    $previewFaqs = collect($faq_items)->filter(fn ($i) => trim($i['q'] ?? '') !== '')->values()->all();
+                @endphp
+                <section style="background: var(--ivory); padding: 4rem 4.5rem; border-top: 1px solid var(--ivory3);">
+                    <div style="max-width: 760px; margin: 0 auto; text-align:center;">
+                        <div class="kicker" style="justify-content:center;">{{ $faq_kicker ?: 'Common Questions' }}</div>
+                        <h2 class="section-h" style="margin-bottom: 2rem;">{{ $faq_title ?: 'Frequently Asked' }} <em>{{ $faq_title_em ?: 'Questions' }}</em></h2>
+                        <div style="text-align:left;">
+                            @forelse($previewFaqs as $f)
+                                <div style="border-top:1px solid var(--ivory3); padding:1.1rem 0; font-weight:600; color:var(--slate); display:flex; justify-content:space-between; gap:1rem;">
+                                    <span>{{ $f['q'] }}</span><span style="color:var(--copper);">+</span>
+                                </div>
+                            @empty
+                                <p style="font-size:0.85rem; color:var(--muted); text-align:center;">Using the default question set. Add questions in the form to customise.</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </section>
+                @endif
 
                 @include('layouts.partials.frontend.footer')
             </div>{{-- /wps-preview-inner --}}

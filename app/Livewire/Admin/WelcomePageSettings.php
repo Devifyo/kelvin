@@ -2,51 +2,109 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\WelcomePageContent;
+use App\Services\FrontendContentService;
+use App\Services\ImageOptimizer;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.admin')]
 class WelcomePageSettings extends Component
 {
+    use WithFileUploads;
+
     public $contentId;
+
     public $tab = 'hero';
-    
+
     // Hero Section
     public $hero_kicker;
+
     public $hero_h1_em;
+
     public $hero_h1_strong;
+
     public $hero_p1;
+
     public $hero_p2;
+
     public $hero_cta_primary_text;
+
     public $hero_cta_primary_link;
+
     public $hero_cta_secondary_text;
+
     public $hero_cta_secondary_link;
 
     // Pain List Section
     public $pain_title;
+
     public $pain_list = [];
+
     public $pain_list_string = ''; // for textarea editing
+
     public $pain_footer;
 
     // Principal Section
     public $principal_kicker;
+
     public $principal_h2_name;
+
     public $principal_h2_em;
+
     public $principal_p1;
+
     public $principal_p2;
+
     public $principal_p3;
+
+    public $principal_portrait_image;        // stored path on the public disk
+
+    public $principal_portrait_upload;       // temp uploaded file
+
+    public $principal_portrait_enabled = true;
 
     // Book info
     public $principal_book_image;
+
     public $principal_book_title;
+
     public $principal_book_desc;
+
     public $principal_book_url;
 
     // SEO Settings
     public $seo_title;
+
     public $seo_description;
+
     public $seo_keywords;
+
+    // Trusted By / Client Showcase Section
+    public $trusted_enabled = true;
+
+    public $trusted_kicker;
+
+    public $trusted_title;
+
+    public $trusted_title_em;
+
+    public $trusted_count_label;
+
+    public $trusted_cta_text;
+
+    // FAQ Section
+    public $faq_enabled = true;
+
+    public $faq_kicker;
+
+    public $faq_title;
+
+    public $faq_title_em;
+
+    public $faq_items = [];
 
     public function mount()
     {
@@ -74,6 +132,8 @@ class WelcomePageSettings extends Component
             $this->principal_p1 = $content->principal_p1;
             $this->principal_p2 = $content->principal_p2;
             $this->principal_p3 = $content->principal_p3;
+            $this->principal_portrait_image = $content->principal_portrait_image;
+            $this->principal_portrait_enabled = (bool) ($content->principal_portrait_enabled ?? true);
 
             $this->principal_book_image = $content->principal_book_image;
             $this->principal_book_title = $content->principal_book_title;
@@ -83,12 +143,56 @@ class WelcomePageSettings extends Component
             $this->seo_title = $content->seo_title;
             $this->seo_description = $content->seo_description;
             $this->seo_keywords = $content->seo_keywords;
+
+            $this->trusted_enabled = (bool) $content->trusted_enabled;
+            $this->trusted_kicker = $content->trusted_kicker;
+            $this->trusted_title = $content->trusted_title;
+            $this->trusted_title_em = $content->trusted_title_em;
+            $this->trusted_count_label = $content->trusted_count_label;
+            $this->trusted_cta_text = $content->trusted_cta_text;
+
+            $this->faq_enabled = (bool) ($content->faq_enabled ?? true);
+            $this->faq_kicker = $content->faq_kicker;
+            $this->faq_title = $content->faq_title;
+            $this->faq_title_em = $content->faq_title_em;
+            // Attach a stable transient _id to each item for reliable drag-and-drop
+            // keying. It is stripped again on save (only q/a are persisted).
+            $this->faq_items = collect($content->faq_items ?: [])
+                ->map(fn ($i) => ['_id' => uniqid('faq_', true), 'q' => $i['q'] ?? '', 'a' => $i['a'] ?? ''])
+                ->all();
         }
+    }
+
+    public function addFaqItem()
+    {
+        $this->faq_items[] = ['_id' => uniqid('faq_', true), 'q' => '', 'a' => ''];
+    }
+
+    public function removeFaqItem($index)
+    {
+        unset($this->faq_items[$index]);
+        $this->faq_items = array_values($this->faq_items);
+    }
+
+    /**
+     * Reorder FAQ items to match the order of _id values from the drag-and-drop UI.
+     *
+     * @param  array<int, string>  $ids
+     */
+    public function reorderFaqItems($ids)
+    {
+        $byId = collect($this->faq_items)->keyBy('_id');
+
+        $this->faq_items = collect($ids)
+            ->map(fn ($id) => $byId->get($id))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public function save()
     {
-            $this->validate([
+        $this->validate([
             'hero_kicker' => 'nullable|string|max:255',
             'hero_h1_em' => 'nullable|string|max:255',
             'hero_h1_strong' => 'nullable|string|max:255',
@@ -110,12 +214,38 @@ class WelcomePageSettings extends Component
             'principal_book_title' => 'nullable|string|max:255',
             'principal_book_desc' => 'nullable|string',
             'principal_book_url' => 'nullable|string|max:1024',
+            'principal_portrait_upload' => 'nullable|image|max:2048',
+            'principal_portrait_enabled' => 'boolean',
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string',
             'seo_keywords' => 'nullable|string|max:255',
+            'trusted_enabled' => 'boolean',
+            'trusted_kicker' => 'nullable|string|max:255',
+            'trusted_title' => 'nullable|string|max:255',
+            'trusted_title_em' => 'nullable|string|max:255',
+            'trusted_count_label' => 'nullable|string|max:255',
+            'trusted_cta_text' => 'nullable|string|max:255',
+            'faq_enabled' => 'boolean',
+            'faq_kicker' => 'nullable|string|max:255',
+            'faq_title' => 'nullable|string|max:255',
+            'faq_title_em' => 'nullable|string|max:255',
+            'faq_items' => 'array',
+            'faq_items.*.q' => 'nullable|string|max:300',
+            'faq_items.*.a' => 'nullable|string|max:2000',
         ]);
 
         $painListArray = array_filter(array_map('trim', explode("\n", $this->pain_list_string)));
+
+        // Handle a newly uploaded principal portrait: store, optimise, replace the old one.
+        if ($this->principal_portrait_upload) {
+            if ($this->principal_portrait_image) {
+                Storage::disk('public')->delete($this->principal_portrait_image);
+            }
+            $path = $this->principal_portrait_upload->store('welcome', 'public');
+            ImageOptimizer::optimize($path, 800); // portraits can be a touch larger than logos
+            $this->principal_portrait_image = $path;
+            $this->principal_portrait_upload = null;
+        }
 
         $data = [
             'hero_kicker' => $this->hero_kicker,
@@ -140,9 +270,26 @@ class WelcomePageSettings extends Component
             'principal_book_title' => $this->principal_book_title,
             'principal_book_desc' => $this->principal_book_desc,
             'principal_book_url' => $this->principal_book_url,
+            'principal_portrait_image' => $this->principal_portrait_image,
+            'principal_portrait_enabled' => $this->principal_portrait_enabled,
             'seo_title' => $this->seo_title,
             'seo_description' => $this->seo_description,
             'seo_keywords' => $this->seo_keywords,
+            'trusted_enabled' => $this->trusted_enabled,
+            'trusted_kicker' => $this->trusted_kicker,
+            'trusted_title' => $this->trusted_title,
+            'trusted_title_em' => $this->trusted_title_em,
+            'trusted_count_label' => $this->trusted_count_label,
+            'trusted_cta_text' => $this->trusted_cta_text,
+            'faq_enabled' => $this->faq_enabled,
+            'faq_kicker' => $this->faq_kicker,
+            'faq_title' => $this->faq_title,
+            'faq_title_em' => $this->faq_title_em,
+            'faq_items' => collect($this->faq_items)
+                ->map(fn ($i) => ['q' => trim($i['q'] ?? ''), 'a' => trim($i['a'] ?? '')])
+                ->filter(fn ($i) => $i['q'] !== '' && $i['a'] !== '')
+                ->values()
+                ->all(),
         ];
 
         if ($this->contentId) {
@@ -155,6 +302,21 @@ class WelcomePageSettings extends Component
         session()->flash('success', 'Welcome page settings updated successfully.');
     }
 
+    public function removePortrait()
+    {
+        if ($this->principal_portrait_image) {
+            Storage::disk('public')->delete($this->principal_portrait_image);
+        }
+        $this->principal_portrait_image = null;
+        $this->principal_portrait_upload = null;
+
+        if ($this->contentId) {
+            WelcomePageContent::where('id', $this->contentId)->update(['principal_portrait_image' => null]);
+        }
+
+        session()->flash('success', 'Portrait reset to the default photo.');
+    }
+
     public function setTab($tabName)
     {
         $this->tab = $tabName;
@@ -162,14 +324,16 @@ class WelcomePageSettings extends Component
 
     public function render()
     {
-        // Load services to pass to preview
-        $contentService = app(\App\Services\FrontendContentService::class);
+        // Load services + featured clients to feed the live preview pane
+        $contentService = app(FrontendContentService::class);
         $consultingServices = $contentService->getConsultingServices();
         $trainingClasses = $contentService->getTrainingClasses();
 
         return view('livewire.admin.welcome-page-settings', [
             'consultingServices' => $consultingServices,
-            'trainingClasses' => $trainingClasses
+            'trainingClasses' => $trainingClasses,
+            'featuredClients' => $contentService->getFeaturedClients(),
+            'clientsCount' => $contentService->getActiveClientsCount(),
         ])->title('Welcome Page Settings');
     }
 }

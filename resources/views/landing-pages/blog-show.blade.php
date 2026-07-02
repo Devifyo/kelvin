@@ -9,6 +9,26 @@
     @section('og_image_alt', $post->title)
 @endif
 
+{{-- Article Open Graph tags + breadcrumb structured data (head) --}}
+@push('schema')
+    @if($post->published_at)<meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}">@endif
+    <meta property="article:modified_time" content="{{ $post->updated_at->toIso8601String() }}">
+    <meta property="article:author" content="{{ $post->author->name ?? 'Dr. Kevin Thompson' }}">
+    @if($post->category)<meta property="article:section" content="{{ $post->category->name }}">@endif
+    @php
+        $_crumbs = json_encode([
+            '@context' => 'https://schema.org',
+            '@type'    => 'BreadcrumbList',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Agile Insights Blog', 'item' => route('blog')],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => $post->title, 'item' => url()->current()],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    @endphp
+    <script type="application/ld+json">{!! $_crumbs !!}</script>
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="/css/frontend/blog-view.css">
 @endpush
@@ -51,7 +71,7 @@
         
         {{-- DYNAMIC COVER IMAGE --}}
         @if($post->featured_image_url)
-            <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="article-cover">
+            <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}" class="article-cover" width="1200" height="630" loading="eager" fetchpriority="high" decoding="async">
         @endif
 
         <div class="article-body">
