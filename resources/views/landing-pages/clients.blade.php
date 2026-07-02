@@ -172,7 +172,6 @@
         <div class="clients-controls reveal rv1">
             <h2 class="controls-title">
                 Companies We've Served
-                <small><span x-text="shown">{{ $clients->count() }}</span> of {{ $clients->count() }} {{ \Illuminate\Support\Str::plural('company', $clients->count()) }}</small>
             </h2>
 
             {{-- Instant client-side search. Falls back to a server GET for no-JS. --}}
