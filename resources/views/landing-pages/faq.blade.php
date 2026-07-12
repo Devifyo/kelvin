@@ -55,7 +55,7 @@
     .faq-toc-title { font-family:-apple-system,sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--copper); margin-bottom:1.1rem; }
     .faq-toc-group { margin-bottom: 1.5rem; }
     .faq-toc-group:last-child { margin-bottom: 0; }
-    .faq-toc-group > h3 { font-family:'Cormorant Garamond',serif; font-size:1.18rem; font-weight:600; color:var(--slate); line-height:1.25; margin-bottom:.6rem; }
+    .faq-toc-group > .faq-toc-grouptitle { font-family:'Cormorant Garamond',serif; font-size:1.18rem; font-weight:600; color:var(--slate); line-height:1.25; margin:0 0 .6rem; }
     .faq-toc-group ul { list-style:none; margin:0; padding:0; border-left:1px solid var(--ivory3); }
     .faq-toc-group li { margin:0; }
     .faq-toc-group li a { display:block; padding:.4rem .9rem; font-family:-apple-system,sans-serif; font-size:.85rem; line-height:1.45; color:var(--body-text); border-left:2px solid transparent; margin-left:-1px; transition:color .2s, border-color .2s, background .2s; }
@@ -75,6 +75,8 @@
     .faq-item:first-child { border-top: 1px solid var(--ivory3); }
     .faq-q { list-style:none; width:100%; text-align:left; cursor:pointer; user-select:none; display:flex; align-items:flex-start; justify-content:space-between; gap:1.25rem; padding:1.35rem .35rem; font-family:-apple-system,sans-serif; font-size:1.02rem; font-weight:600; line-height:1.45; color:var(--slate); transition:color .25s; }
     .faq-q::-webkit-details-marker { display:none; }
+    .faq-q-heading { margin:0; font:inherit; }
+    .faq-q-heading > .faq-q { width:100%; }
     .faq-q:hover, .faq-item.is-open .faq-q { color:var(--copper); }
     .faq-q:focus-visible { outline:2px solid var(--copper); outline-offset:2px; border-radius:3px; }
     .faq-ic { flex-shrink:0; width:20px; height:20px; margin-top:.15rem; color:var(--copper); transition:transform .35s cubic-bezier(.4,0,.2,1); }
@@ -174,7 +176,7 @@
                 <div class="faq-toc-title">On this page</div>
                 @foreach($faqSections as $section)
                     <div class="faq-toc-group">
-                        <h3>{{ $section['title'] }}</h3>
+                        <p class="faq-toc-grouptitle">{{ $section['title'] }}</p>
                         <ul>
                             @foreach($section['questions'] as $q)
                                 <li><a href="#{{ $q['id'] }}" class="faq-toc-link" data-target="{{ $q['id'] }}">{{ $q['q'] }}</a></li>
@@ -196,10 +198,12 @@
 
                     @foreach($section['questions'] as $q)
                         <div class="faq-item" id="{{ $q['id'] }}" data-faq-item>
-                            <button type="button" class="faq-q" aria-expanded="false" aria-controls="panel-{{ $q['id'] }}">
-                                <span>{{ $q['q'] }}</span>
-                                <svg class="faq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            </button>
+                            <h3 class="faq-q-heading">
+                                <button type="button" class="faq-q" aria-expanded="false" aria-controls="panel-{{ $q['id'] }}">
+                                    <span>{{ $q['q'] }}</span>
+                                    <svg class="faq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                </button>
+                            </h3>
                             <div class="faq-panel" id="panel-{{ $q['id'] }}" role="region" aria-label="{{ $q['q'] }}">
                                 <div class="faq-answer-scroll">
                                     <div class="faq-answer">
