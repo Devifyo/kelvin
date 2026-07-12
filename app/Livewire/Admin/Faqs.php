@@ -4,10 +4,14 @@ namespace App\Livewire\Admin;
 
 use App\Models\Faq;
 use App\Models\FaqSection;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Faqs extends Component
 {
+    /** Which public page is currently being managed. null = show the page list. */
+    public ?string $selectedPage = null;
+
     // ── Item (Q&A) modal ──
     public $showModal = false;
 
@@ -21,10 +25,12 @@ class Faqs extends Component
 
     public $item_is_active = true;
 
-    // ── Section heading modal ──
+    // ── Section modal ──
     public $showSectionModal = false;
 
     public $sectionId = null;
+
+    public $s_name;
 
     public $s_kicker;
 
@@ -36,10 +42,21 @@ class Faqs extends Component
     {
         return [
             'question' => 'required|string|max:300',
-            'answer' => 'required|string|max:2000',
+            'answer' => 'required|string|max:60000',
             'faq_section_id' => 'required|exists:faq_sections,id',
             'item_is_active' => 'boolean',
         ];
+    }
+
+    // ── Page navigation ──
+    public function selectPage(string $page): void
+    {
+        $this->selectedPage = $page;
+    }
+
+    public function backToPages(): void
+    {
+        $this->selectedPage = null;
     }
 
     // ── Q&A items ──
@@ -107,7 +124,7 @@ class Faqs extends Component
         $this->dispatch('notify', message: 'Order updated.', type: 'success');
     }
 
-    // ── Section ──
+    // ── Sections ──
     public function toggleSection($id): void
     {
         $s = FaqSection::findOrFail($id);
@@ -115,43 +132,110 @@ class Faqs extends Component
         FaqSection::clearCache();
     }
 
+    public function createSection(): void
+    {
+        $this->reset(['sectionId', 's_name', 's_kicker', 's_title', 's_title_em']);
+        $this->resetValidation();
+        $this->showSectionModal = true;
+    }
+
     public function editSection($id): void
     {
         $s = FaqSection::findOrFail($id);
         $this->sectionId = $s->id;
+        $this->s_name = $s->name;
         $this->s_kicker = $s->kicker;
         $this->s_title = $s->title;
         $this->s_title_em = $s->title_em;
+        $this->resetValidation();
         $this->showSectionModal = true;
     }
 
     public function saveSection(): void
     {
         $this->validate([
+            's_name' => 'required|string|max:255',
             's_kicker' => 'nullable|string|max:255',
             's_title' => 'nullable|string|max:255',
             's_title_em' => 'nullable|string|max:255',
         ]);
 
-        FaqSection::where('id', $this->sectionId)->update([
-            'kicker' => $this->s_kicker,
-            'title' => $this->s_title,
-            'title_em' => $this->s_title_em,
-        ]);
+        if ($this->sectionId) {
+            FaqSection::where('id', $this->sectionId)->update([
+                'name' => $this->s_name,
+                'kicker' => $this->s_kicker,
+                'title' => $this->s_title,
+                'title_em' => $this->s_title_em,
+            ]);
+            $message = 'Section updated.';
+        } else {
+            // New section — appends to the end of the current page (after existing sections).
+            $page = $this->selectedPage ?? 'faq';
+            $order = (FaqSection::where('page', $page)->max('sort_order') ?? 0) + 1;
+
+            FaqSection::create([
+                'key' => $this->uniqueKey($page.'-'.$this->s_name),
+                'page' => $page,
+                'name' => $this->s_name,
+                'kicker' => $this->s_kicker,
+                'title' => $this->s_title,
+                'title_em' => $this->s_title_em,
+                'is_active' => true,
+                'sort_order' => $order,
+            ]);
+            $message = 'Section added.';
+        }
 
         FaqSection::clearCache();
-        $this->dispatch('notify', message: 'Section heading updated.', type: 'success');
+        $this->dispatch('notify', message: $message, type: 'success');
         $this->showSectionModal = false;
+    }
+
+    public function deleteSection($id): void
+    {
+        $s = FaqSection::find($id);
+        if ($s) {
+            $s->faqs()->delete();
+            $s->delete();
+        }
+        FaqSection::clearCache();
+        $this->dispatch('notify', message: 'Section deleted.', type: 'success');
+    }
+
+    /** Build a unique faq_sections.key from a base string. */
+    protected function uniqueKey(string $base): string
+    {
+        $slug = Str::slug($base) ?: 'section';
+        $key = $slug;
+        $i = 2;
+        while (FaqSection::where('key', $key)->exists()) {
+            $key = $slug.'-'.$i;
+            $i++;
+        }
+
+        return $key;
     }
 
     public function render()
     {
-        $sections = FaqSection::with(['faqs' => fn ($q) => $q->orderBy('sort_order')->orderBy('id')])
-            ->orderBy('page')
-            ->orderBy('sort_order')
-            ->get();
+        // Detail view: manage one page's sections + questions.
+        if ($this->selectedPage) {
+            $sections = FaqSection::with(['faqs' => fn ($q) => $q->orderBy('sort_order')->orderBy('id')])
+                ->where('page', $this->selectedPage)
+                ->orderBy('sort_order')
+                ->get();
 
-        return view('livewire.admin.faqs', compact('sections'))
+            return view('livewire.admin.faqs', ['sections' => $sections, 'pages' => null])
+                ->layout('layouts.admin', ['title' => 'FAQ Manager']);
+        }
+
+        // Listing view: the pages that have FAQ sections, grouped.
+        $pages = FaqSection::withCount('faqs')
+            ->orderBy('sort_order')
+            ->get()
+            ->groupBy('page');
+
+        return view('livewire.admin.faqs', ['sections' => null, 'pages' => $pages])
             ->layout('layouts.admin', ['title' => 'FAQ Manager']);
     }
 }
