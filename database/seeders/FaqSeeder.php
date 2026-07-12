@@ -33,28 +33,6 @@ class FaqSeeder extends Seeder
                     ['Can training be combined with coaching?', 'Yes — and it usually should be. Training builds shared understanding; follow-on coaching during your first sprints is what makes the change actually stick.'],
                 ],
             ],
-            [
-                'key' => 'faq-basics', 'page' => 'faq', 'name' => 'FAQ Page — The Basics',
-                'kicker' => 'The Basics', 'title' => 'Agile for Hardware', 'title_em' => 'Explained', 'sort_order' => 1,
-                'items' => [
-                    ['What is Agile hardware development?', 'Agile hardware development applies iterative, feedback-driven principles — short cycles, early integration, and risk-focused prioritisation — to the design of physical products. Unlike software, hardware sprints deliver demonstrable progress (CAD models, board routing, design reviews, parts on order) rather than shippable features, and they must be sequenced around procurement lead time.'],
-                    ['Does Agile/Scrum really work for hardware, or only software?', 'It works, but it must be adapted rather than copied from software. The framework is the same; the mechanics differ because of lead time, physical iteration cost, and integration risk. Dr. Thompson pioneered Agile for hardware and authored the foundational paper on it.'],
-                    ['How is Scrum for hardware different from Scrum for software?', 'Hardware sprints are often roughly twice the length of software sprints and are sequenced to account for procurement lead time; the Product Owner is frequently a team member; and a sprint produces demonstrable progress rather than a releasable feature. Each of these is tailored to your product and organisation.'],
-                    ['How long should a hardware sprint be?', 'There is no universal number, but hardware sprints commonly run longer than the two-week software norm — frequently around twice as long — and are timed so planning cycles line up with parts lead times. The right cadence depends on your product and supply chain.'],
-                ],
-            ],
-            [
-                'key' => 'faq-logistics', 'page' => 'faq', 'name' => 'FAQ Page — Engagements & Logistics',
-                'kicker' => 'Working Together', 'title' => 'Engagements &', 'title_em' => 'Logistics', 'sort_order' => 2,
-                'items' => [
-                    ['Will I work with Dr. Thompson directly?', 'Yes. This is a senior, hands-on practice — you work directly with Dr. Kevin Thompson, Ph.D., not a junior assigned after the sale.'],
-                    ['Have you worked in regulated environments like FDA-controlled medical devices?', 'Yes. Agile and regulatory compliance are not mutually exclusive — the FDA and IEC 62304 are methodology-neutral and require that design controls are documented, not that you use waterfall. Dr. Thompson has written specifically on Agile development for FDA-regulated medical products.'],
-                    ['How long does an engagement take, and how is it priced?', 'It is scoped to your goal — from a short assessment or training through multi-month transformation and coaching. Share your situation and you will receive a tailored proposal.'],
-                    ['Do you work on-site, remotely, or hybrid?', 'Both. Engagements are delivered on-site at your facilities and include remote coaching for distributed hardware and software teams across locations and time zones.'],
-                    ['What results do clients typically see?', 'Common outcomes are earlier discovery of design and integration problems, shorter and more predictable development cycles, and tighter alignment between hardware and software teams — fewer expensive late-stage surprises.'],
-                    ['Does the change last after you leave?', 'That is the objective. Coaching is paired with training and executive alignment so your teams own the process — the goal is durable capability, not dependence on a consultant.'],
-                ],
-            ],
         ];
 
         foreach ($sections as $data) {

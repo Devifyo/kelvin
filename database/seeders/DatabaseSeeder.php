@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PaperSeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(FaqSeeder::class);
+        $this->call(FaqPageSeeder::class);
         $this->call(WelcomePageContentSeeder::class);
         $this->call(AboutPageContentSeeder::class);
         $this->call(PrivacyPageContentSeeder::class);
