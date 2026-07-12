@@ -44,6 +44,7 @@
 
 ## Blog Posts
 
+- [Thermo Fisher Scientific Lesson 6](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-6): Lesson #6: Hardware teams may initially struggle with Story writing because they tend to express non-functional requirements where Scrum expects Stories to describe deliverables.
 - [Thermo Fisher Scientific Lesson 5](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-5): Lesson #5: User Stories play a much smaller role in hardware development than they do in software development. Technical Stories become the dominant mechanism for describing Sprint-level work.
 - [Thermo Fisher Scientific Lesson 4](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-4): Lesson #4: Hardware products accrete components, not functionality.
 - [Thermo Fisher Scientific Lesson 3](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-lesson-3): Lesson #3: Scope decomposition for hardware products is typically driven by components and subsystems.

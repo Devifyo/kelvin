@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kevinthompsonphd.com</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
@@ -25,43 +25,49 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-training-classes</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/contact-us</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-6</loc>
+        <lastmod>2026-07-09T16:10:18+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-5</loc>
-        <lastmod>2026-07-01T20:41:26+00:00</lastmod>
+        <lastmod>2026-07-09T16:10:59+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -72,7 +78,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-4</loc>
-        <lastmod>2026-06-24T16:34:13+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -83,7 +89,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-lesson-3</loc>
-        <lastmod>2026-06-17T19:05:19+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -94,7 +100,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-2</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -105,7 +111,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-1</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -116,7 +122,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-introduction</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -127,7 +133,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/scrum-teams-swarming-and-hardware</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -138,7 +144,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/how-hardware-and-software-engineers-differ</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -149,7 +155,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/embedded-software</loc>
-        <lastmod>2026-06-17T19:04:48+00:00</lastmod>
+        <lastmod>2026-07-01T20:41:44+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
