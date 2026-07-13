@@ -37,6 +37,16 @@
         .faqx-ic { flex-shrink:0; width:20px; height:20px; color:var(--copper,#b5722a); transition:transform .3s; }
         .faqx-item[open] .faqx-ic { transform:rotate(45deg); }
         .faqx-ans { padding:0 .25rem 1.6rem; max-width:70ch; font-family:'Cormorant Garamond',serif; font-size:1.12rem; line-height:1.75; color:var(--charcoal,#2c3a4a); }
+        .faqx-ans > *:first-child { margin-top:0; }
+        .faqx-ans > *:last-child { margin-bottom:0; }
+        .faqx-ans p { margin:0 0 1rem; }
+        .faqx-ans ul, .faqx-ans ol { margin:0 0 1rem; padding-left:1.4rem; }
+        .faqx-ans ul { list-style:disc; }
+        .faqx-ans ol { list-style:decimal; }
+        .faqx-ans li { margin:.3rem 0; }
+        .faqx-ans strong { font-weight:700; color:var(--slate,#1a2332); }
+        .faqx-ans em { font-style:italic; }
+        .faqx-ans a { color:var(--copper,#b5722a); text-decoration:underline; text-underline-offset:2px; }
         .faqx-cta { text-align:center; margin-top:2.5rem; }
         .faqx-cta a { display:inline-flex; align-items:center; gap:.6rem; font-family:-apple-system,sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:#fff; background:var(--copper,#b5722a); padding:1rem 2.25rem; text-decoration:none; transition:background .3s, transform .3s; }
         .faqx-cta a:hover { background:var(--slate,#1a2332); transform:translateY(-2px); }
@@ -50,7 +60,7 @@
         @foreach($items as $f)
             <details class="faqx-item">
                 <summary><span>{{ $f['q'] }}</span><svg class="faqx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></summary>
-                <div class="faqx-ans">{!! nl2br(e($f['a'])) !!}</div>
+                <div class="faqx-ans">{!! $f['a'] !!}</div>
             </details>
         @endforeach
         @if(!empty($ctaText) && !empty($ctaUrl))
@@ -66,7 +76,7 @@
     '@type'    => 'FAQPage',
     'mainEntity' => collect($items)->map(fn ($f) => [
         '@type' => 'Question', 'name' => $f['q'],
-        'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
+        'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(preg_replace('/\s+/', ' ', strip_tags($f['a'])))],
     ])->all(),
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endpush

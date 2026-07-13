@@ -143,6 +143,53 @@ main {
 .nav-contact::after{display:none!important}
 .nav-contact:hover{background:var(--copper)!important;color:var(--white)!important;border-color:var(--copper)!important}
 
+/* Resources dropdown (desktop) */
+.nav-dropdown{position:relative;display:flex;align-items:center}
+.nav-dd-toggle{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(250,247,242,.65);cursor:pointer;transition:color .3s;
+}
+.nav-dd-toggle .chev{width:12px;height:12px;transition:transform .3s}
+.nav-dropdown:hover .nav-dd-toggle .chev,
+.nav-dropdown.open .nav-dd-toggle .chev{transform:rotate(180deg)}
+.nav-dd-toggle:hover,.nav-dd-toggle.active{color:var(--copper3)}
+.nav-dd-menu{
+  position:absolute;top:100%;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  min-width:238px;margin-top:14px;padding:.5rem;
+  display:flex;flex-direction:column;
+  background:rgba(26,35,50,.98);backdrop-filter:blur(18px);
+  border:1px solid rgba(181,114,42,.18);border-radius:5px;
+  box-shadow:0 14px 38px rgba(0,0,0,.38),0 1px 0 rgba(181,114,42,.12) inset;
+  opacity:0;visibility:hidden;pointer-events:none;z-index:210;
+  transition:opacity .28s cubic-bezier(.4,0,.2,1),transform .28s cubic-bezier(.4,0,.2,1),visibility .28s;
+}
+/* invisible bridge so the pointer can cross the gap without the menu closing */
+.nav-dd-menu::before{content:'';position:absolute;top:-14px;left:0;right:0;height:14px}
+.nav-dropdown:hover .nav-dd-menu,
+.nav-dropdown.open .nav-dd-menu{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0);
+}
+.nav-dd-menu a{
+  display:block;padding:.62rem .9rem;border-radius:3px;white-space:nowrap;
+  font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(250,247,242,.72);transition:color .25s,background .25s;
+}
+.nav-dd-menu a::after{display:none}
+.nav-dd-menu a:hover{color:var(--copper3);background:rgba(181,114,42,.1)}
+.nav-dd-menu a.active{color:var(--copper3);background:rgba(181,114,42,.08)}
+
+/* Resources group in the mobile drawer */
+.drawer-group-label{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;
+  font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--copper3);opacity:.75;margin:.25rem 0 -.25rem;
+}
+.drawer a.drawer-sub{font-size:1.25rem}
+
 /* hamburger */
 .burger{display:none;flex-direction:column;gap:5px;padding:4px;z-index:201}
 .burger span{display:block;width:24px;height:1.5px;background:var(--white);transition:all .3s;transform-origin:center}

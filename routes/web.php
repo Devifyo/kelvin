@@ -23,8 +23,11 @@ Route::controller(PageController::class)->group(function () {
     // Services
     Route::get('/agile-consulting-services', 'services')->name('services.training');
     
-    // Training (Main listing)
-    Route::get('/agile-training-classes/{slug?}', 'training')->name('training');
+    // Training landing removed — its content now lives on /agile-consulting-services.
+    // 301 the old landing URL so any external links / crawl equity pass across.
+    Route::redirect('/agile-training-classes', '/agile-consulting-services', 301);
+    // Individual class detail pages remain (linked from the Services page).
+    Route::get('/agile-training-classes/{slug}', 'training')->name('training');
     
     // Papers & Presentations (Library)
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');

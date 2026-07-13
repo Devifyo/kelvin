@@ -72,7 +72,6 @@ class AppSettings extends Component
         ['url' => '/',                                        'changefreq' => 'weekly',  'priority' => '1.0', 'enabled' => true],
         ['url' => '/about-kevin-thompson',                    'changefreq' => 'monthly', 'priority' => '0.8', 'enabled' => true],
         ['url' => '/agile-consulting-services',               'changefreq' => 'monthly', 'priority' => '0.8', 'enabled' => true],
-        ['url' => '/agile-training-classes',                  'changefreq' => 'weekly',  'priority' => '0.8', 'enabled' => true],
         ['url' => '/agile-hardware-papers-and-presentations', 'changefreq' => 'weekly',  'priority' => '0.7', 'enabled' => true],
         ['url' => '/agile-insights-blog',                     'changefreq' => 'daily',   'priority' => '0.7', 'enabled' => true],
         ['url' => '/podcasts-webinars',                       'changefreq' => 'weekly',  'priority' => '0.6', 'enabled' => true],

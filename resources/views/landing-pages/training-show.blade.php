@@ -446,7 +446,7 @@
         '@type'    => 'BreadcrumbList',
         'itemListElement' => [
             ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => url('/')],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Agile Training Classes', 'item' => route('training')],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Agile Consulting & Training', 'item' => route('services.training')],
             ['@type' => 'ListItem', 'position' => 3, 'name' => $service->title, 'item' => url()->current()],
         ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

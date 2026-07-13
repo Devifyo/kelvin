@@ -24,7 +24,7 @@
         '@type'      => 'FAQPage',
         'mainEntity' => collect(\App\Models\FaqSection::schemaItems($page))->map(fn ($f) => [
             '@type' => 'Question', 'name' => $f['q'],
-            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(preg_replace('/\s+/', ' ', strip_tags($f['a'])))],
         ])->all(),
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush

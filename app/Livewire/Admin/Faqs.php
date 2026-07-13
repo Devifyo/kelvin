@@ -230,7 +230,10 @@ class Faqs extends Component
         }
 
         // Listing view: the pages that have FAQ sections, grouped.
+        // 'training' is excluded — the /agile-training-classes landing page was
+        // retired (redirects to /agile-consulting-services), so its FAQs no longer render.
         $pages = FaqSection::withCount('faqs')
+            ->where('page', '!=', 'training')
             ->orderBy('sort_order')
             ->get()
             ->groupBy('page');

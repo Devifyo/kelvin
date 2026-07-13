@@ -25,7 +25,6 @@ class FaqSection extends Model
         return match ($this->page) {
             'home'     => 'Homepage',
             'services' => 'Services Page',
-            'training' => 'Training Page',
             'faq'      => 'FAQ Page',
             default    => ucfirst($this->page) . ' Page',
         };
@@ -37,7 +36,6 @@ class FaqSection extends Model
         return match ($this->page) {
             'home'     => route('home'),
             'services' => route('services.training'),
-            'training' => route('training'),
             'faq'      => route('faq'),
             default    => null,
         };
@@ -74,7 +72,7 @@ class FaqSection extends Model
 
     public static function clearCache(): void
     {
-        foreach (['home', 'services', 'training', 'faq'] as $page) {
+        foreach (['home', 'services', 'faq'] as $page) {
             Cache::forget("faq.page.{$page}");
         }
     }

@@ -261,6 +261,30 @@
             document.body.style.overflow = '';
         }
 
+        /* Resources dropdown — hover is CSS-driven; this adds click / keyboard support */
+        document.querySelectorAll('[data-nav-dropdown]').forEach((dd) => {
+            const toggle = dd.querySelector('.nav-dd-toggle');
+            if (!toggle) return;
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const open = dd.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', (e) => {
+                if (!dd.contains(e.target)) {
+                    dd.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+            dd.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    dd.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.focus();
+                }
+            });
+        });
+
         /* ─────────────────────────────────────────
            GLOBAL SCROLL REVEAL ANIMATION
            Works on any page with class="reveal"
