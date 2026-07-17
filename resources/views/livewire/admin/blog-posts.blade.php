@@ -8,6 +8,10 @@
     .service-row:hover .drag-handle { opacity: 0.7; }
     .drag-handle:active { cursor: grabbing; opacity: 1; }
     .drag-ghost { opacity: 0.35 !important; background: var(--ivory) !important; border: 2px dashed var(--copper) !important; }
+    .pos-cell { flex-shrink: 0; margin-right: 0.5rem; }
+    .pos-input { width: 3.1rem; padding: 0.35rem 0.4rem; text-align: center; font-size: 0.85rem; font-weight: 700; color: var(--slate); background: var(--ivory); border: 1px solid var(--ivory3); border-radius: 6px; -moz-appearance: textfield; }
+    .pos-input:focus { outline: none; border-color: var(--copper); background: #fff; box-shadow: 0 0 0 2px rgba(181,114,42,0.15); }
+    .pos-input::-webkit-outer-spin-button, .pos-input::-webkit-inner-spin-button { opacity: 0.4; }
     </style>
 
     {{-- List Header Controls --}}
@@ -41,6 +45,13 @@
             <div class="service-row" data-id="{{ $item->id }}" wire:key="post-{{ $item->id }}">
                 <div class="drag-handle" title="Drag to reorder">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+                </div>
+                @php($position = ($posts->firstItem() ?? 1) + $loop->index)
+                <div class="pos-cell" x-data="{ orig: {{ $position }} }">
+                    <input type="number" min="1" class="pos-input" :value="orig"
+                           title="Type a position and press Enter to move this post there"
+                           x-on:keydown.enter.prevent="if($event.target.value !== '' && +$event.target.value !== orig) $wire.moveToPosition({{ $item->id }}, +$event.target.value)"
+                           x-on:blur="if($event.target.value !== '' && +$event.target.value !== orig) $wire.moveToPosition({{ $item->id }}, +$event.target.value); else $event.target.value = orig">
                 </div>
                 <div style="display: flex; align-items: center; gap: 1.25rem; width: 45%;">
                     <div class="service-avatar">

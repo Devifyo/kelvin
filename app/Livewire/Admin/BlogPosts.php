@@ -176,10 +176,60 @@ class BlogPosts extends Component
 
     public function reorder(array $ids, int $offset = 0): void
     {
+        $this->applyOrder($ids, $offset);
+        $this->dispatch('notify', message: 'Post order saved.', type: 'success');
+    }
+
+    /** Write sort_order values without notifying (shared by drag + move-to-end actions). */
+    private function applyOrder(array $ids, int $offset = 0): void
+    {
         foreach ($ids as $index => $id) {
             Post::where('id', $id)->update(['sort_order' => $offset + $index]);
         }
-        $this->dispatch('notify', message: 'Post order saved.', type: 'success');
+    }
+
+    /** Full list of post ids in the exact order the listing displays them (ignores pagination). */
+    private function orderedIds(): array
+    {
+        return Post::orderByRaw('(sort_order IS NULL) ASC, sort_order ASC, created_at DESC')
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    /**
+     * Swap a post with whatever currently sits at the given 1-based position.
+     * Works across pages: type "1" on the post at position 11 and the two trade places —
+     * position-1's post moves to 11, this post moves to 1; everything else stays put.
+     * The list is renumbered densely so positions stay 1,2,3… with no gaps.
+     */
+    public function moveToPosition($id, $position): void
+    {
+        if ($position === null || $position === '' || ! is_numeric($position)) {
+            return;
+        }
+
+        $id  = (int) $id;
+        $ids = $this->orderedIds();
+
+        $curIdx = array_search($id, $ids, true);
+        if ($curIdx === false) {
+            return;
+        }
+
+        // Clamp to an existing slot (1 … count) and no-op if it's already there.
+        $targetIdx = max(1, min((int) $position, count($ids))) - 1;
+        if ($targetIdx === $curIdx) {
+            return;
+        }
+
+        // Swap the two positions.
+        [$ids[$curIdx], $ids[$targetIdx]] = [$ids[$targetIdx], $ids[$curIdx]];
+        $this->applyOrder($ids);
+
+        // Follow the post to whichever page it now lives on so the user sees the result.
+        $this->gotoPage((int) ceil(($targetIdx + 1) / 10));
+        $this->dispatch('notify', message: 'Moved to position '.($targetIdx + 1).'.', type: 'success');
     }
 
     public function render()
