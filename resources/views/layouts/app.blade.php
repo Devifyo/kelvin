@@ -37,10 +37,15 @@
         $_gtmId          = AppSetting::get('seo_gtm_id', '');
         $_schemaJobTitle = AppSetting::get('seo_schema_job_title') ?: 'Agile Consultant & Trainer, Ph.D.';
         $_schemaOrgName  = AppSetting::get('seo_schema_org_name')  ?: 'Kevin Thompson Ph.D. Consulting';
-        $_sameAs = array_values(array_filter([
+        // sameAs is how search and AI engines resolve WHICH "Kevin Thompson"
+        // this is. Beyond LinkedIn/X, `seo_sameas_urls` takes one profile URL
+        // per line (ORCID, Google Scholar, Amazon author page, Scrum Alliance,
+        // Wikidata, …) so more identity sources can be added without a deploy.
+        $_extraSameAs = preg_split('/\r\n|\r|\n/', (string) AppSetting::get('seo_sameas_urls', '')) ?: [];
+        $_sameAs = array_values(array_unique(array_filter(array_map('trim', array_merge([
             $_linkedinUrl,
             $_twitterHandle ? 'https://x.com/' . $_twitterHandle : '',
-        ]));
+        ], $_extraSameAs)), fn ($u) => $u !== '' && preg_match('#^https?://#i', $u))));
 
         $_suffix  = $_titleSuffix ? ' ' . ltrim($_titleSuffix) : '';
         $_pageUrl = url()->current();

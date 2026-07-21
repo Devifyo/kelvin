@@ -61,14 +61,21 @@
 
 @if($schema ?? true)
 @push('scripts')
-<script type="application/ld+json">{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type'    => 'FAQPage',
-    'mainEntity' => collect($items)->map(fn ($f) => [
-        '@type' => 'Question', 'name' => $f['q'],
-        'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
-    ])->all(),
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+{{-- Build the array inside a PHP block, never inline in an unescaped echo.
+     Blade treats the literal schema context key (at-sign + "context") as its own
+     directive, which corrupts the JSON-LD and leaks compiled PHP into the page.
+     Do not mention that key outside a PHP block — not even in a comment. --}}
+@php
+    $_faqBlockJsonLd = json_encode([
+        '@context' => 'https://schema.org',
+        '@type'    => 'FAQPage',
+        'mainEntity' => collect($items)->map(fn ($f) => [
+            '@type' => 'Question', 'name' => $f['q'],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
+        ])->all(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+@endphp
+<script type="application/ld+json">{!! $_faqBlockJsonLd !!}</script>
 @endpush
 @endif
 @endif

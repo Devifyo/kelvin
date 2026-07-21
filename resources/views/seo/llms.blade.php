@@ -11,6 +11,7 @@
 - [Papers & Presentations]({{ url('/agile-hardware-papers-and-presentations') }}): Research papers and conference presentations on agile hardware development
 - [Blog]({{ url('/agile-insights-blog') }}): Articles and insights on agile methodologies for hardware
 - [Podcasts & Webinars]({{ url('/podcasts-webinars') }}): Recorded podcast appearances and webinar sessions
+- [FAQ]({{ url('/faq') }}): Direct answers to common questions — can Scrum be used for hardware development, how hardware teams estimate work and manage dependencies, what Agile Release Planning is, and how hardware Product Owners work
 - [Contact]({{ url('/contact-us') }}): Get in touch with Kevin Thompson
 
 @if($trainings->isNotEmpty())

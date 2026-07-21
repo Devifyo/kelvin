@@ -27,6 +27,8 @@
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
         <env name="BROADCAST_CONNECTION" value="null" force="true"/>
         <env name="CACHE_STORE" value="array" force="true"/>
+        <!-- SeoGenerator writes real files into public/; never let a test run rewrite them. -->
+        <env name="SEO_AUTOGENERATE" value="false" force="true"/>
         <env name="DB_CONNECTION" value="sqlite" force="true"/>
         <env name="DB_DATABASE" value=":memory:" force="true"/>
         <env name="DB_HOST" value="" force="true"/>

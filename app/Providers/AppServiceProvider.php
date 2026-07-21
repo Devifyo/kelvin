@@ -56,6 +56,18 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerSeoHooks(): void
     {
+        // These hooks write real files into public/. Left enabled under
+        // `artisan test`, fixture slugs and the local APP_URL get baked into the
+        // shipped sitemap.xml / llms.txt, which then get committed and deployed.
+        //
+        // Note: environment detection is NOT reliable here — under `artisan test`
+        // this provider boots reporting environment "local" with
+        // runningUnitTests() === false. phpunit.xml sets SEO_AUTOGENERATE=false
+        // explicitly instead. Regenerate deliberately with `php artisan seo:generate`.
+        if (! config('seo.autogenerate', true)) {
+            return;
+        }
+
         $sitemapAndLlms = function () {
             SeoGenerator::generateSitemap();
             SeoGenerator::generateLlms();

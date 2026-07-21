@@ -3,7 +3,12 @@
     plus a single combined FAQPage JSON-LD for the URL.
     Params: $page (required), $ctaText / $ctaUrl (optional — shown after the last section)
 --}}
-@php($__sections = \App\Models\FaqSection::forPage($page))
+{{-- Block form, not the @php(...) short form. Blade pairs @php with the next
+     @endphp using a lazy regex, so a short-form @php earlier in the file would
+     bind to the @endphp of the block below and swallow everything between. --}}
+@php
+    $__sections = \App\Models\FaqSection::forPage($page);
+@endphp
 
 @if($__sections->isNotEmpty())
     @foreach($__sections as $__s)
@@ -19,13 +24,21 @@
     @endforeach
 
     @push('scripts')
-    <script type="application/ld+json">{!! json_encode([
-        '@context'   => 'https://schema.org',
-        '@type'      => 'FAQPage',
-        'mainEntity' => collect(\App\Models\FaqSection::schemaItems($page))->map(fn ($f) => [
-            '@type' => 'Question', 'name' => $f['q'],
-            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
-        ])->all(),
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    {{-- Build the array inside a PHP block, never inline in an unescaped echo.
+         Blade treats the literal schema context key (at-sign + "context") as its
+         own directive, which corrupts the JSON-LD and leaks compiled PHP into
+         the page. Do not mention that key outside a PHP block — not even in a
+         comment; Blade compiles it here too. --}}
+    @php
+        $_pageFaqJsonLd = json_encode([
+            '@context'   => 'https://schema.org',
+            '@type'      => 'FAQPage',
+            'mainEntity' => collect(\App\Models\FaqSection::schemaItems($page))->map(fn ($f) => [
+                '@type' => 'Question', 'name' => $f['q'],
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f['a']],
+            ])->all(),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    @endphp
+    <script type="application/ld+json">{!! $_pageFaqJsonLd !!}</script>
     @endpush
 @endif

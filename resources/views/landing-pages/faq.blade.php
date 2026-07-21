@@ -391,20 +391,25 @@
 })();
 </script>
 
-<script type="application/ld+json">
-{!! json_encode([
-    '@context'   => 'https://schema.org',
-    '@type'      => 'FAQPage',
-    'mainEntity' => collect($faqSections)
-        ->flatMap(fn ($s) => $s['questions'])
-        ->map(fn ($q) => [
-            '@type'          => 'Question',
-            'name'           => $q['q'],
-            'acceptedAnswer' => [
-                '@type' => 'Answer',
-                'text'  => trim(preg_replace('/\s+/', ' ', strip_tags($q['a']))),
-            ],
-        ])->all(),
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-</script>
+{{-- Build the array inside a PHP block, never inline in an unescaped echo.
+     Blade treats the literal schema context key (at-sign + "context") as its own
+     directive, which corrupts the JSON-LD and leaks compiled PHP into the page.
+     Do not mention that key outside a PHP block — not even in a comment. --}}
+@php
+    $_faqPageJsonLd = json_encode([
+        '@context'   => 'https://schema.org',
+        '@type'      => 'FAQPage',
+        'mainEntity' => collect($faqSections)
+            ->flatMap(fn ($s) => $s['questions'])
+            ->map(fn ($q) => [
+                '@type'          => 'Question',
+                'name'           => $q['q'],
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text'  => trim(preg_replace('/\s+/', ' ', strip_tags($q['a']))),
+                ],
+            ])->all(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+@endphp
+<script type="application/ld+json">{!! $_faqPageJsonLd !!}</script>
 @endpush

@@ -320,6 +320,18 @@
                         @error('seoLinkedinUrl') <span class="as-error">{{ $message }}</span> @enderror
                     </div>
                 </div>
+
+                <div class="as-field" style="margin-top:1rem;">
+                    <label class="as-label">Other profile URLs (schema <code>sameAs</code>)</label>
+                    <textarea wire:model="seoSameasUrls" class="as-input" rows="5" maxlength="2000"
+                              placeholder="https://orcid.org/0000-0000-0000-0000&#10;https://scholar.google.com/citations?user=…&#10;https://www.amazon.com/stores/author/…&#10;https://www.scrumalliance.org/community/profile/…"></textarea>
+                    <span class="as-hint">
+                        One URL per line. These tell Google and AI engines <strong>which</strong> Kevin Thompson this is —
+                        the single strongest signal for being cited correctly. ORCID, Google Scholar, your Amazon author
+                        page, Scrum Alliance, Wikidata. Non-URL lines are ignored.
+                    </span>
+                    @error('seoSameasUrls') <span class="as-error">{{ $message }}</span> @enderror
+                </div>
             </div>
 
             {{-- ── 3. Structured Data (JSON-LD) ── --}}
