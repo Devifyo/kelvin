@@ -18,13 +18,7 @@
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker">Knowledge &amp; Research</div>
-        <h1 class="page-title">Papers &amp; <em>Presentations</em></h1>
-        <p class="page-subtitle">A comprehensive collection of insights, methodologies, and findings from our extensive engagements in Agile hardware and software development.</p>
-    </div>
-</section>
+<x-page-header page="papers" />
 
 {{-- DYNAMIC SERVER-SIDE FILTER MENU --}}
 <div class="filter-container reveal rv1">

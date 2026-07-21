@@ -165,13 +165,7 @@
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker">Media &amp; Appearances</div>
-        <h1 class="page-title">Podcasts &amp; <em>Webinars</em></h1>
-        <p class="page-subtitle">Watch and listen to Dr. Kevin Thompson's latest interviews, keynotes, and deep-dives into Agile hardware transformation.</p>
-    </div>
-</section>
+<x-page-header page="podcasts-webinars" />
 
 {{-- DYNAMIC SERVER-SIDE FILTER MENU --}}
 <div class="filter-container reveal rv1">

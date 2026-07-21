@@ -346,13 +346,7 @@
 {{-- ─────────────────────────────────────────
      PAGE HEADER
 ───────────────────────────────────────── --}}
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker" style="color:var(--copper2);">Our Expertise</div>
-        <h1 class="page-title">Consulting &amp; <em>Training</em></h1>
-        <p class="page-subtitle">We offer both consulting and training services. All services are provided on-site at client locations.</p>
-    </div>
-</section>
+<x-page-header page="services" />
 
 <div class="strip"></div>
 

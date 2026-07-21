@@ -147,7 +147,8 @@
                     </label>
                     @error('newAppIcon') <span class="as-error">{{ $message }}</span> @enderror
                     @if($currentIconUrl)
-                        <button wire:click="removeAppIcon" wire:confirm="Remove the current app icon?" class="as-remove-btn">Remove current icon</button>
+                        <button type="button" class="as-remove-btn"
+                                @click="Swal.fire({ title: 'Remove the app icon?', text: 'The sidebar will fall back to your initials.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, remove', cancelButtonText: 'Cancel', confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280' }).then(r => r.isConfirmed && $wire.removeAppIcon())">Remove current icon</button>
                     @endif
                 </div>
 
@@ -171,7 +172,8 @@
                     </label>
                     @error('newFavicon') <span class="as-error">{{ $message }}</span> @enderror
                     @if($currentFaviconUrl)
-                        <button wire:click="removeFavicon" wire:confirm="Remove the current favicon?" class="as-remove-btn">Remove current favicon</button>
+                        <button type="button" class="as-remove-btn"
+                                @click="Swal.fire({ title: 'Remove the favicon?', text: 'Browsers will fall back to the default site icon.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, remove', cancelButtonText: 'Cancel', confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280' }).then(r => r.isConfirmed && $wire.removeFavicon())">Remove current favicon</button>
                     @endif
                 </div>
             </div>
@@ -280,7 +282,8 @@
                                         @endif
                                     @endif
                                 </span>
-                                <button wire:click="removeOgImage" wire:confirm="Remove the OG image? Pages will fall back to the default headshot." class="as-remove-btn" style="align-self:flex-start">Remove image</button>
+                                <button type="button" class="as-remove-btn" style="align-self:flex-start"
+                                        @click="Swal.fire({ title: 'Remove the OG image?', text: 'Social sharing previews will fall back to the default headshot.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, remove', cancelButtonText: 'Cancel', confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280' }).then(r => r.isConfirmed && $wire.removeOgImage())">Remove image</button>
                             @else
                                 <span class="as-hint">No image uploaded — sharing previews will fall back to the default headshot. Upload a 1200 × 630 brand card for best results.</span>
                             @endif

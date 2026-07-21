@@ -15,12 +15,11 @@ class AboutPageSettings extends Component
 
     public $contentId;
     public $tab = 'header';
-    
-    // Header
-    public $header_kicker;
-    public $header_h1_regular;
-    public $header_h1_em;
-    
+
+    // NOTE: the page header (kicker / H1) is no longer edited here — it moved to
+    // Admin → Page Headers (App\Livewire\Admin\PageHeaders) so all public page
+    // headers live in one module. The Header tab now links there.
+
     // Sidebar
     public $profile_image;
     public $new_profile_image;
@@ -52,10 +51,6 @@ class AboutPageSettings extends Component
         $content = AboutPageContent::first();
         if ($content) {
             $this->contentId = $content->id;
-            
-            $this->header_kicker = $content->header_kicker;
-            $this->header_h1_regular = $content->header_h1_regular;
-            $this->header_h1_em = $content->header_h1_em;
 
             $this->profile_image = $content->profile_image;
             $this->sidebar_kicker = $content->sidebar_kicker;
@@ -91,9 +86,6 @@ class AboutPageSettings extends Component
     public function save()
     {
         $this->validate([
-            'header_kicker' => 'nullable|string|max:255',
-            'header_h1_regular' => 'nullable|string|max:255',
-            'header_h1_em' => 'nullable|string|max:255',
             'new_profile_image' => 'nullable|image|max:5120', // allow up to 5MB image
             'profile_image' => 'nullable|string|max:1024',
             'sidebar_kicker' => 'nullable|string|max:255',
@@ -121,9 +113,6 @@ class AboutPageSettings extends Component
         }
 
         $data = [
-            'header_kicker' => $this->header_kicker,
-            'header_h1_regular' => $this->header_h1_regular,
-            'header_h1_em' => $this->header_h1_em,
             'profile_image' => $this->profile_image,
             'sidebar_kicker' => $this->sidebar_kicker,
             'education_list' => $this->education_list,
