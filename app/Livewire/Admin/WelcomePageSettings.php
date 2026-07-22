@@ -106,6 +106,15 @@ class WelcomePageSettings extends Component
 
     public $faq_items = [];
 
+    // ── "What We Offer" / Services section ────────────────────────────────
+    public $offer_kicker;
+
+    public $offer_title;
+
+    public $offer_title_em;
+
+    public $offer_body;
+
     public function mount()
     {
         $content = WelcomePageContent::first();
@@ -160,6 +169,11 @@ class WelcomePageSettings extends Component
             $this->faq_items = collect($content->faq_items ?: [])
                 ->map(fn ($i) => ['_id' => uniqid('faq_', true), 'q' => $i['q'] ?? '', 'a' => $i['a'] ?? ''])
                 ->all();
+
+            $this->offer_kicker = $content->offer_kicker;
+            $this->offer_title = $content->offer_title;
+            $this->offer_title_em = $content->offer_title_em;
+            $this->offer_body = $content->offer_body;
         }
     }
 
@@ -232,6 +246,10 @@ class WelcomePageSettings extends Component
             'faq_items' => 'array',
             'faq_items.*.q' => 'nullable|string|max:300',
             'faq_items.*.a' => 'nullable|string|max:2000',
+            'offer_kicker' => 'nullable|string|max:255',
+            'offer_title' => 'nullable|string|max:255',
+            'offer_title_em' => 'nullable|string|max:255',
+            'offer_body' => 'nullable|string|max:2000',
         ]);
 
         $painListArray = array_filter(array_map('trim', explode("\n", $this->pain_list_string)));
@@ -290,6 +308,10 @@ class WelcomePageSettings extends Component
                 ->filter(fn ($i) => $i['q'] !== '' && $i['a'] !== '')
                 ->values()
                 ->all(),
+            'offer_kicker' => $this->offer_kicker,
+            'offer_title' => $this->offer_title,
+            'offer_title_em' => $this->offer_title_em,
+            'offer_body' => $this->offer_body,
         ];
 
         if ($this->contentId) {

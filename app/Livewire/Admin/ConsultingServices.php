@@ -14,20 +14,20 @@ class ConsultingServices extends Component
     use WithPagination, WithFileUploads;
 
     public $searchTitle = '';
-    public $filterStatus = 'all'; 
+    public $filterStatus = 'all';
 
     public $showModal = false;
     public $serviceId = null;
-    
+
     // Form Fields
     public $title, $slug, $icon, $short_description, $content;
-    public $meta_title, $meta_description, $meta_keywords; 
+    public $meta_title, $meta_description, $meta_keywords;
     public $is_active = true;
     public $sort_order = 0;
-    
+
     // File Upload for Icon/Image
-    public $icon_file; 
-    public $existing_icon_path; 
+    public $icon_file;
+    public $existing_icon_path;
 
     protected function rules()
     {

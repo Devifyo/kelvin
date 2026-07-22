@@ -27,6 +27,11 @@
             Welcome Page
         </a>
 
+        <a href="{{ route('admin.services-page') }}" class="nav-item {{ request()->routeIs('admin.services-page') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            Services Page
+        </a>
+
         <a href="{{ route('admin.about-page') }}" class="nav-item {{ request()->routeIs('admin.about-page') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             About Page

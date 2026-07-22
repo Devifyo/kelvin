@@ -66,6 +66,12 @@ class WelcomePageContentSeeder extends Seeder
                 ['q' => 'How is Scrum different for hardware versus software?', 'a' => 'The framework is the same; the mechanics differ. Hardware sprints are often roughly twice the length of software sprints and must be sequenced around procurement lead time, the Product Owner is frequently a team member, and a sprint’s output is demonstrable progress rather than a releasable feature. We tailor each of these to your product.'],
                 ['q' => 'Does the change stick after you leave?', 'a' => 'That’s the point. Engagements pair assessment and training with hands-on coaching and executive alignment so your teams own the process — the goal is durable capability, not dependence on a consultant.'],
             ],
+
+            // "What We Offer" section — editable in /admin/welcome-page (Services tab).
+            'offer_kicker'   => 'What We Offer',
+            'offer_title'    => 'Consulting &',
+            'offer_title_em' => 'Training Services',
+            'offer_body'     => 'We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite. We take the time to understand the unique needs of each client, and tailor consulting services accordingly.',
         ]);
     }
 }

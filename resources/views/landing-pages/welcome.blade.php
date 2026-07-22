@@ -315,11 +315,11 @@
             </div>
 
             <div class="reveal rv2">
-                <div class="kicker">What We Offer</div>
-                <h2 class="section-h">Consulting &amp; <em>Training Services</em></h2>
+                <div class="kicker">{{ $welcomeContent->offer_kicker ?? 'What We Offer' }}</div>
+                <h2 class="section-h">{{ $welcomeContent->offer_title ?? 'Consulting &' }} <em>{{ $welcomeContent->offer_title_em ?? 'Training Services' }}</em></h2>
                 <div class="ornament"></div>
                 <p class="svc-desc">
-                    We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite. We take the time to understand the unique needs of each client, and tailor consulting services accordingly.
+                    {{ $welcomeContent->offer_body ?? 'We offer a variety of consulting and training services. We can work with all levels at a client, from the hands-on engineers to the C-suite. We take the time to understand the unique needs of each client, and tailor consulting services accordingly.' }}
                 </p>
 
                 <div class="svc-group">

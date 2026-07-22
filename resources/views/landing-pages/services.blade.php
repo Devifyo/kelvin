@@ -357,10 +357,10 @@
     <div class="content-wrap">
 
         <div class="reveal">
-            <div class="kicker">Strategic Guidance</div>
-            <h2 class="section-h">Consulting <em>Services</em></h2>
+            <div class="kicker">{{ \App\Models\AppSetting::get('services_consulting_kicker', 'Strategic Guidance') }}</div>
+            <h2 class="section-h">{{ \App\Models\AppSetting::get('services_consulting_title', 'Consulting') }} <em>{{ \App\Models\AppSetting::get('services_consulting_title_em', 'Services') }}</em></h2>
             <div class="ornament"></div>
-            <p class="section-lead">We work directly with your organization to diagnose delivery issues, coach teams, and drive lasting improvement. Every engagement is scoped and tailored to the specific needs of the client.</p>
+            <p class="section-lead">{{ \App\Models\AppSetting::get('services_consulting_body', 'We work directly with your organization to diagnose delivery issues, coach teams, and drive lasting improvement. Every engagement is scoped and tailored to the specific needs of the client.') }}</p>
         </div>
 
         <div class="consulting-grid">
@@ -419,10 +419,10 @@
     <div class="training-wrap">
 
         <div class="training-intro reveal">
-            <div class="kicker">Education &amp; Growth</div>
-            <h2 class="section-h">Training <em>Classes</em></h2>
+            <div class="kicker">{{ \App\Models\AppSetting::get('services_training_kicker', 'Education & Growth') }}</div>
+            <h2 class="section-h">{{ \App\Models\AppSetting::get('services_training_title', 'Training') }} <em>{{ \App\Models\AppSetting::get('services_training_title_em', 'Classes') }}</em></h2>
             <div class="ornament"></div>
-            <p>The following classes and presentations are available. Each is designed to address specific needs within your organization — from executive briefings to deep-dive team frameworks.</p>
+            <p>{{ \App\Models\AppSetting::get('services_training_body', 'The following classes and presentations are available. Each is designed to address specific needs within your organization — from executive briefings to deep-dive team frameworks.') }}</p>
         </div>
 
         <div class="course-list reveal rv1">

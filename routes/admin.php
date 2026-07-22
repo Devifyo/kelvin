@@ -13,6 +13,7 @@ use App\Livewire\Admin\Clients;
 use App\Livewire\Admin\Faqs;
 use App\Livewire\Admin\VisitorAnalytics;
 use App\Livewire\Admin\WelcomePageSettings;
+use App\Livewire\Admin\ServicesPageSettings;
 use App\Livewire\Admin\AboutPageSettings;
 use App\Livewire\Admin\PrivacyPageSettings;
 use App\Livewire\Admin\TermsPageSettings;
@@ -33,6 +34,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/profile', ProfileSettings::class)->name('profile');
 Route::get('/app-settings', AppSettings::class)->name('app-settings');
 Route::get('/welcome-page', WelcomePageSettings::class)->name('welcome-page');
+Route::get('/services-page', ServicesPageSettings::class)->name('services-page');
 Route::get('/about-page', AboutPageSettings::class)->name('about-page');
 Route::get('/privacy-page', PrivacyPageSettings::class)->name('privacy-page');
 Route::get('/terms-page', TermsPageSettings::class)->name('terms-page');
