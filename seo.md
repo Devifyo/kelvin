@@ -490,6 +490,7 @@ php artisan seo:generate
 ## Companion documents
 
 - [audit-report.md](audit-report.md) — original SEO audit (2026-05-06).
+- [kevinthompsonphd.com-audit/](kevinthompsonphd.com-audit/) — full site audit (2026-07-21), health score 67/100. Start with [ACTION-PLAN.md](kevinthompsonphd.com-audit/ACTION-PLAN.md) for the open worklist; [findings/](kevinthompsonphd.com-audit/findings/) holds the per-category evidence, including ready-to-paste corrected JSON-LD in `schema.md`. Read the "Coverage gaps" section of the report before trusting the score — four specialist tracks did not complete.
 - [seo-implementation-log.md](seo-implementation-log.md) — every file changed in the implementation pass and why.
 - [suggested-meta-updates.md](suggested-meta-updates.md) — title/description rewrites awaiting manual approval.
 - [manual-followups.md](manual-followups.md) — Search Console, Wikidata, OG image upload, HSTS preload, etc.

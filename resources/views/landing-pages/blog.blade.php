@@ -317,13 +317,7 @@
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker">Insights &amp; Articles</div>
-        <h1 class="page-title">Agile <em>Insights</em></h1>
-        <p class="page-subtitle">Expert perspectives on the unique challenges, methodologies, and intersection of Agile software and hardware development.</p>
-    </div>
-</section>
+<x-page-header page="blog" />
 
 <section class="blog-section">
     <div class="blog-container">

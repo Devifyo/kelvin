@@ -16,6 +16,7 @@ use App\Livewire\Admin\WelcomePageSettings;
 use App\Livewire\Admin\AboutPageSettings;
 use App\Livewire\Admin\PrivacyPageSettings;
 use App\Livewire\Admin\TermsPageSettings;
+use App\Livewire\Admin\PageHeaders;
 use App\Livewire\Admin\AppSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +36,7 @@ Route::get('/welcome-page', WelcomePageSettings::class)->name('welcome-page');
 Route::get('/about-page', AboutPageSettings::class)->name('about-page');
 Route::get('/privacy-page', PrivacyPageSettings::class)->name('privacy-page');
 Route::get('/terms-page', TermsPageSettings::class)->name('terms-page');
+Route::get('/page-headers', PageHeaders::class)->name('page-headers');
 
 Route::get('/inquiries', ContactInquiries::class)->name('inquiries');
 Route::get('/consulting-services', ConsultingServices::class)->name('services.index');

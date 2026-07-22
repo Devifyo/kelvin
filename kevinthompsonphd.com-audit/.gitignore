@@ -1,0 +1,16 @@
+# Machine artifacts from the audit run — regenerable, and stale the moment the
+# site changes. The human-readable reports beside them ARE tracked.
+#
+# To regenerate:
+#   curl -s https://kevinthompsonphd.com/sitemap.xml | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' > urls.txt
+#   /seo audit https://kevinthompsonphd.com
+
+raw/
+screenshots/
+pages.json
+urls.txt
+leak-scan.txt
+
+# Only consumed by the PDF generator, which was never run. Regenerate with the
+# audit if you want `claude-seo run google_report.py --type full`.
+audit-data.json

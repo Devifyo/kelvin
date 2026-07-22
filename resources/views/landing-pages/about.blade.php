@@ -19,12 +19,7 @@
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker-small" style="color:var(--copper2);">{{ $aboutContent->header_kicker ?? 'Principal Consultant' }}<span style="display:none;"></span></div>
-        <h1 class="page-title">{{ $aboutContent->header_h1_regular ?? 'About Dr. Kevin' }} <em>{{ $aboutContent->header_h1_em ?? 'Thompson' }}</em><span style="display:none;"></span></h1>
-    </div>
-</section>
+<x-page-header page="about" />
 
 <div class="strip"></div>
 

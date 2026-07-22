@@ -107,4 +107,33 @@ class Service extends Model
     {
         $query->orderBy('sort_order', 'asc');
     }
+
+    /**
+     * The <title> for this service's page.
+     *
+     * An explicit meta_title always wins. Otherwise we build one, because a bare
+     * course name ("Advanced Product Owner", 22 chars) carries no brand and no
+     * indication that it is training — it wastes most of the available SERP
+     * width. "Training" is only appended when the name doesn't already imply it
+     * and the result still fits inside the ~60-char display limit.
+     */
+    public function seoTitle(): string
+    {
+        if (filled($this->meta_title)) {
+            return $this->meta_title;
+        }
+
+        $brand = config('app.name');
+        $base  = trim((string) $this->title);
+
+        if ($this->type === 'training' && ! str_contains(mb_strtolower($base), 'training')) {
+            $withKeyword = "{$base} Training";
+
+            if (mb_strlen("{$withKeyword} | {$brand}") <= 60) {
+                $base = $withKeyword;
+            }
+        }
+
+        return "{$base} | {$brand}";
+    }
 }

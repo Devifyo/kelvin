@@ -40,6 +40,9 @@ class AppSettings extends Component
 
     public string $seoLinkedinUrl = '';
 
+    /** Additional identity profile URLs for schema sameAs, one per line. */
+    public string $seoSameasUrls = '';
+
     // ── SEO: Structured Data ──────────────────────────────────────────────
     public string $seoSchemaJobTitle = '';
 
@@ -119,6 +122,7 @@ class AppSettings extends Component
         // Social
         $this->seoTwitterHandle = AppSetting::get('seo_twitter_handle', '');
         $this->seoLinkedinUrl = AppSetting::get('seo_linkedin_url', '');
+        $this->seoSameasUrls = AppSetting::get('seo_sameas_urls', '');
 
         // Schema.org
         $this->seoSchemaJobTitle = AppSetting::get('seo_schema_job_title') ?: 'Agile Consultant & Trainer, Ph.D.';
@@ -346,6 +350,7 @@ class AppSettings extends Component
             'seoOgImage' => 'nullable|string|max:500',
             'seoTwitterHandle' => 'nullable|string|max:100',
             'seoLinkedinUrl' => ['nullable', 'string', 'max:500', 'regex:/^https?:\/\//i'],
+            'seoSameasUrls' => ['nullable', 'string', 'max:2000'],
             'seoSchemaJobTitle' => 'nullable|string|max:200',
             'seoSchemaOrgName' => 'nullable|string|max:200',
             'seoGa4Id' => ['nullable', 'string', 'max:50', 'regex:/^G-[A-Z0-9]+$/i'],
@@ -367,6 +372,7 @@ class AppSettings extends Component
         // Social
         AppSetting::set('seo_twitter_handle', ltrim(trim($this->seoTwitterHandle), '@'));
         AppSetting::set('seo_linkedin_url', trim($this->seoLinkedinUrl));
+        AppSetting::set('seo_sameas_urls', trim($this->seoSameasUrls));
 
         // Schema
         AppSetting::set('seo_schema_job_title', trim($this->seoSchemaJobTitle));

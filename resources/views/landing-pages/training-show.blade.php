@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $service->meta_title ?: $service->title)
+@section('title', $service->seoTitle())
 @section('meta_description', $service->meta_description ?: $service->short_description)
 @section('meta_keywords', $service->meta_keywords ?: 'agile training, scrum training, agile hardware development, Kevin Thompson')
 @section('og_type', 'article')
@@ -416,7 +416,7 @@
         $_courseInstance['courseWorkload'] = $service->length;
     }
 
-    $_courseJsonLd = json_encode([
+    $_course = [
         '@context'         => 'https://schema.org',
         '@type'            => 'Course',
         'name'             => $service->title,
@@ -425,19 +425,59 @@
         'provider'         => ['@id' => url('/') . '/#organization'],
         'instructor'       => ['@id' => url('/') . '/#person'],
         'educationalLevel' => 'Professional',
-        'courseMode'       => ['onsite', 'online'],
+        // Only claim the modes we actually publish an instance for — declaring
+        // 'online' with no online hasCourseInstance is a validation mismatch.
+        'courseMode'       => ['onsite'],
         'inLanguage'       => 'en-US',
         'hasCourseInstance'=> [$_courseInstance],
         'offers'           => [
             '@type'        => 'Offer',
-            'category'     => 'Professional Training',
+            // Google only accepts Paid / Free / Subscription here — a free-text
+            // value fails Course validation for the whole page.
+            'category'     => 'Paid',
             'url'          => url('/contact-us'),
             'availability' => 'https://schema.org/InStock',
         ],
-        'image'            => $service->featured_image
-            ? asset('storage/' . $service->featured_image)
-            : null,
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    ];
+
+    // Omit `image` entirely when there is no featured image — a literal null
+    // is a validation error, whereas an absent optional property is fine.
+    if (! empty($service->featured_image)) {
+        $_course['image'] = asset('storage/' . $service->featured_image);
+    }
+
+    // The syllabus already lives in the database and renders on the page, but
+    // was invisible to search engines. Expose it through the standard Course
+    // properties so the markup reflects what the page actually teaches.
+    if (! empty($service->topics) && is_array($service->topics)) {
+        $_teaches = collect($service->topics)
+            ->flatMap(fn ($subTopics, $groupTitle) => array_merge([$groupTitle], (array) $subTopics))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($_teaches) {
+            $_course['teaches'] = $_teaches;
+        }
+    }
+
+    if (! empty($service->prerequisites)) {
+        $_course['coursePrerequisites'] = strip_tags($service->prerequisites);
+    }
+
+    if (! empty($service->audience)) {
+        $_course['audience'] = [
+            '@type'            => 'Audience',
+            'audienceType'     => strip_tags($service->audience),
+        ];
+    }
+
+    if (! empty($service->learning_objectives)) {
+        $_course['abstract'] = trim(preg_replace('/\s+/', ' ', strip_tags($service->learning_objectives)));
+    }
+
+    $_courseJsonLd = json_encode($_course, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp
 <script type="application/ld+json">{!! $_courseJsonLd !!}</script>
 @php

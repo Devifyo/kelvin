@@ -530,8 +530,8 @@
                                 @error('principal_portrait_upload')<div class="wps-hint" style="color:#dc2626;">{{ $message }}</div>@enderror
                                 <div class="wps-hint">JPG/PNG/WebP, portrait orientation works best. Max 2MB. Auto-optimised on upload.</div>
                                 @if($principal_portrait_image)
-                                    <button type="button" wire:click="removePortrait"
-                                            onclick="return confirm('Reset to the default photo?')"
+                                    <button type="button"
+                                            @click="Swal.fire({ title: 'Reset to the default photo?', text: 'The uploaded portrait will be removed.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, reset', cancelButtonText: 'Cancel', confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280' }).then(r => r.isConfirmed && $wire.removePortrait())"
                                             style="margin-top:.5rem; background:none; border:none; color:#dc2626; font-size:.78rem; font-weight:600; cursor:pointer; padding:0;">
                                         Reset to default photo
                                     </button>

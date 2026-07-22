@@ -42,6 +42,11 @@
             Terms &amp; Conditions
         </a>
 
+        <a href="{{ route('admin.page-headers') }}" class="nav-item {{ request()->routeIs('admin.page-headers') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"></path><path d="M9 20h6"></path><path d="M12 4v16"></path></svg>
+            Page Headers
+        </a>
+
         <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.25rem 1rem 0.4rem; font-weight: 800; font-family: -apple-system, sans-serif;">Applications & Resources</div>
 
         {{-- Separated: Consulting Services --}}

@@ -477,23 +477,20 @@
                 <div wire:key="tab-header">
                     <div class="wps-section-label">Page Header</div>
 
-                    <div class="wps-field">
-                        <label class="wps-label">Kicker / Eyebrow</label>
-                        <input type="text" wire:model.live.debounce.500ms="header_kicker" class="wps-input" placeholder="e.g. Principal Consultant">
-                        <div class="wps-hint">Short label displayed above the main page title.</div>
-                    </div>
-
-                    <div class="wps-subsection">Headline</div>
-
-                    <div class="wps-grid-2">
-                        <div class="wps-field" style="margin-bottom: 0;">
-                            <label class="wps-label">H1 Regular</label>
-                            <input type="text" wire:model.live.debounce.500ms="header_h1_regular" class="wps-input" placeholder="About Dr. Kevin">
+                    <div style="padding: 1.25rem 1.35rem; background: var(--ivory); border: 1px solid var(--ivory3); border-radius: 12px;">
+                        <div style="font-size: 0.85rem; font-weight: 700; color: var(--slate); margin-bottom: 0.4rem;">
+                            Moved to the Page Headers module
                         </div>
-                        <div class="wps-field" style="margin-bottom: 0;">
-                            <label class="wps-label">H1 Italic</label>
-                            <input type="text" wire:model.live.debounce.500ms="header_h1_em" class="wps-input" placeholder="Thompson">
+                        <div class="wps-hint" style="margin-bottom: 1rem;">
+                            The kicker and H1 for this page are now edited alongside every other public
+                            page header — in one place, with a live preview. Your current copy was carried
+                            over automatically.
                         </div>
+                        <a href="{{ route('admin.page-headers', ['page' => 'about']) }}"
+                           style="display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.65rem 1.05rem; background: var(--slate); color: var(--white); border-radius: 9px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none;">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+                            Edit Page Header
+                        </a>
                     </div>
                 </div>
                 @endif
@@ -735,13 +732,8 @@
                     .footer-links a:hover { color: var(--copper3); }
                 </style>
 
-                <!-- PAGE HEADER -->
-                <section class="page-header">
-                    <div class="header-content reveal">
-                        <div class="kicker-small" style="color: var(--copper2);">{{ $header_kicker ?? 'Principal Consultant' }}</div>
-                        <h1 class="page-title">{{ $header_h1_regular ?? 'About Dr. Kevin' }} <em>{{ $header_h1_em ?? 'Thompson' }}</em></h1>
-                    </div>
-                </section>
+                <!-- PAGE HEADER — managed in Admin → Page Headers -->
+                <x-page-header page="about" />
 
                 <div class="strip"></div>
 
