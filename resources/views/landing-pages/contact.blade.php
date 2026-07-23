@@ -311,26 +311,26 @@ textarea.form-control {
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="name">Full Name</label>
-                        <input type="text" id="name" name="name" class="form-control" required placeholder="Jane Doe" value="{{ old('name') }}">
+                        <input type="text" id="name" name="name" class="form-control" required placeholder="{{ \App\Models\AppSetting::get('contact_form_name_ph', 'Jane Doe') }}" value="{{ old('name') }}">
                         @error('name') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="email">Email Address</label>
-                        <input type="email" id="email" name="email" class="form-control" required placeholder="jane@company.com" value="{{ old('email') }}">
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="{{ \App\Models\AppSetting::get('contact_form_email_ph', 'jane@company.com') }}" value="{{ old('email') }}">
                         @error('email') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="subject">Subject</label>
-                    <input type="text" id="subject" name="subject" class="form-control" required placeholder="How can we help you?" value="{{ old('subject') }}">
+                    <input type="text" id="subject" name="subject" class="form-control" required placeholder="{{ \App\Models\AppSetting::get('contact_form_subject_ph', 'What engineering challenge are you facing?') }}" value="{{ old('subject') }}">
                     @error('subject') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="message">Message</label>
-                    <textarea id="message" name="message" class="form-control" required placeholder="Tell us about your organization's challenges...">{{ old('message') }}</textarea>
+                    <textarea id="message" name="message" class="form-control" required placeholder="{{ \App\Models\AppSetting::get('contact_form_message_ph', "Briefly describe your organization, your products, and the challenges you're facing.") }}">{{ old('message') }}</textarea>
                     @error('message') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                 </div>
 

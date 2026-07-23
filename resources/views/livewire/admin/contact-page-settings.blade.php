@@ -75,8 +75,8 @@
         .cpv-row { display:grid; grid-template-columns:1fr 1fr; gap:.85rem; }
         .cpv-fg { margin-bottom:.9rem; }
         .cpv-fl { display:block; font-family:-apple-system,sans-serif; font-size:.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--slate,#1a2332); margin-bottom:.3rem; }
-        .cpv-fc { height:34px; background:var(--ivory,#faf7f2); border:1px solid var(--ivory3,#e8dfd2); border-radius:5px; }
-        .cpv-fc.ta { height:60px; }
+        .cpv-fc { min-height:34px; background:var(--ivory,#faf7f2); border:1px solid var(--ivory3,#e8dfd2); border-radius:5px; padding:.5rem .6rem; font-family:-apple-system,sans-serif; font-size:.72rem; color:var(--muted,#8a8175); line-height:1.4; }
+        .cpv-fc.ta { min-height:60px; }
         .cpv-btn { margin-top:.4rem; width:100%; text-align:center; background:var(--copper,#b5722a); color:#fff; font-family:-apple-system,sans-serif; font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:.75rem; border-radius:4px; }
         @media (max-width:640px){ .cpv-section{ grid-template-columns:1fr; } }
 
@@ -168,6 +168,36 @@
                     @error('contact_submit_text')<span class="cps-err">{{ $message }}</span>@enderror
                 </div>
             </div>
+
+            {{-- Form placeholders --}}
+            <div class="cps-group">
+                <div class="cps-group-head">
+                    <span class="t">Form Placeholders <small>Grey hint text inside each field</small></span>
+                    <button type="button" class="cps-reset"
+                            x-on:click="Swal.fire({title:'Reset placeholders?', text:'Restores the original hint text.', icon:'question', showCancelButton:true, confirmButtonColor:'#b5722a', confirmButtonText:'Yes, reset'}).then((r)=>{if(r.isConfirmed) $wire.resetSection('placeholders')})">Reset</button>
+                </div>
+
+                <div class="cps-field">
+                    <label class="cps-label">Full Name</label>
+                    <input type="text" class="cps-input" wire:model.live.debounce.400ms="form_name_ph" placeholder="Jane Doe">
+                    @error('form_name_ph')<span class="cps-err">{{ $message }}</span>@enderror
+                </div>
+                <div class="cps-field">
+                    <label class="cps-label">Email Address</label>
+                    <input type="text" class="cps-input" wire:model.live.debounce.400ms="form_email_ph" placeholder="jane@company.com">
+                    @error('form_email_ph')<span class="cps-err">{{ $message }}</span>@enderror
+                </div>
+                <div class="cps-field">
+                    <label class="cps-label">Subject</label>
+                    <input type="text" class="cps-input" wire:model.live.debounce.400ms="form_subject_ph" placeholder="What engineering challenge are you facing?">
+                    @error('form_subject_ph')<span class="cps-err">{{ $message }}</span>@enderror
+                </div>
+                <div class="cps-field">
+                    <label class="cps-label">Message</label>
+                    <textarea class="cps-input" wire:model.live.debounce.400ms="form_message_ph" placeholder="Briefly describe your organization..."></textarea>
+                    @error('form_message_ph')<span class="cps-err">{{ $message }}</span>@enderror
+                </div>
+            </div>
         </div>
 
         <div class="cps-footer">
@@ -210,11 +240,11 @@
                     </div>
                     <div class="cpv-form">
                         <div class="cpv-row">
-                            <div class="cpv-fg"><span class="cpv-fl">Full Name</span><div class="cpv-fc"></div></div>
-                            <div class="cpv-fg"><span class="cpv-fl">Email Address</span><div class="cpv-fc"></div></div>
+                            <div class="cpv-fg"><span class="cpv-fl">Full Name</span><div class="cpv-fc">{{ $form_name_ph }}</div></div>
+                            <div class="cpv-fg"><span class="cpv-fl">Email Address</span><div class="cpv-fc">{{ $form_email_ph }}</div></div>
                         </div>
-                        <div class="cpv-fg"><span class="cpv-fl">Subject</span><div class="cpv-fc"></div></div>
-                        <div class="cpv-fg"><span class="cpv-fl">Message</span><div class="cpv-fc ta"></div></div>
+                        <div class="cpv-fg"><span class="cpv-fl">Subject</span><div class="cpv-fc">{{ $form_subject_ph }}</div></div>
+                        <div class="cpv-fg"><span class="cpv-fl">Message</span><div class="cpv-fc ta">{{ $form_message_ph }}</div></div>
                         <div class="cpv-btn">{{ $contact_submit_text ?: 'Send Message' }}</div>
                     </div>
                 </div>
