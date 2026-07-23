@@ -84,6 +84,25 @@ class PageHeader extends Model
             ],
         ],
 
+        'contact' => [
+            'label'        => 'Contact',
+            'route'        => 'contact',
+            'kicker_class' => 'kicker',
+            'kicker_style' => 'color:var(--copper2);',
+            'has_subtitle' => true,
+            // Edited from the dedicated "Contact Page" module, not the shared
+            // Page Headers screen — kept here so <x-page-header> still resolves
+            // its meta + defaults. Hidden from the Page Headers list to avoid a
+            // second editing surface for the same copy.
+            'admin_hidden' => true,
+            'defaults'     => [
+                'kicker'        => "Let's Connect",
+                'title_regular' => 'Contact',
+                'title_em'      => null,
+                'subtitle'      => "Whether you're facing a specific hardware development challenge or want to explore an Agile transformation, we're here to help.",
+            ],
+        ],
+
         'blog' => [
             'label'        => 'Agile Insights Blog',
             'route'        => 'blog',
@@ -133,6 +152,12 @@ class PageHeader extends Model
     public static function meta(string $pageKey): array
     {
         return static::PAGES[$pageKey] ?? [];
+    }
+
+    /** Pages editable on the shared Page Headers screen (excludes ones managed elsewhere). */
+    public static function adminPages(): array
+    {
+        return array_filter(static::PAGES, fn ($meta) => empty($meta['admin_hidden']));
     }
 
     public function forgetCache(): void

@@ -268,13 +268,7 @@ textarea.form-control {
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker" style="color:var(--copper2);">Let's Connect</div>
-        <h1 class="page-title">Contact</h1>
-        <p class="page-subtitle">Whether you're facing a specific hardware development challenge or want to explore an Agile transformation, we're here to help.</p>
-    </div>
-</section>
+<x-page-header page="contact" />
 
 <div class="strip"></div>
 
@@ -282,16 +276,16 @@ textarea.form-control {
     <div class="contact-grid">
         
         <div class="contact-info reveal">
-            <div class="kicker">Get in Touch</div>
-            <h2 class="section-h">Start the <em>Conversation</em></h2>
+            <div class="kicker">{{ \App\Models\AppSetting::get('contact_kicker', 'Get in Touch') }}</div>
+            <h2 class="section-h">{{ \App\Models\AppSetting::get('contact_title', 'Start the') }} <em>{{ \App\Models\AppSetting::get('contact_title_em', 'Conversation') }}</em></h2>
             <div class="ornament"></div>
 
             <p class="contact-text">
-                Reach out to discuss your organization's needs. All consulting and training services are provided on-site at client locations, tailored specifically to your product context.
+                {{ \App\Models\AppSetting::get('contact_body', "Reach out to discuss your organization's needs. All consulting and training services are provided on-site at client locations, tailored specifically to your product context.") }}
             </p>
 
             <p class="contact-text" style="font-size: 0.95rem; margin-top: -1rem; padding-left: 1rem; border-left: 3px solid rgba(181,114,42,0.3);">
-                Please fill out the form with your details and a brief message regarding the challenges your team is facing. We will review your inquiry and respond promptly to schedule an initial consultation.
+                {{ \App\Models\AppSetting::get('contact_note', 'Please fill out the form with your details and a brief message regarding the challenges your team is facing. We will review your inquiry and respond promptly to schedule an initial consultation.') }}
             </p>
         </div>
 
@@ -320,7 +314,7 @@ textarea.form-control {
                         <input type="text" id="name" name="name" class="form-control" required placeholder="Jane Doe" value="{{ old('name') }}">
                         @error('name') <span style="color:red; font-size:0.8rem;">{{ $message }}</span> @enderror
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="form-label" for="email">Email Address</label>
                         <input type="email" id="email" name="email" class="form-control" required placeholder="jane@company.com" value="{{ old('email') }}">
@@ -343,7 +337,7 @@ textarea.form-control {
                 <x-captcha />
 
                 <button type="submit" class="btn-submit">
-                    Send Message
+                    {{ \App\Models\AppSetting::get('contact_submit_text', 'Send Message') }}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </form>

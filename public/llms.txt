@@ -11,6 +11,7 @@
 - [Papers & Presentations](https://kevinthompsonphd.com/agile-hardware-papers-and-presentations): Research papers and conference presentations on agile hardware development
 - [Blog](https://kevinthompsonphd.com/agile-insights-blog): Articles and insights on agile methodologies for hardware
 - [Podcasts & Webinars](https://kevinthompsonphd.com/podcasts-webinars): Recorded podcast appearances and webinar sessions
+- [FAQ](https://kevinthompsonphd.com/faq): Direct answers to common questions — can Scrum be used for hardware development, how hardware teams estimate work and manage dependencies, what Agile Release Planning is, and how hardware Product Owners work
 - [Contact](https://kevinthompsonphd.com/contact-us): Get in touch with Kevin Thompson
 
 ## Training Classes
@@ -44,6 +45,7 @@
 
 ## Blog Posts
 
+- [Thermo Fisher Scientific: Lesson 8](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-8): Lesson #8: Hardware organizations generally do not have a direct equivalent to the software Quality Assurance specialist who independently tests most Story deliverables. In many cases, the engineer who creates the deliverable is also the person best qualified to test it.
 - [Thermo Fisher Scientific Lesson 7](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-7): Lesson #7: In hardware development, Product Owners often write only a minority of the Stories. Story-writing responsibility is distributed much more evenly across the Product 
 - [Thermo Fisher Scientific Lesson 6](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-6): Lesson #6: Hardware teams may initially struggle with Story writing because they tend to express non-functional requirements where Scrum expects Stories to describe deliverables.
 - [Thermo Fisher Scientific Lesson 5](https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-5): Lesson #5: User Stories play a much smaller role in hardware development than they do in software development. Technical Stories become the dominant mechanism for describing Sprint-level work.

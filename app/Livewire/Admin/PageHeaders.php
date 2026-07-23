@@ -31,7 +31,7 @@ class PageHeaders extends Component
 
     public function mount(): void
     {
-        $keys = array_keys(PageHeader::PAGES);
+        $keys = array_keys(PageHeader::adminPages());
 
         if (! in_array($this->pageKey, $keys, true)) {
             $this->pageKey = $keys[0];
@@ -50,7 +50,7 @@ class PageHeaders extends Component
      */
     public function selectPage(string $pageKey, bool $force = false): void
     {
-        if (! array_key_exists($pageKey, PageHeader::PAGES) || $pageKey === $this->pageKey) {
+        if (! array_key_exists($pageKey, PageHeader::adminPages()) || $pageKey === $this->pageKey) {
             return;
         }
 
@@ -156,7 +156,7 @@ class PageHeaders extends Component
     public function render()
     {
         return view('livewire.admin.page-headers', [
-            'pages' => PageHeader::PAGES,
+            'pages' => PageHeader::adminPages(),
         ])->title('Page Headers');
     }
 }
