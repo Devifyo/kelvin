@@ -64,7 +64,17 @@ class ContactController extends Controller
         // Fetching the email from config instead of hardcoding
         $adminEmail = config('mail.admin_address');
 
-        Mail::to($adminEmail)->send(new ContactInquiryMail($data));
+        // The lead is already saved above, so a mail failure must never 500 the
+        // form (that would lose the submission and the ad conversion). Log it and
+        // carry on — the message is still captured in the admin inbox.
+        try {
+            Mail::to($adminEmail)->send(new ContactInquiryMail($data));
+        } catch (\Throwable $e) {
+            \Log::error('Contact notification email failed to send', [
+                'to'    => $adminEmail,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         // Redirect to the dedicated thank-you URL so the submission registers as
         // a distinct pageview conversion (ad goals / analytics). The one-time flag
