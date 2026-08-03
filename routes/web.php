@@ -53,6 +53,7 @@ Route::controller(ContactController::class)->group(function () {
     Route::post('/contact-us', 'store')
         ->middleware('throttle:contact') // IP rate limiting — see AppServiceProvider
         ->name('contact.store'); // Process the form
+    Route::get('/thank-you', 'thankYou')->name('contact.thankyou'); // Post-submit confirmation (conversion tracking)
 });
 
 // CAPTCHA — refresh endpoint for the reusable <x-captcha /> component.

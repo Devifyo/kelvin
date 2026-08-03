@@ -37,6 +37,11 @@
             Contact Page
         </a>
 
+        <a href="{{ route('admin.thank-you-page') }}" class="nav-item {{ request()->routeIs('admin.thank-you-page') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Thank You Page
+        </a>
+
         <a href="{{ route('admin.about-page') }}" class="nav-item {{ request()->routeIs('admin.about-page') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             About Page
@@ -114,6 +119,11 @@
         </a>
 
         <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.25rem 1rem 0.4rem; font-weight: 800; font-family: -apple-system, sans-serif;">System</div>
+
+        <a href="{{ route('admin.cookie-banner') }}"  class="nav-item {{ request()->routeIs('admin.cookie-banner') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/><path d="M11 17v.01"/><path d="M7 14v.01"/></svg>
+            Cookie Banner
+        </a>
 
         <a href="{{ route('admin.app-settings') }}"  class="nav-item {{ request()->routeIs('admin.app-settings') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>

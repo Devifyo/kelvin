@@ -17,6 +17,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             SEO
         </button>
+        <button wire:click="$set('tab','analytics')" class="as-tab {{ $tab === 'analytics' ? 'as-tab-active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="4" width="3" height="14"/></svg>
+            Analytics
+        </button>
     </div>
 
     {{-- ── GENERAL ── --}}
@@ -352,25 +356,7 @@
                 </div>
             </div>
 
-            {{-- ── 4. Analytics & Tracking ── --}}
-            <div>
-                <h3 class="as-section-title">Analytics &amp; Tracking</h3>
-                <p class="as-hint" style="margin-bottom:.75rem">If both are set, only GTM is loaded (it handles GA4 internally).</p>
-                <div class="as-color-grid" style="gap:.75rem">
-                    <div class="as-field">
-                        <label class="as-label">Google Analytics 4 — Measurement ID</label>
-                        <input type="text" wire:model="seoGa4Id" class="as-input" placeholder="G-XXXXXXXXXX" maxlength="50" style="font-family:monospace" />
-                        @error('seoGa4Id') <span class="as-error">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="as-field">
-                        <label class="as-label">Google Tag Manager — Container ID</label>
-                        <input type="text" wire:model="seoGtmId" class="as-input" placeholder="GTM-XXXXXXX" maxlength="50" style="font-family:monospace" />
-                        @error('seoGtmId') <span class="as-error">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-            </div>
-
-            {{-- ── 5. Search Engine Verification ── --}}
+            {{-- ── 4. Search Engine Verification ── --}}
             <div>
                 <h3 class="as-section-title">Search Engine Verification</h3>
                 <p class="as-hint" style="margin-bottom:.75rem">Paste only the <strong>content value</strong> from the verification meta tag — not the full tag.</p>
@@ -534,6 +520,63 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
                     <span wire:loading.remove wire:target="resetStaticPages">Reset Pages</span>
                     <span wire:loading wire:target="resetStaticPages">Resetting…</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- ── ANALYTICS & TRACKING ── --}}
+    @if($tab === 'analytics')
+    <div class="as-card">
+        <div class="as-card-head">
+            <h2 class="as-card-title">Analytics &amp; Tracking</h2>
+            <p class="as-card-sub">Measurement and advertising tags. All tags respect the cookie banner (Google Consent Mode) — they fire only after the visitor consents.</p>
+        </div>
+        <div class="as-body" style="display:flex;flex-direction:column;gap:2rem;">
+
+            {{-- Google Analytics / Tag Manager --}}
+            <div>
+                <h3 class="as-section-title">Google Analytics &amp; Tag Manager</h3>
+                <p class="as-hint" style="margin-bottom:.75rem">If both are set, only GTM is loaded (it handles GA4 internally).</p>
+                <div class="as-color-grid" style="gap:.75rem">
+                    <div class="as-field">
+                        <label class="as-label">Google Analytics 4 — Measurement ID</label>
+                        <input type="text" wire:model="seoGa4Id" class="as-input" placeholder="G-XXXXXXXXXX" maxlength="50" style="font-family:monospace" />
+                        @error('seoGa4Id') <span class="as-error">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="as-field">
+                        <label class="as-label">Google Tag Manager — Container ID</label>
+                        <input type="text" wire:model="seoGtmId" class="as-input" placeholder="GTM-XXXXXXX" maxlength="50" style="font-family:monospace" />
+                        @error('seoGtmId') <span class="as-error">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </div>
+
+            {{-- Google Ads --}}
+            <div>
+                <h3 class="as-section-title">Google Ads</h3>
+                <div class="as-color-grid" style="gap:.75rem">
+                    <div class="as-field">
+                        <label class="as-label">Google Ads — Conversion ID</label>
+                        <input type="text" wire:model="seoGoogleAdsId" class="as-input" placeholder="AW-XXXXXXXXX" maxlength="50" style="font-family:monospace" />
+                        @error('seoGoogleAdsId') <span class="as-error">{{ $message }}</span> @enderror
+                        <span class="as-hint" style="display:block;margin-top:.3rem">Loads the Google Ads global site tag (gtag.js). Respects the cookie banner — fires only after consent.</span>
+                    </div>
+                    <div class="as-field">
+                        <label class="as-label">Google Ads — Conversion Label</label>
+                        <input type="text" wire:model="seoGoogleAdsConversionLabel" class="as-input" placeholder="AbC-D_efGhIjK" maxlength="80" style="font-family:monospace" />
+                        @error('seoGoogleAdsConversionLabel') <span class="as-error">{{ $message }}</span> @enderror
+                        <span class="as-hint" style="display:block;margin-top:.3rem">The label from your "Submit lead form" conversion action (the part after the slash). When set, a submission fires a conversion on the thank-you page with <strong>Enhanced Conversions for Leads</strong> — the visitor's email is hashed (SHA-256) server-side and sent only after cookie consent. Leave blank to disable.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="as-actions">
+                <button wire:click="saveSeo" wire:loading.attr="disabled" class="as-btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    <span wire:loading.remove wire:target="saveSeo">Save Analytics Settings</span>
+                    <span wire:loading wire:target="saveSeo">Saving…</span>
                 </button>
             </div>
         </div>

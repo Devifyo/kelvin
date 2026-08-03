@@ -53,6 +53,10 @@ class AppSettings extends Component
 
     public string $seoGtmId = '';
 
+    public string $seoGoogleAdsId = '';
+
+    public string $seoGoogleAdsConversionLabel = '';
+
     // ── SEO: Verification ─────────────────────────────────────────────────
     public string $seoGoogleVerify = '';
 
@@ -131,6 +135,8 @@ class AppSettings extends Component
         // Analytics
         $this->seoGa4Id = AppSetting::get('seo_ga4_id', '');
         $this->seoGtmId = AppSetting::get('seo_gtm_id', '');
+        $this->seoGoogleAdsId = AppSetting::get('seo_google_ads_id', '');
+        $this->seoGoogleAdsConversionLabel = AppSetting::get('seo_google_ads_conversion_label', '');
 
         // Verification
         $this->seoGoogleVerify = AppSetting::get('seo_google_verify', '');
@@ -355,6 +361,9 @@ class AppSettings extends Component
             'seoSchemaOrgName' => 'nullable|string|max:200',
             'seoGa4Id' => ['nullable', 'string', 'max:50', 'regex:/^G-[A-Z0-9]+$/i'],
             'seoGtmId' => ['nullable', 'string', 'max:50', 'regex:/^GTM-[A-Z0-9]+$/i'],
+            'seoGoogleAdsId' => ['nullable', 'string', 'max:50', 'regex:/^AW-[A-Z0-9]+$/i'],
+            // Conversion labels are case-sensitive and may include - and _.
+            'seoGoogleAdsConversionLabel' => ['nullable', 'string', 'max:80'],
             'seoGoogleVerify' => 'nullable|string|max:200',
             'seoBingVerify' => 'nullable|string|max:200',
             'robotsDisallowExtra' => 'nullable|string|max:2000',
@@ -381,6 +390,14 @@ class AppSettings extends Component
         // Analytics
         AppSetting::set('seo_ga4_id', strtoupper(trim($this->seoGa4Id)));
         AppSetting::set('seo_gtm_id', strtoupper(trim($this->seoGtmId)));
+        AppSetting::set('seo_google_ads_id', strtoupper(trim($this->seoGoogleAdsId)));
+        // Keep only the label part if a full "AW-123/LABEL" send_to was pasted.
+        // Do NOT uppercase — conversion labels are case-sensitive.
+        $adsLabel = trim($this->seoGoogleAdsConversionLabel);
+        if (str_contains($adsLabel, '/')) {
+            $adsLabel = trim(substr(strrchr($adsLabel, '/'), 1));
+        }
+        AppSetting::set('seo_google_ads_conversion_label', $adsLabel);
 
         // Verification
         AppSetting::set('seo_google_verify', trim($this->seoGoogleVerify));

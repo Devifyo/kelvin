@@ -35,6 +35,7 @@
         $_bingVerify     = AppSetting::get('seo_bing_verify', '');
         $_ga4Id          = AppSetting::get('seo_ga4_id', '');
         $_gtmId          = AppSetting::get('seo_gtm_id', '');
+        $_adsId          = AppSetting::get('seo_google_ads_id', '');
         $_schemaJobTitle = AppSetting::get('seo_schema_job_title') ?: 'Agile Consultant & Trainer, Ph.D.';
         $_schemaOrgName  = AppSetting::get('seo_schema_org_name')  ?: 'Kevin Thompson Ph.D. Consulting';
         // sameAs is how search and AI engines resolve WHICH "Kevin Thompson"
@@ -51,6 +52,29 @@
         $_pageUrl = url()->current();
     @endphp
 
+    {{-- Google Consent Mode v2 — MUST run before GTM/GA4 so ad & analytics
+         storage stay denied until the visitor accepts via the cookie banner.
+         Returning visitors who already accepted are granted immediately. --}}
+    @if($_gtmId || $_ga4Id || $_adsId)
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        (function () {
+            var m = document.cookie.match(/(?:^|; )cookie_consent=([^;]+)/);
+            var granted = m && decodeURIComponent(m[1]) === 'accepted' ? 'granted' : 'denied';
+            gtag('consent', 'default', {
+                ad_storage: granted,
+                ad_user_data: granted,
+                ad_personalization: granted,
+                analytics_storage: granted,
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                wait_for_update: 500
+            });
+        })();
+    </script>
+    @endif
+
     {{-- Google Tag Manager (head) --}}
     @if($_gtmId)
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ $_gtmId }}');</script>
@@ -62,6 +86,12 @@
     <meta name="keywords"    content="@yield('meta_keywords', 'Agile Hardware, Scrum, Embedded Systems, Agile Consulting, Software Engineering')">
     <meta name="author"      content="Dr. Kevin Thompson">
     <link rel="canonical"    href="{{ $_pageUrl }}" />
+
+    {{-- Robots: pages are indexable by default; a view may opt out (e.g. the
+         thank-you confirmation page) with @section('meta_robots', 'noindex, follow'). --}}
+    @hasSection('meta_robots')
+    <meta name="robots" content="@yield('meta_robots')">
+    @endif
 
     {{-- Search engine verification --}}
     @if($_googleVerify)
@@ -188,10 +218,26 @@
 
     @stack('schema')
 
-    {{-- Google Analytics 4 (only if no GTM — GTM handles GA4 via tag) --}}
-    @if($_ga4Id && !$_gtmId)
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $_ga4Id }}"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ $_ga4Id }}');</script>
+    {{-- Global site tag (gtag.js) — loaded once for any gtag-based IDs handled
+         outside GTM: GA4 (only when GTM is absent, since GTM loads GA4 itself)
+         and the Google Ads conversion tag. Consent Mode defaults (set above)
+         keep ad/analytics storage denied until the visitor accepts. --}}
+    @php
+        $_gtagIds = array_values(array_filter([
+            (! $_gtmId && $_ga4Id) ? $_ga4Id : null,
+            $_adsId ?: null,
+        ]));
+    @endphp
+    @if(!empty($_gtagIds))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $_gtagIds[0] }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        @foreach($_gtagIds as $_gid)
+        gtag('config', '{{ $_gid }}');
+        @endforeach
+    </script>
     @endif
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $_faviconUrl ?? '/apple-touch-icon.png' }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ $_faviconUrl ?? '/favicon-32x32.png' }}">
@@ -244,6 +290,8 @@
     </main>
 
     @include('layouts.partials.frontend.footer', ['appName' => $_appName])
+
+    @include('layouts.partials.frontend.cookie-consent')
 
     <script>
         /* sticky nav  */
