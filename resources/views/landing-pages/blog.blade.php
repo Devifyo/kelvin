@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Agile Hardware Insights — Blog | Kevin Thompson, Ph.D.')
-@section('meta_description', 'Practical articles on Agile hardware development, Scrum, Kanban, and Agile transformation by Dr. Kevin Thompson, Ph.D. — written for R&D and engineering leaders.')
+@section('title', 'Agile Hardware Insights - Blog | Kevin Thompson, Ph.D.')
+@section('meta_description', 'Practical articles on Agile hardware development, Scrum, Kanban, and Agile transformation by Dr. Kevin Thompson, Ph.D. - written for R&D and engineering leaders.')
 @section('meta_keywords', 'agile hardware blog, scrum hardware, agile transformation, embedded systems agile, Kevin Thompson, agile insights')
 @section('og_type', 'website')
 

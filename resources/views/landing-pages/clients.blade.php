@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Our Clients — Trusted By Industry Leaders | Kevin Thompson, Ph.D.')
+@section('title', 'Our Clients - Trusted By Industry Leaders | Kevin Thompson, Ph.D.')
 @section('meta_description', 'Dr. Kevin Thompson, Ph.D. has partnered with leading hardware, technology, and enterprise organizations worldwide. Browse the companies I have served.')
 @section('meta_keywords', 'kevin thompson clients, agile consulting clients, trusted by, hardware companies, agile transformation clients')
 @section('og_type', 'website')

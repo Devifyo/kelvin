@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Frequently Asked Questions — Agile Hardware Consulting & Training | Kevin Thompson, Ph.D.')
-@section('meta_description', 'Answers to common Agile, Scrum, hardware development, and consulting questions — from applying Scrum to hardware and regulated products to how engagements, training, and estimation work.')
+@section('title', 'Frequently Asked Questions - Agile Hardware Consulting & Training | Kevin Thompson, Ph.D.')
+@section('meta_description', 'Answers to common Agile, Scrum, hardware development, and consulting questions - from applying Scrum to hardware and regulated products to how engagements, training, and estimation work.')
 @section('meta_keywords', 'agile hardware faq, scrum for hardware, agile scrum questions, hardware development scrum, agile consulting questions, Kevin Thompson')
 @section('og_type', 'website')
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Agile & Scrum Training for Hardware Teams | Kevin Thompson, Ph.D.')
-@section('meta_description', 'Live, instructor-led Scrum and Agile classes for hardware, embedded, and R&D teams. Taught by Dr. Kevin Thompson — CSP, PMI-ACP, PMP-aligned curricula.')
+@section('meta_description', 'Live, instructor-led Scrum and Agile classes for hardware, embedded, and R&D teams. Taught by Dr. Kevin Thompson - CSP, PMI-ACP, PMP-aligned curricula.')
 @section('meta_keywords', 'agile training, scrum training, agile hardware training, hardware scrum, kanban training, agile portfolio management, Kevin Thompson')
 
 @push('styles')
