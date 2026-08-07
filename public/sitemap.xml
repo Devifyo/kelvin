@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kevinthompsonphd.com</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
@@ -25,59 +25,70 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/contact-us</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/faq</loc>
-        <lastmod>2026-08-03T16:42:04+00:00</lastmod>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-10</loc>
+        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/WV5kAc9PNMFq09LCNu9FgPcopmjkoD6Iou394RFX.jpg</image:loc>
+            <image:title>Thermo Fisher Scientific Lesson 10</image:title>
+            <image:caption>Lesson #10: When work is estimated in Person-Days, Velocity should also be measured and forecast in Person-Days. The most effective forecasting technique is a resource model that accounts for the actual availability of team members during the Sprint.</image:caption>
+        </image:image>
+    </url>
+    <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-9</loc>
-        <lastmod>2026-07-29T19:26:23+00:00</lastmod>
+        <lastmod>2026-08-06T16:29:26+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://kevinthompsonphd.com/storage/blog/featured/Oo4XM7NygKHvFKycTAg2ZYbwiTE7gesMsYCo9hHX.jpg</image:loc>
-            <image:title>Thermo Fisher Scientific: Lesson 9</image:title>
+            <image:title>Thermo Fisher Scientific Lesson 9</image:title>
             <image:caption>Lesson #9: Story Points depend on a shared understanding of the work being estimated. Because hardware teams are often composed of highly specialized experts, effort-based estimates such as Person-Days frequently provide a more practical alternative.</image:caption>
         </image:image>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-8</loc>
-        <lastmod>2026-07-29T19:26:23+00:00</lastmod>
+        <lastmod>2026-08-06T16:29:15+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
             <image:loc>https://kevinthompsonphd.com/storage/blog/featured/L4kEbtPHlVfpwIAKa7WUa46AvWIMKPRfwQczFszy.jpg</image:loc>
-            <image:title>Thermo Fisher Scientific: Lesson 8</image:title>
+            <image:title>Thermo Fisher Scientific Lesson 8</image:title>
             <image:caption>Lesson #8: Hardware organizations generally do not have a direct equivalent to the software Quality Assurance specialist who independently tests most Story deliverables. In many cases, the engineer who creates the deliverable is also the person best qualified to test it.</image:caption>
         </image:image>
     </url>
