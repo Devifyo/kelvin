@@ -116,6 +116,20 @@ class PageHeader extends Model
                 'subtitle'      => 'Expert perspectives on the unique challenges, methodologies, and intersection of Agile software and hardware development.',
             ],
         ],
+
+        'clients' => [
+            'label'        => 'Client Showcase',
+            'route'        => 'clients',
+            'kicker_class' => 'kicker',
+            'kicker_style' => null,
+            'has_subtitle' => true,
+            'defaults'     => [
+                'kicker'        => 'Our Clients',
+                'title_regular' => 'Trusted By',
+                'title_em'      => 'Industry Leaders',
+                'subtitle'      => 'Over the course of more than 100 engagements, I have partnered with leading hardware, technology, and enterprise organizations to deliver lasting Agile transformation.',
+            ],
+        ],
     ];
 
     protected static function booted(): void

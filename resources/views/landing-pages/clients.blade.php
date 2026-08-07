@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Our Clients — Trusted By Industry Leaders | Kevin Thompson, Ph.D.')
-@section('meta_description', 'Dr. Kevin Thompson, Ph.D. has partnered with leading hardware, technology, and enterprise organizations worldwide. Browse the companies we have served.')
+@section('meta_description', 'Dr. Kevin Thompson, Ph.D. has partnered with leading hardware, technology, and enterprise organizations worldwide. Browse the companies I have served.')
 @section('meta_keywords', 'kevin thompson clients, agile consulting clients, trusted by, hardware companies, agile transformation clients')
 @section('og_type', 'website')
 
@@ -151,13 +151,7 @@
 
 @section('content')
 
-<section class="page-header">
-    <div class="header-content reveal">
-        <div class="kicker">Our Clients</div>
-        <h1 class="page-title">Trusted By <em>Industry Leaders</em></h1>
-        <p class="page-subtitle">Over the course of more than 100 engagements, we have partnered with leading hardware, technology, and enterprise organizations to deliver lasting Agile transformation.</p>
-    </div>
-</section>
+<x-page-header page="clients" />
 
 <section class="clients-section">
     <div class="clients-container"
@@ -171,7 +165,7 @@
 
         <div class="clients-controls reveal rv1">
             <h2 class="controls-title">
-                Companies We've Served
+                Companies I've Served
             </h2>
 
             {{-- Instant client-side search. Falls back to a server GET for no-JS. --}}
@@ -214,7 +208,7 @@
         {{-- Empty state: live query matches nothing (only when there ARE clients to filter) --}}
         <div class="no-results" x-show="shown === 0 && names.length > 0" x-cloak>
             <h3>No companies found.</h3>
-            <p>We couldn't find any companies matching “<span x-text="q"></span>”.</p>
+            <p>I couldn't find any companies matching “<span x-text="q"></span>”.</p>
             <button type="button" class="clear-search-btn" @click="q = ''">Clear search</button>
         </div>
 
