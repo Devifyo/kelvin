@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kevinthompsonphd.com</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
@@ -25,43 +25,77 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/contact-us</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/faq</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-conclusion-did-scrum-work</loc>
+        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/lJheD0zPe5t96M3fvNIb6ulYHWVeIuyLCYPbO7pi.jpg</image:loc>
+            <image:title>Thermo Fisher Scientific: Conclusion - Did Scrum Work?</image:title>
+            <image:caption>The most important lesson from Thermo Fisher Scientific was not that hardware development differs from software development. We already knew that. The important lesson was that Scrum can work remarkably well in a hardware environment once those differences are acknowledged and accommodated.
+</image:caption>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-12</loc>
+        <lastmod>2026-08-20T16:59:29+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/u0mm9KEj1dScD4KX0NaW56TOuUUww8tHDnrMw8ed.jpg</image:loc>
+            <image:title>Thermo Fisher Scientific Lesson 12</image:title>
+            <image:caption>Lesson #12: In hardware development, cross-functional teams and swarming are often competing objectives. When forced to choose, organizations should favor cross-functional product teams over discipline-based teams designed to maximize swarming.</image:caption>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-11</loc>
+        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://kevinthompsonphd.com/storage/blog/featured/43Hm1jb112PuUl34nAzO3nJhWrwes3jH0zZVla41.jpg</image:loc>
+            <image:title>Thermo Fisher Scientific Lesson 11</image:title>
+            <image:caption>Lesson #11: Hardware Sprint Planning must account for both team capacity and individual capacity. A Sprint is feasible only if neither the team nor any individual specialist is overloaded.</image:caption>
+        </image:image>
+    </url>
+    <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-10</loc>
-        <lastmod>2026-08-06T16:33:34+00:00</lastmod>
+        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -72,7 +106,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-9</loc>
-        <lastmod>2026-08-06T16:29:26+00:00</lastmod>
+        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -83,7 +117,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-8</loc>
-        <lastmod>2026-08-06T16:29:15+00:00</lastmod>
+        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -94,7 +128,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-7</loc>
-        <lastmod>2026-07-29T19:26:23+00:00</lastmod>
+        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
