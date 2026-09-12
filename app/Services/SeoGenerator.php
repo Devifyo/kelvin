@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Service;
 use App\Livewire\Admin\AppSettings;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SeoGenerator
 {
@@ -40,7 +41,7 @@ class SeoGenerator
         $lines[] = '';
         $lines[] = 'Sitemap: ' . url('/sitemap.xml');
 
-        file_put_contents(public_path('robots.txt'), implode("\n", $lines) . "\n");
+        static::write('robots.txt', implode("\n", $lines) . "\n");
     }
 
     public static function generateSitemap(): void
@@ -162,7 +163,7 @@ class SeoGenerator
 
         $xml .= '</urlset>';
 
-        file_put_contents(public_path('sitemap.xml'), $xml);
+        static::write('sitemap.xml', $xml);
     }
 
     public static function generateLlms(): void
@@ -188,7 +189,28 @@ class SeoGenerator
 
         $content = view('seo.llms', compact('appName', 'siteDesc', 'extra', 'posts', 'trainings', 'papers'))->render();
 
-        file_put_contents(public_path('llms.txt'), $content);
+        static::write('llms.txt', $content);
+    }
+
+    /**
+     * Write a generated file into public/. A failed write (typically a file
+     * left owned by root after a deploy or git checkout) is logged, never
+     * thrown — an admin saving a resource must not get a 500 because the
+     * sitemap could not be refreshed.
+     */
+    private static function write(string $file, string $contents): void
+    {
+        $path = public_path($file);
+
+        try {
+            $ok = @file_put_contents($path, $contents);
+        } catch (\Throwable $e) {
+            $ok = false;
+        }
+
+        if ($ok === false) {
+            Log::warning("SeoGenerator: could not write {$path} — check that the web server user can write it. Run `php artisan seo:generate` after fixing permissions.");
+        }
     }
 
     private static function staticPages(): array

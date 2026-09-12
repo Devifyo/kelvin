@@ -128,3 +128,15 @@ docker exec kevin_app php artisan test
 - Writing the long descriptions and SEO copy for the 15 existing resources (client will supply).
 - Creating the book resource itself (category "Books", Amazon URL, cover image) — the admin supports it now.
 - Optional: a "Books" category and cover-image upload can be added from the admin without code changes.
+
+## 8. Post-implementation fix (2026-09-12)
+
+Starring a resource threw a 500: `file_put_contents(public/sitemap.xml): Permission denied`.
+Cause: the Paper save hook now regenerates the sitemap (previously llms only), and the three
+generated files were left owned by root after a `git checkout`, while PHP-FPM runs as `www-data`.
+
+- Environment: `chown www-data:www-data` + `chmod 664` on `public/{robots.txt,sitemap.xml,llms.txt}`.
+- Code: `SeoGenerator::write()` now logs a warning instead of throwing, so an admin save can never
+  500 because a generated file is unwritable. Fix permissions and run `seo:generate` if you see
+  that warning in `storage/logs/laravel.log`.
+- On production, make sure those three files are writable by the web server user after deploy.
