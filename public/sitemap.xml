@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://kevinthompsonphd.com</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <image:image>
@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/about-kevin-thompson</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <image:image>
@@ -25,43 +25,43 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-consulting-services</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/podcasts-webinars</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/contact-us</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/faq</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-conclusion-did-scrum-work</loc>
-        <lastmod>2026-08-28T16:17:45+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -73,7 +73,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-12</loc>
-        <lastmod>2026-08-20T16:59:29+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -84,7 +84,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-11</loc>
-        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -95,7 +95,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-10</loc>
-        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -106,7 +106,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-9</loc>
-        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -117,7 +117,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-8</loc>
-        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -128,7 +128,7 @@
     </url>
     <url>
         <loc>https://kevinthompsonphd.com/agile-insights-blog/thermo-fisher-scientific-lesson-7</loc>
-        <lastmod>2026-08-13T16:19:27+00:00</lastmod>
+        <lastmod>2026-08-28T16:17:51+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
         <image:image>
@@ -288,5 +288,107 @@
         <lastmod>2026-05-05T19:59:53+00:00</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/executive-briefing-modernizing-hardware-product-development</loc>
+        <lastmod>2026-09-12T01:49:38+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/common-pathologies-in-hardware-product-development-and-what-to-do-about-them</loc>
+        <lastmod>2026-09-04T18:50:59+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/eleven-lessons-learned-about-agile-hardware-development</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agilevox-scrum-for-hardware</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/plantronics-case-study</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/bird-technologies-case-study</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/a-real-release-planning-experience</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agilent-case-study</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agile-processes-for-hardware-development</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agile-development-for-medical-products</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agile-scrum-and-hitting-the-date</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/the-price-of-uncertainty</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/the-agile-pmo</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/recipes-for-agile-governance-in-the-enterprise-rage</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/the-agile-hardware-research-project</loc>
+        <lastmod>2026-09-04T18:48:40+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/agile-for-hardware-a-briefing-to-gartner-inc</loc>
+        <lastmod>2026-07-14T17:23:21+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://kevinthompsonphd.com/agile-hardware-papers-and-presentations/scrum-for-hardware-conference-keynote</loc>
+        <lastmod>2026-07-14T17:23:50+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
     </url>
 </urlset>
