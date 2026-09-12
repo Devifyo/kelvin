@@ -109,6 +109,16 @@ Do **not** reintroduce per-page hardcoded `<section class="page-header">` markup
 not add a second editing surface for the same copy (About's header used to live in two
 places — that was consolidated deliberately).
 
+## Resource Library (papers, case studies, presentations, books)
+
+Public index: `/agile-hardware-papers-and-presentations` (route `papers`, opens on the **Featured**
+tab; falls back to All Documents when nothing is featured). Every entry has its own page at
+`/agile-hardware-papers-and-presentations/{slug}` (route `papers.show`) — cards link there, never
+straight to the PDF. Model is still `App\Models\Paper` (`papers` table); `resource_type` is
+`document` (uploaded file), `book` (Amazon link) or `link` (website). Slugs auto-generate on
+create; renaming a slug changes a public URL. Detail pages are in `sitemap.xml` and `llms.txt`.
+Design notes: [tasks/2026-09-10-resource-library.md](tasks/2026-09-10-resource-library.md).
+
 ## Admin panel conventions
 
 - **Never use native `confirm()`, `alert()`, or `wire:confirm`.** All confirmations use

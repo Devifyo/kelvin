@@ -156,8 +156,13 @@ class PaperSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
+            // DatabaseSeeder mutes model events, so the auto-slug hook does not
+            // run here — every resource needs a slug for its public page.
+            $item['slug'] = $item['slug'] ?? Str::slug($item['title']);
+            $item['resource_type'] = $item['resource_type'] ?? Paper::TYPE_DOCUMENT;
+
             Paper::updateOrCreate(
-                ['title' => $item['title']], 
+                ['title' => $item['title']],
                 $item
             );
         }

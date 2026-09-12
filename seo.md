@@ -105,6 +105,7 @@ Some pages pull title/description from the database so admins can edit without t
 |---|---|---|
 | `Post` | `meta_title`, `meta_description`, `meta_keywords`, `featured_image`, `excerpt`, `content`, `published_at` | [blog-show.blade.php](resources/views/landing-pages/blog-show.blade.php) (Article schema reads `published_at`, `updated_at`, `author->name`, `category->name`). |
 | `Service` | `meta_title`, `meta_description`, `meta_keywords`, `short_description`, `featured_image`, `length`, `audience` | [training-show.blade.php](resources/views/landing-pages/training-show.blade.php) (Course schema reads `length`, `audience`, etc.). |
+| `Paper` (Resource Library) | `slug`, `meta_title`, `meta_description`, `meta_keywords`, `description` (card), `long_description` (page body, falls back to `description`), `featured_image`, `resource_type`, `external_url`, `is_featured` | [paper-show.blade.php](resources/views/landing-pages/paper-show.blade.php). `seoTitle()` builds "Title — Category \| Kevin Thompson, Ph.D." when no meta title is set. Edited in Admin → Resource Library. |
 | `WelcomePageContent` | `seo_title`, `seo_description`, `seo_keywords` | [welcome.blade.php](resources/views/landing-pages/welcome.blade.php). |
 | `AboutPageContent` | `seo_title`, `seo_description`, `seo_keywords`, `profile_image` | [about.blade.php](resources/views/landing-pages/about.blade.php). |
 
@@ -189,7 +190,8 @@ The layout has a `@stack('schema')` directive in `<head>` available for future p
 | `/agile-training-classes/{slug}` | `Course` with `hasCourseInstance`, `offers`, provider/instructor via `@id` |
 | `/agile-insights-blog` | `Blog` (author/publisher via `@id`) |
 | `/agile-insights-blog/{slug}` | `Article` (datePublished/dateModified/wordCount/articleSection/image — all from the `Post` model) |
-| `/agile-hardware-papers-and-presentations` | `CollectionPage` |
+| `/agile-hardware-papers-and-presentations` | `CollectionPage` with an `ItemList` `mainEntity` naming **every** active resource URL (the page itself renders only the Featured tab by default) |
+| `/agile-hardware-papers-and-presentations/{slug}` | `DigitalDocument` (+ `encoding` MediaObject → the PDF) for documents, `Book` (+ `offers.url` → Amazon) for books, `WebPage` for links; plus `BreadcrumbList` in `<head>` |
 | `/podcasts-webinars` | `CollectionPage` |
 | `/contact-us` | `ContactPage` |
 
@@ -268,7 +270,7 @@ When to run manually:
 |---|---|---|
 | `robots.txt` | `User-agent: *`, `Disallow: /admin /login /livewire /_ignition` (hardcoded), plus optional `seo_robots_disallow_extra`, plus the `Sitemap:` directive pointing at the absolute non-www URL. | Regenerated on AppSetting change. |
 | `sitemap.xml` | Static pages from `seo_sitemap_static_pages` AppSetting (or default list), plus published `Post` URLs (with their `featured_image` as `<image:image>`), plus active training `Service` URLs (with their `featured_image`), plus the headshot for `/` and `/about-kevin-thompson`. Uses the `xmlns:image` namespace. | Regenerated on Post/Service save and AppSetting save. |
-| `llms.txt` | The Blade view at [resources/views/seo/llms.blade.php](resources/views/seo/llms.blade.php) renders site description + a structured list of recent posts, training classes, and active papers. | Regenerated on Post/Service/Paper save and AppSetting save. |
+| `llms.txt` | The Blade view at [resources/views/seo/llms.blade.php](resources/views/seo/llms.blade.php) renders site description + a structured list of recent posts, training classes, and every active Resource Library entry (each linked to its own page). | Regenerated on Post/Service/Paper save and AppSetting save. |
 
 ### Routes that serve the files
 

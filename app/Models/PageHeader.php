@@ -57,15 +57,15 @@ class PageHeader extends Model
         ],
 
         'papers' => [
-            'label'        => 'Papers & Presentations',
+            'label'        => 'Resource Library',
             'route'        => 'papers',
             'kicker_class' => 'kicker',
             'kicker_style' => null,
             'has_subtitle' => true,
             'defaults'     => [
                 'kicker'        => 'Knowledge & Research',
-                'title_regular' => 'Papers &',
-                'title_em'      => 'Presentations',
+                'title_regular' => 'Resource',
+                'title_em'      => 'Library',
                 'subtitle'      => 'A comprehensive collection of insights, methodologies, and findings from our extensive engagements in Agile hardware and software development.',
             ],
         ],

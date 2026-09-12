@@ -81,9 +81,9 @@ class AppServiceProvider extends ServiceProvider
         Service::saved($sitemapAndLlms);
         Service::deleted($sitemapAndLlms);
 
-        // Papers affect llms only
-        Paper::saved(fn()   => SeoGenerator::generateLlms());
-        Paper::deleted(fn() => SeoGenerator::generateLlms());
+        // Resource Library entries have their own public pages → sitemap + llms
+        Paper::saved($sitemapAndLlms);
+        Paper::deleted($sitemapAndLlms);
 
         // SEO settings affect all three files
         AppSetting::saved(function (AppSetting $setting) {

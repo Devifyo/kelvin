@@ -13,7 +13,7 @@
         <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') ? 'active' : '' }}">Consulting & Training</a>
         
         {{-- Resources / Proof of Expertise --}}
-        <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers') ? 'active' : '' }}">Papers</a>
+        <a href="{{ route('papers') }}" class="{{ request()->routeIs('papers*') ? 'active' : '' }}">Resource Library</a>
         <a href="{{ route('podcasts-webinars') }}" class="{{ request()->routeIs('podcasts-webinars') ? 'active' : '' }}">Podcasts & Webinars</a>
         <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'active' : '' }}">Blog</a>
         <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a>

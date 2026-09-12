@@ -452,6 +452,11 @@
                             <span class="as-toggle-label">Include training classes</span>
                             <span class="as-sp-count">{{ $trainingClasses->count() }} classes</span>
                         </label>
+                        <label class="as-toggle-row">
+                            <input type="checkbox" wire:model="sitemapPapers" class="as-toggle" />
+                            <span class="as-toggle-label">Include Resource Library pages</span>
+                            <span class="as-sp-count">{{ $papers->count() }} resources</span>
+                        </label>
                     </div>
                 </div>
 
@@ -460,7 +465,7 @@
                     <summary class="as-sp-preview-summary">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                         Sitemap preview — <strong>{{ $totalSitemap }} total URLs</strong>
-                        <span class="as-sp-count">{{ $staticCount }} static · {{ $blogPosts->count() }} blog · {{ $trainingClasses->count() }} training</span>
+                        <span class="as-sp-count">{{ $staticCount }} static · {{ $blogPosts->count() }} blog · {{ $trainingClasses->count() }} training · {{ $papers->count() }} resources</span>
                     </summary>
                     <div class="as-sp-preview-body">
                         @foreach(array_filter($sitemapStaticPages, fn($p) => $p['enabled'] ?? true) as $p)
@@ -481,6 +486,13 @@
                         <div class="as-sp-preview-row as-sp-preview-training">
                             <span class="as-sp-preview-badge">training</span>
                             <code>/agile-training-classes/{{ $class->slug }}</code>
+                        </div>
+                        @endforeach
+
+                        @foreach($papers as $paper)
+                        <div class="as-sp-preview-row as-sp-preview-training">
+                            <span class="as-sp-preview-badge">resource</span>
+                            <code>/agile-hardware-papers-and-presentations/{{ $paper->slug }}</code>
                         </div>
                         @endforeach
                     </div>

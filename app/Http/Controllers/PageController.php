@@ -80,12 +80,17 @@ class PageController extends Controller
 
     public function papers(Request $request)
     {
-        $currentFilter = $request->query('category', 'all');
-        $data = $this->contentService->getPapersData($currentFilter);
+        $data = $this->contentService->getPapersData($request->query('category'));
 
-        return view('landing-pages.papers', array_merge($data, [
-            'currentFilter' => $currentFilter,
-        ]));
+        return view('landing-pages.papers', $data);
+    }
+
+    public function showPaper(string $slug)
+    {
+        $paper   = $this->contentService->getPaperBySlug($slug);
+        $related = $this->contentService->getRelatedPapers($paper);
+
+        return view('landing-pages.paper-show', compact('paper', 'related'));
     }
 
     public function blog(Request $request)

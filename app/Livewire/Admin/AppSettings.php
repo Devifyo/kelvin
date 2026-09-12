@@ -71,6 +71,8 @@ class AppSettings extends Component
 
     public bool $sitemapTraining = true;
 
+    public bool $sitemapPapers = true;
+
     public string $llmsDescription = '';
 
     public string $llmsExtra = '';
@@ -150,6 +152,7 @@ class AppSettings extends Component
         $this->sitemapStaticPages = $pagesJson ? json_decode($pagesJson, true) : self::DEFAULT_STATIC_PAGES;
         $this->sitemapBlog = AppSetting::get('seo_sitemap_blog', '1') === '1';
         $this->sitemapTraining = AppSetting::get('seo_sitemap_training', '1') === '1';
+        $this->sitemapPapers = AppSetting::get('seo_sitemap_papers', '1') === '1';
         $this->llmsDescription = AppSetting::get('seo_llms_description')
             ?: 'Kevin Thompson Ph.D. provides expert agile consulting, training, and research for hardware development teams. Specializing in Scrum, SAFe, Kanban, and Lean methodologies applied to complex hardware and software engineering environments.';
         $this->llmsExtra = AppSetting::get('seo_llms_extra', '');
@@ -411,6 +414,7 @@ class AppSettings extends Component
         AppSetting::set('seo_sitemap_static_pages', json_encode($pages));
         AppSetting::set('seo_sitemap_blog', $this->sitemapBlog ? '1' : '0');
         AppSetting::set('seo_sitemap_training', $this->sitemapTraining ? '1' : '0');
+        AppSetting::set('seo_sitemap_papers', $this->sitemapPapers ? '1' : '0');
         AppSetting::set('seo_llms_description', trim($this->llmsDescription));
         AppSetting::set('seo_llms_extra', trim($this->llmsExtra));
 
@@ -461,13 +465,18 @@ class AppSettings extends Component
             ? Service::where('type', 'training')->where('is_active', true)->orderBy('sort_order')->get(['title', 'slug'])
             : collect();
 
+        $papers = $this->sitemapPapers
+            ? \App\Models\Paper::where('is_active', true)->orderBy('sort_order')->get(['title', 'slug'])
+            : collect();
+
         $staticCount = count(array_filter($this->sitemapStaticPages, fn ($p) => $p['enabled'] ?? true));
-        $totalSitemap = $staticCount + $blogPosts->count() + $trainingClasses->count();
+        $totalSitemap = $staticCount + $blogPosts->count() + $trainingClasses->count() + $papers->count();
 
         return view('livewire.admin.app-settings', [
             'previewColors' => AppSetting::resolvedColors(),
             'blogPosts' => $blogPosts,
             'trainingClasses' => $trainingClasses,
+            'papers' => $papers,
             'staticCount' => $staticCount,
             'totalSitemap' => $totalSitemap,
         ]);

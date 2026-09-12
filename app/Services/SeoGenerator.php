@@ -107,6 +107,28 @@ class SeoGenerator
                 });
         }
 
+        if (AppSetting::get('seo_sitemap_papers', '1') === '1') {
+            Paper::where('is_active', true)
+                ->orderBy('sort_order')
+                ->get(['slug', 'title', 'description', 'featured_image', 'updated_at'])
+                ->each(function ($paper) use (&$urls) {
+                    $entry = [
+                        'loc'        => url('/agile-hardware-papers-and-presentations/' . $paper->slug),
+                        'lastmod'    => $paper->updated_at->toAtomString(),
+                        'changefreq' => 'monthly',
+                        'priority'   => '0.6',
+                    ];
+                    if (! empty($paper->featured_image)) {
+                        $entry['images'][] = [
+                            'loc'     => url(\Illuminate\Support\Facades\Storage::url($paper->featured_image)),
+                            'title'   => $paper->title,
+                            'caption' => trim(strip_tags((string) $paper->description)) ?: $paper->title,
+                        ];
+                    }
+                    $urls[] = $entry;
+                });
+        }
+
         $seen = [];
         $urls = array_filter($urls, function ($url) use (&$seen) {
             if (in_array($url['loc'], $seen, true)) return false;
@@ -159,9 +181,10 @@ class SeoGenerator
             ->orderBy('sort_order')
             ->get(['title', 'slug', 'short_description']);
 
-        $papers = Paper::where('is_active', true)
+        $papers = Paper::with('category')
+            ->where('is_active', true)
             ->orderBy('sort_order')
-            ->get(['title', 'description', 'sub_category']);
+            ->get(['id', 'title', 'slug', 'description', 'sub_category', 'category_id', 'resource_type', 'external_url', 'is_featured']);
 
         $content = view('seo.llms', compact('appName', 'siteDesc', 'extra', 'posts', 'trainings', 'papers'))->render();
 

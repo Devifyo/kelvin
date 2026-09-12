@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Papers & Presentations | ' . config('app.name'))
-@section('meta_description', 'Peer-reviewed papers, conference talks, and case studies on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.')
-@section('meta_keywords', 'agile hardware research, scrum case studies, embedded systems agile, agile transformation papers, Kevin Thompson')
+@section('title', 'Agile Hardware Resource Library: Papers, Case Studies & Presentations | ' . config('app.name'))
+@section('meta_description', 'Resource Library of white papers, case studies, conference presentations, and books on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.')
+@section('meta_keywords', 'agile hardware research, scrum case studies, embedded systems agile, agile transformation papers, agile hardware white papers, Kevin Thompson')
 @section('og_type', 'website')
 
 @push('styles')
@@ -20,55 +20,68 @@
 
 <x-page-header page="papers" />
 
-{{-- DYNAMIC SERVER-SIDE FILTER MENU --}}
+{{-- DYNAMIC SERVER-SIDE FILTER MENU — Featured is the default landing view --}}
 <div class="filter-container reveal rv1">
-    <div class="filter-menu">
-        <a href="{{ route('papers', ['category' => 'all']) }}" 
-           class="filter-btn {{ $currentFilter === 'all' ? 'active' : '' }}">
+    <nav class="filter-menu" aria-label="Resource categories">
+        @if($hasFeatured)
+            <a href="{{ route('papers') }}"
+               class="filter-btn {{ $currentFilter === 'featured' ? 'active' : '' }}"
+               @if($currentFilter === 'featured') aria-current="page" @endif>
+               Featured
+            </a>
+        @endif
+
+        <a href="{{ route('papers', ['category' => 'all']) }}"
+           class="filter-btn {{ $currentFilter === 'all' ? 'active' : '' }}"
+           @if($currentFilter === 'all') aria-current="page" @endif>
            All Documents
         </a>
-        
+
         @foreach($categories as $cat)
-            <a href="{{ route('papers', ['category' => $cat->slug]) }}" 
-               class="filter-btn {{ $currentFilter === $cat->slug ? 'active' : '' }}">
+            <a href="{{ route('papers', ['category' => $cat->slug]) }}"
+               class="filter-btn {{ $currentFilter === $cat->slug ? 'active' : '' }}"
+               @if($currentFilter === $cat->slug) aria-current="page" @endif>
                {{ $cat->name }}
             </a>
         @endforeach
-    </div>
+    </nav>
 </div>
 
 <section class="content-section">
     <div class="papers-grid" id="papers-container">
 
-        {{-- DYNAMIC CARDS --}}
+        {{-- DYNAMIC CARDS — each card links to the resource's own page, never straight to the file --}}
         @forelse($papers as $paper)
-            <div class="paper-card">
+            <article class="paper-card {{ $paper->is_featured ? 'is-featured' : '' }}">
                 <div class="paper-meta">
                     <span class="paper-category-tag">{{ $paper->category?->name ?? 'Document' }}</span>
                     {{ $paper->sub_category }}
+                    @if($paper->is_featured)
+                        <span class="paper-featured-badge" title="Featured resource">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            Featured
+                        </span>
+                    @endif
                 </div>
-                <h2 class="paper-title">{{ $paper->title }}</h2>
-                
+                <h2 class="paper-title">
+                    <a href="{{ route('papers.show', $paper->slug) }}" class="paper-title-link">{{ $paper->title }}</a>
+                </h2>
+
                 {{-- Unescaped output so TinyMCE HTML renders correctly --}}
                 <div class="paper-desc">
                     {!! $paper->description !!}
                 </div>
-                
-                @if($paper->file_path)
-                <a href="{{ $paper->file_url }}" target="_blank" download class="download-btn">
-                    Download PDF
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+
+                <a href="{{ route('papers.show', $paper->slug) }}" class="download-btn" aria-label="Open the resource page for {{ $paper->title }}">
+                    <span>{{ $paper->is_book ? 'About the Book' : 'View Resource' }}</span>
+                    <span class="paper-type-hint">{{ $paper->type_label }}@if($paper->file_size_label) &middot; {{ $paper->file_size_label }}@endif</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
-                @else
-                <a href="#" class="download-btn" style="opacity: 0.5; pointer-events: none;">
-                    File Pending
-                </a>
-                @endif
-            </div>
+            </article>
         @empty
             {{-- SERVER-SIDE NO RESULTS MESSAGE --}}
             <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: var(--white); border: 1px dashed var(--ivory3);">
-                <h3>No documents found.</h3>
+                <h3>No resources found.</h3>
                 <p style="color: var(--muted);">Please try selecting a different category.</p>
             </div>
         @endforelse
@@ -79,18 +92,29 @@
 @endsection
 
 @push('scripts')
-{{-- Page-level JSON-LD: Research papers collection — author/publisher by @id --}}
+{{-- Page-level JSON-LD: the Resource Library collection. The ItemList carries EVERY active
+     resource (not just the rendered tab) so crawlers discover all resource URLs from here. --}}
 @php
     $_papersJsonLd = json_encode([
         '@context'    => 'https://schema.org',
         '@type'       => 'CollectionPage',
-        'name'        => 'Agile Hardware Research Papers & Presentations',
-        'description' => 'Peer-reviewed papers, conference talks, and case studies on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.',
-        'url'         => url()->current(),
+        'name'        => 'Agile Hardware Resource Library — Research Papers, Case Studies & Presentations',
+        'description' => 'White papers, case studies, conference presentations, and books on Agile hardware development and Scrum at scale by Dr. Kevin Thompson, Ph.D.',
+        'url'         => route('papers'),
         'author'      => ['@id' => url('/') . '/#person'],
         'publisher'   => ['@id' => url('/') . '/#organization'],
         'about'       => ['Agile hardware development', 'Embedded systems', 'Scrum', 'Agile transformation'],
         'inLanguage'  => 'en-US',
+        'mainEntity'  => [
+            '@type'           => 'ItemList',
+            'numberOfItems'   => $allPapers->count(),
+            'itemListElement' => $allPapers->values()->map(fn ($p, $i) => [
+                '@type'    => 'ListItem',
+                'position' => $i + 1,
+                'name'     => $p->title,
+                'url'      => route('papers.show', $p->slug),
+            ])->all(),
+        ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 @endphp
 <script type="application/ld+json">{!! $_papersJsonLd !!}</script>

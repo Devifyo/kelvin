@@ -30,21 +30,77 @@ class FrontendContentService
         return Service::active()->training()->where('slug', $slug)->firstOrFail();
     }
 
-    public function getPapersData(string $filter = 'all'): array
+    /**
+     * Data for the Resource Library index.
+     *
+     * The default view is "featured". If nothing is featured yet the page
+     * falls back to "all" (and hides the Featured tab) so the client can never
+     * publish an empty landing view.
+     */
+    public function getPapersData(?string $filter = null): array
     {
         $categories = Category::where('type', 'paper')
             ->whereHas('papers', fn ($q) => $q->where('is_active', true))
             ->orderBy('name')
             ->get();
 
+        $hasFeatured = Paper::active()->featured()->exists();
+
+        $filter = $filter ?: 'featured';
+        if ($filter === 'featured' && ! $hasFeatured) {
+            $filter = 'all';
+        }
+
         $papers = Paper::with('category')
-            ->where('is_active', true)
-            ->when($filter !== 'all', fn ($query) => $query->whereHas('category', fn ($q) => $q->where('slug', $filter))
+            ->active()
+            ->when($filter === 'featured', fn ($query) => $query->featured())
+            ->when(! in_array($filter, ['all', 'featured'], true), fn ($query) => $query->whereHas('category', fn ($q) => $q->where('slug', $filter))
             )
-            ->orderBy('sort_order')
+            ->ordered()
             ->get();
 
-        return compact('categories', 'papers');
+        // Every active resource, for the CollectionPage ItemList — crawlers see
+        // all resource URLs no matter which tab is rendered.
+        $allPapers = Paper::active()->ordered()->get(['id', 'title', 'slug']);
+
+        return [
+            'categories'    => $categories,
+            'papers'        => $papers,
+            'allPapers'     => $allPapers,
+            'hasFeatured'   => $hasFeatured,
+            'currentFilter' => $filter,
+        ];
+    }
+
+    public function getPaperBySlug(string $slug): Model
+    {
+        return Paper::with('category')->active()->where('slug', $slug)->firstOrFail();
+    }
+
+    /** Up to $limit other active resources, same category first. */
+    public function getRelatedPapers(Paper $paper, int $limit = 3): Collection
+    {
+        $related = Paper::with('category')
+            ->active()
+            ->where('id', '!=', $paper->id)
+            ->where('category_id', $paper->category_id)
+            ->ordered()
+            ->limit($limit)
+            ->get();
+
+        if ($related->count() < $limit) {
+            $more = Paper::with('category')
+                ->active()
+                ->where('id', '!=', $paper->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->orderByDesc('is_featured')
+                ->ordered()
+                ->limit($limit - $related->count())
+                ->get();
+            $related = $related->concat($more);
+        }
+
+        return $related;
     }
 
     public function getBlogPosts(?string $search, int $perPage = 9): LengthAwarePaginator

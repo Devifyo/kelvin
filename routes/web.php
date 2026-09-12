@@ -29,8 +29,9 @@ Route::controller(PageController::class)->group(function () {
     // Individual class detail pages remain (linked from the Services page).
     Route::get('/agile-training-classes/{slug}', 'training')->name('training');
     
-    // Papers & Presentations (Library)
+    // Resource Library (index) + dedicated resource pages
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');
+    Route::get('/agile-hardware-papers-and-presentations/{slug}', 'showPaper')->name('papers.show');
 
     // Previous Clients showcase
     Route::get('/clients', 'clients')->name('clients');

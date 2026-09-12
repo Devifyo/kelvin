@@ -19,7 +19,7 @@
     @php
         // "Resources" groups the proof-of-expertise pages — including the FAQ hub —
         // so the primary nav stays short and the FAQ is reachable from the top bar.
-        $__resActive = request()->routeIs('papers')
+        $__resActive = request()->routeIs('papers*')
             || request()->routeIs('podcasts-webinars')
             || request()->routeIs('blog*')
             || request()->routeIs('faq');
@@ -36,7 +36,7 @@
                 <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="nav-dd-menu" role="menu">
-                <a href="{{ route('papers') }}" role="menuitem" class="{{ request()->routeIs('papers') ? 'active' : '' }}">Papers &amp; Presentations</a>
+                <a href="{{ route('papers') }}" role="menuitem" class="{{ request()->routeIs('papers*') ? 'active' : '' }}">Resource Library</a>
                 <a href="{{ route('podcasts-webinars') }}" role="menuitem" class="{{ request()->routeIs('podcasts-webinars') ? 'active' : '' }}">Podcasts &amp; Webinars</a>
                 <a href="{{ route('blog') }}" role="menuitem" class="{{ request()->routeIs('blog*') ? 'active' : '' }}">Blog</a>
                 <a href="{{ route('faq') }}" role="menuitem" class="{{ request()->routeIs('faq') ? 'active' : '' }}">FAQ</a>
@@ -63,7 +63,7 @@
 
     {{-- Resources group --}}
     <div class="drawer-group-label">Resources</div>
-    <a href="{{ route('papers') }}" class="drawer-sub {{ request()->routeIs('papers') ? 'active' : '' }}" onclick="closeDrawer()">Papers &amp; Presentations</a>
+    <a href="{{ route('papers') }}" class="drawer-sub {{ request()->routeIs('papers*') ? 'active' : '' }}" onclick="closeDrawer()">Resource Library</a>
     <a href="{{ route('podcasts-webinars') }}" class="drawer-sub {{ request()->routeIs('podcasts-webinars') ? 'active' : '' }}" onclick="closeDrawer()">Podcasts &amp; Webinars</a>
     <a href="{{ route('blog') }}" class="drawer-sub {{ request()->routeIs('blog*') ? 'active' : '' }}" onclick="closeDrawer()">Blog</a>
     <a href="{{ route('faq') }}" class="drawer-sub {{ request()->routeIs('faq') ? 'active' : '' }}" onclick="closeDrawer()">FAQ</a>
