@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Card Summary <span class="rl-req">*</span> <span class="rl-opt">— the short description shown on the Resource Library cards</span></label>
+                        <label>Card Summary <span class="rl-req">*</span> <span class="rl-opt">— the short description shown on the Resource Library cards. Keep it brief; the resource page's own longer text belongs in the <strong>Resource Page</strong> tab.</span></label>
                         <div wire:ignore>
                             <textarea x-data x-init="
                                 let editorInstance = null;

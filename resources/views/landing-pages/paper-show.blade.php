@@ -74,9 +74,9 @@
             </div>
 
             <div class="resource-author">
-                <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" alt="Dr. Kevin Thompson, Ph.D. — Agile hardware consultant" width="72" height="72" loading="lazy" decoding="async">
+                <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" alt="Kevin Thompson, Ph.D. — Agile hardware consultant" width="72" height="72" loading="lazy" decoding="async">
                 <div>
-                    <h4>Dr. Kevin Thompson, Ph.D.</h4>
+                    <h4>Kevin Thompson, Ph.D.</h4>
                     <p>Principal Consultant specializing in Agile hardware development. Dr. Thompson has guided more than 100 enterprise transformations, bridging the gap between hardware engineering and Agile software methodologies. <a href="{{ route('about') }}">About Dr. Thompson &rarr;</a></p>
                 </div>
             </div>
