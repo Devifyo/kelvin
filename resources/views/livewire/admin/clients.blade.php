@@ -212,8 +212,8 @@
                         <div class="form-divider">Display Controls</div>
                         <div style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
                             <div class="form-group" style="margin-bottom:0;">
-                                <label>Display Order</label>
-                                <input type="number" wire:model="sort_order" class="form-control" style="width: 120px;">
+                                <label>Display Order <span style="font-weight:400; color:var(--muted); text-transform:none; letter-spacing:0;">(position in the list — others renumber automatically)</span></label>
+                                <input type="number" min="1" wire:model="sort_order" class="form-control" style="width: 120px;">
                             </div>
                             <div class="form-group" style="margin-bottom:0;">
                                 <label>Status</label>

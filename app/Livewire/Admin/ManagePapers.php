@@ -103,15 +103,59 @@ class ManagePapers extends Component
         $this->slug = Str::slug($value);
     }
 
+    // --- Ordering helpers ---------------------------------------------------
+    // Every write goes through applyOrder(), which renumbers the WHOLE list to a
+    // dense 1..n sequence — no duplicates, no gaps. Bulk renumbering uses query
+    // builder updates so Paper model events (SEO file regeneration) don't fire
+    // once per row.
+
+    /** Every paper id in current display order. */
+    private function orderedIds(): array
+    {
+        return Paper::orderBy('sort_order')->orderBy('id')
+            ->pluck('id')->map(fn ($i) => (int) $i)->all();
+    }
+
+    /** Persist a full ordering as dense 1..n Display Order values. */
+    private function applyOrder(array $ids): void
+    {
+        foreach (array_values($ids) as $i => $id) {
+            Paper::where('id', $id)->update(['sort_order' => $i + 1]);
+        }
+    }
+
+    /** Insert one paper at a 1-based position, shifting the rest. */
+    private function moveToPosition(int $id, int $position): void
+    {
+        $ids = array_values(array_filter($this->orderedIds(), fn ($x) => $x !== $id));
+        $pos = $position > 0 ? min($position, count($ids) + 1) : count($ids) + 1;
+        array_splice($ids, $pos - 1, 0, [$id]);
+        $this->applyOrder($ids);
+    }
+
     /**
      * Reorder papers based on drag-and-drop.
-     * Receives an ordered array of paper IDs from the frontend.
+     * Receives an ordered array of paper IDs from the frontend (the visible
+     * page — possibly filtered). Those items keep their slots in the overall
+     * sequence but take the new order among themselves; the whole list is then
+     * renumbered densely, so items on other pages can never collide.
      */
     public function reorder(array $orderedIds)
     {
-        foreach ($orderedIds as $index => $id) {
-            Paper::where('id', $id)->update(['sort_order' => $index + 1]);
+        $orderedIds = array_values(array_map('intval', $orderedIds));
+        if (empty($orderedIds)) {
+            return;
         }
+
+        $all   = $this->orderedIds();
+        $queue = $orderedIds;
+        $slots = array_flip($orderedIds);
+        foreach ($all as $i => $id) {
+            if (isset($slots[$id])) {
+                $all[$i] = array_shift($queue);
+            }
+        }
+        $this->applyOrder($all);
 
         $this->dispatch('notify', message: 'Order updated.', type: 'success');
     }
@@ -222,7 +266,11 @@ class ManagePapers extends Component
             $data['featured_image'] = null;
         }
 
-        Paper::updateOrCreate(['id' => $this->paperId], $data);
+        $paper = Paper::updateOrCreate(['id' => $this->paperId], $data);
+
+        // Display Order is a POSITION: place the paper there and renumber the
+        // whole list 1..n so no duplicates or gaps can be introduced by hand.
+        $this->moveToPosition($paper->id, (int) $this->sort_order);
 
         $this->dispatch('notify', message: 'Resource saved successfully.', type: 'success');
         $this->showModal = false;

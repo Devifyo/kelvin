@@ -186,8 +186,8 @@
                             <span class="rl-switch-text"><strong>Active</strong><small>Visible on the public site</small></span>
                         </label>
                         <div class="form-group" style="margin:0; max-width: 140px;">
-                            <label>Display Order</label>
-                            <input type="number" wire:model="sort_order" class="form-control">
+                            <label>Display Order <span class="rl-opt">— position in the list (1 = first); other items renumber automatically</span></label>
+                            <input type="number" min="1" wire:model="sort_order" class="form-control">
                             @error('sort_order')<span class="error-msg">{{$message}}</span>@enderror
                         </div>
                     </div>

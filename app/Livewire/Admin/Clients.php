@@ -53,18 +53,55 @@ class Clients extends Component
         ];
     }
 
+    // --- Ordering helpers ---------------------------------------------------
+    // Every write goes through applyOrder(), which renumbers the WHOLE list to a
+    // dense 1..n sequence. That keeps Display Order free of the duplicates and
+    // gaps that used to accumulate (and then broke the per-page drag math).
+
+    /** Every client id in current display order (same ordering the admin list uses). */
+    private function orderedIds(): array
+    {
+        return Client::orderBy('sort_order')->orderBy('name')->orderBy('id')
+            ->pluck('id')->map(fn ($i) => (int) $i)->all();
+    }
+
+    /** Persist a full ordering as dense 1..n Display Order values. */
+    private function applyOrder(array $ids): void
+    {
+        foreach (array_values($ids) as $i => $id) {
+            Client::where('id', $id)->update(['sort_order' => $i + 1]);
+        }
+    }
+
+    /** Insert one client at a 1-based position, shifting the rest. */
+    private function moveToPosition(int $id, int $position): void
+    {
+        $ids = array_values(array_filter($this->orderedIds(), fn ($x) => $x !== $id));
+        $pos = $position > 0 ? min($position, count($ids) + 1) : count($ids) + 1;
+        array_splice($ids, $pos - 1, 0, [$id]);
+        $this->applyOrder($ids);
+    }
+
     // --- Drag & drop ordering ---
     public function updateSortOrder($orderedIds): void
     {
+        $orderedIds = array_values(array_map('intval', (array) $orderedIds));
         if (empty($orderedIds)) {
             return;
         }
 
-        $minSortOrder = Client::whereIn('id', $orderedIds)->min('sort_order') ?? 0;
-
-        foreach ($orderedIds as $index => $id) {
-            Client::where('id', $id)->update(['sort_order' => $minSortOrder + $index]);
+        // The dragged page's items keep their slots in the overall sequence but
+        // take the new order among themselves; everything is then renumbered
+        // densely, so items on other pages can never collide.
+        $all   = $this->orderedIds();
+        $queue = $orderedIds;
+        $slots = array_flip($orderedIds);
+        foreach ($all as $i => $id) {
+            if (isset($slots[$id])) {
+                $all[$i] = array_shift($queue);
+            }
         }
+        $this->applyOrder($all);
 
         Client::clearCache();
         $this->dispatch('notify', message: 'Order updated successfully.', type: 'success');
@@ -123,7 +160,12 @@ class Clients extends Component
             $data['logo'] = $path;
         }
 
-        Client::updateOrCreate(['id' => $this->clientId], $data);
+        $client = Client::updateOrCreate(['id' => $this->clientId], $data);
+
+        // Display Order is a POSITION: place the client there and renumber the
+        // whole list 1..n so no duplicates or gaps can be introduced by hand.
+        $this->moveToPosition($client->id, (int) $this->sort_order);
+
         Client::clearCache();
 
         $this->dispatch('notify', message: 'Client saved successfully.', type: 'success');
