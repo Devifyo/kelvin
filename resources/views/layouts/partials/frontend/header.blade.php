@@ -27,6 +27,7 @@
     <div class="nav-menu">
         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
         <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
+        <a href="{{ route('clients') }}" class="{{ request()->routeIs('clients') ? 'active' : '' }}">Client List</a>
         <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') || request()->routeIs('training') ? 'active' : '' }}">Consulting & Training</a>
 
         {{-- Resources / Proof of Expertise --}}
@@ -56,6 +57,9 @@
     <div class="drawer-line"></div>
     
     <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}" onclick="closeDrawer()">About</a>
+    <div class="drawer-line"></div>
+    
+    <a href="{{ route('clients') }}" class="{{ request()->routeIs('clients') ? 'active' : '' }}" onclick="closeDrawer()">Client List</a>
     <div class="drawer-line"></div>
     
     <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') || request()->routeIs('training') ? 'active' : '' }}" onclick="closeDrawer()">Consulting & Training</a>

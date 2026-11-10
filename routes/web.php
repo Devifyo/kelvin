@@ -32,6 +32,8 @@ Route::controller(PageController::class)->group(function () {
     // Resource Library (index) + dedicated resource pages
     Route::get('/agile-hardware-papers-and-presentations', 'papers')->name('papers');
     Route::get('/agile-hardware-papers-and-presentations/{slug}', 'showPaper')->name('papers.show');
+    // Full-text HTML version of a document resource (only when one has been written)
+    Route::get('/agile-hardware-papers-and-presentations/{slug}/read', 'readPaper')->name('papers.read');
 
     // Previous Clients showcase
     Route::get('/clients', 'clients')->name('clients');

@@ -105,7 +105,7 @@ Some pages pull title/description from the database so admins can edit without t
 |---|---|---|
 | `Post` | `meta_title`, `meta_description`, `meta_keywords`, `featured_image`, `excerpt`, `content`, `published_at` | [blog-show.blade.php](resources/views/landing-pages/blog-show.blade.php) (Article schema reads `published_at`, `updated_at`, `author->name`, `category->name`). |
 | `Service` | `meta_title`, `meta_description`, `meta_keywords`, `short_description`, `featured_image`, `length`, `audience` | [training-show.blade.php](resources/views/landing-pages/training-show.blade.php) (Course schema reads `length`, `audience`, etc.). |
-| `Paper` (Resource Library) | `slug`, `meta_title`, `meta_description`, `meta_keywords`, `description` (card), `long_description` (page body, falls back to `description`), `featured_image`, `resource_type`, `external_url`, `is_featured` | [paper-show.blade.php](resources/views/landing-pages/paper-show.blade.php). `seoTitle()` builds "Title — Category \| Kevin Thompson, Ph.D." when no meta title is set. Edited in Admin → Resource Library. |
+| `Paper` (Resource Library) | `slug`, `meta_title`, `meta_description`, `meta_keywords`, `description` (card), `long_description` (page body, falls back to `description`), `html_content` (optional full text of a document, published at `/{slug}/read`), `featured_image`, `resource_type`, `external_url`, `is_featured` | [paper-show.blade.php](resources/views/landing-pages/paper-show.blade.php). `seoTitle()` builds "Title — Category \| Kevin Thompson, Ph.D." when no meta title is set. Edited in Admin → Resource Library. The full-text version renders through [paper-read.blade.php](resources/views/landing-pages/paper-read.blade.php) with `readSeoTitle()` ("… — Full Text") and `readSeoDescription()` (opening of the text) so it never duplicates the summary page's title/description. |
 | `WelcomePageContent` | `seo_title`, `seo_description`, `seo_keywords` | [welcome.blade.php](resources/views/landing-pages/welcome.blade.php). |
 | `AboutPageContent` | `seo_title`, `seo_description`, `seo_keywords`, `profile_image` | [about.blade.php](resources/views/landing-pages/about.blade.php). |
 
@@ -191,7 +191,8 @@ The layout has a `@stack('schema')` directive in `<head>` available for future p
 | `/agile-insights-blog` | `Blog` (author/publisher via `@id`) |
 | `/agile-insights-blog/{slug}` | `Article` (datePublished/dateModified/wordCount/articleSection/image — all from the `Post` model) |
 | `/agile-hardware-papers-and-presentations` | `CollectionPage` with an `ItemList` `mainEntity` naming **every** active resource URL (the page itself renders only the Featured tab by default) |
-| `/agile-hardware-papers-and-presentations/{slug}` | `DigitalDocument` (+ `encoding` MediaObject → the PDF) for documents, `Book` (+ `offers.url` → Amazon) for books, `WebPage` for links; plus `BreadcrumbList` in `<head>` |
+| `/agile-hardware-papers-and-presentations/{slug}` | `DigitalDocument` (+ `encoding` MediaObject → the PDF) for documents, `Book` (+ `offers.url` → Amazon) for books, `WebPage` for links; plus `BreadcrumbList` in `<head>`. When a full-text HTML version exists the block also carries `workExample` → the `/read` URL |
+| `/agile-hardware-papers-and-presentations/{slug}/read` | `ScholarlyArticle` (same shape as the blog `Article`: datePublished/dateModified/wordCount/articleSection/image, author/publisher via `@id`) + `associatedMedia` MediaObject → the PDF; `BreadcrumbList` and `article:*` metas in `<head>`. Exists only for document resources with `html_content`; 404 otherwise |
 | `/podcasts-webinars` | `CollectionPage` |
 | `/contact-us` | `ContactPage` |
 
@@ -235,7 +236,7 @@ done
 ```
 Post saved/deleted     → SeoGenerator::generateSitemap() + generateLlms()
 Service saved/deleted  → SeoGenerator::generateSitemap() + generateLlms()
-Paper saved/deleted    → SeoGenerator::generateLlms()
+Paper saved/deleted    → SeoGenerator::generateSitemap() + generateLlms()
 AppSetting saved
   if key starts with "seo_" or == "app_name"
                        → SeoGenerator::generateAll()  (all three files)

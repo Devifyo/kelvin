@@ -93,6 +93,17 @@ class PageController extends Controller
         return view('landing-pages.paper-show', compact('paper', 'related'));
     }
 
+    /** Full-text HTML version of a document resource. 404 unless one has been written. */
+    public function readPaper(string $slug)
+    {
+        $paper = $this->contentService->getPaperBySlug($slug); // 404s hidden / unknown resources
+        abort_unless($paper->has_html_version, 404);
+
+        $related = $this->contentService->getRelatedPapers($paper);
+
+        return view('landing-pages.paper-read', compact('paper', 'related'));
+    }
+
     public function blog(Request $request)
     {
         $search = $request->input('search');

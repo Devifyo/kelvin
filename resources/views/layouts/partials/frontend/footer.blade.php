@@ -10,6 +10,7 @@
     
     <nav class="footer-links">
         <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a>
+        <a href="{{ route('clients') }}" class="{{ request()->routeIs('clients') ? 'active' : '' }}">Client List</a>
         <a href="{{ route('services.training') }}" class="{{ request()->routeIs('services.training') ? 'active' : '' }}">Consulting & Training</a>
         
         {{-- Resources / Proof of Expertise --}}

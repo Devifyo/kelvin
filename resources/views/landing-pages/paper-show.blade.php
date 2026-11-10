@@ -73,6 +73,10 @@
                 {!! $paper->long_description_html !!}
             </div>
 
+            @if($paper->has_html_version)
+                <p class="resource-read-link"><a href="{{ $paper->read_url }}">Read the full text of {{ $paper->title }} online &rarr;</a></p>
+            @endif
+
             <div class="resource-author">
                 <img src="{{ asset('img/frontend/Dr.%20Kevin%20Thompson.webp') }}" alt="Kevin Thompson, Ph.D. — Agile hardware consultant" width="72" height="72" loading="lazy" decoding="async">
                 <div>
@@ -105,7 +109,22 @@
                     <li><span>Author</span><span>Dr. Kevin Thompson</span></li>
                 </ul>
 
-                @if($paper->cta_url)
+                @if($paper->has_html_version)
+                    {{-- An HTML version exists: "View" opens it as a web page; the file stays downloadable --}}
+                    <a href="{{ $paper->read_url }}" class="btn-resource">
+                        View
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                    @if($paper->cta_url)
+                        <a href="{{ $paper->cta_url }}" class="btn-resource-secondary" download>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                            Download {{ strtoupper($paper->file_extension ?? 'file') }}
+                        </a>
+                        <p class="resource-card-note">Read the full text online, or download the {{ strtoupper($paper->file_extension ?? 'file') }} to keep.</p>
+                    @else
+                        <p class="resource-card-note">Read the full text online.</p>
+                    @endif
+                @elseif($paper->cta_url)
                     <a href="{{ $paper->cta_url }}" class="btn-resource" target="_blank" rel="noopener{{ $paper->is_document ? '' : ' nofollow' }}">
                         {{ $paper->cta_text }}
                         @if($paper->is_document)
@@ -195,6 +214,16 @@
             'name'           => $paper->title,
         ];
         $_schema['encoding'] = array_filter($_schema['encoding']);
+    }
+
+    // The same work, published as a web page (full text in HTML).
+    if ($paper->has_html_version) {
+        $_schema['workExample'] = [
+            '@type'          => 'ScholarlyArticle',
+            'url'            => $paper->read_url,
+            'name'           => $paper->title,
+            'encodingFormat' => 'text/html',
+        ];
     }
 
     if ($paper->is_book && $paper->external_url) {

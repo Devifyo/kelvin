@@ -64,6 +64,7 @@
 .rl-type-book { background: rgba(99,102,241,.12); color: #4f46e5; }
 .rl-type-link { background: rgba(14,165,233,.12); color: #0284c7; }
 .rl-type-document { background: rgba(16,185,129,.12); color: #059669; }
+.rl-type-html { background: rgba(181,114,42,.12); color: #b5722a; margin-left: .3rem; }
 
 /* Modal */
 .rl-modal .modal-header { padding-bottom: 0; }
@@ -73,6 +74,7 @@
 .rl-tab:hover { color: var(--slate); }
 .rl-tab.active { color: var(--copper); border-bottom-color: var(--copper); }
 .rl-tab-err { position: absolute; top: .55rem; right: .55rem; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+.rl-tab-ok { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; margin-left: .4rem; vertical-align: middle; }
 .rl-req { color: #ef4444; }
 .rl-opt { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
 .rl-help { display: block; margin-top: .4rem; font-size: .74rem; color: var(--muted); line-height: 1.5; }

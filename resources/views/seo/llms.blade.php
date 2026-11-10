@@ -8,7 +8,7 @@
 - [About Kevin Thompson]({{ url('/about-kevin-thompson') }}): Biography, credentials, and expertise of Dr. Kevin Thompson Ph.D.
 - [Agile Consulting Services]({{ url('/agile-consulting-services') }}): Hands-on agile coaching and consulting for hardware teams
 - [Agile Training Classes]({{ url('/agile-training-classes') }}): Certified agile training courses for hardware engineers
-- [Resource Library]({{ url('/agile-hardware-papers-and-presentations') }}): White papers, case studies, conference presentations, and books on agile hardware development — each resource has its own page with a summary and a link to the full document
+- [Resource Library]({{ url('/agile-hardware-papers-and-presentations') }}): White papers, case studies, conference presentations, and books on agile hardware development — each resource has its own page with a summary and a link to the full document, and many papers can also be read in full as a web page
 - [Blog]({{ url('/agile-insights-blog') }}): Articles and insights on agile methodologies for hardware
 - [Podcasts & Webinars]({{ url('/podcasts-webinars') }}): Recorded podcast appearances and webinar sessions
 - [FAQ]({{ url('/faq') }}): Direct answers to common questions — can Scrum be used for hardware development, how hardware teams estimate work and manage dependencies, what Agile Release Planning is, and how hardware Product Owners work
@@ -26,7 +26,7 @@
 ## Resource Library
 
 @foreach($papers as $paper)
-- [{{ $paper->title }}]({{ url('/agile-hardware-papers-and-presentations/' . $paper->slug) }}){{ $paper->category ? ' [' . $paper->category->name . ($paper->sub_category ? ' · ' . $paper->sub_category : '') . ']' : ($paper->sub_category ? ' [' . $paper->sub_category . ']' : '') }}{{ $paper->is_featured ? ' (featured)' : '' }}: {{ trim(preg_replace('/\s+/', ' ', strip_tags($paper->description))) }}
+- [{{ $paper->title }}]({{ url('/agile-hardware-papers-and-presentations/' . $paper->slug) }}){{ $paper->category ? ' [' . $paper->category->name . ($paper->sub_category ? ' · ' . $paper->sub_category : '') . ']' : ($paper->sub_category ? ' [' . $paper->sub_category . ']' : '') }}{{ $paper->is_featured ? ' (featured)' : '' }}: {{ trim(preg_replace('/\s+/', ' ', strip_tags($paper->description))) }}{!! $paper->has_html_version ? ' Full text (HTML): ' . url('/agile-hardware-papers-and-presentations/' . $paper->slug . '/read') : '' !!}
 @endforeach
 @endif
 

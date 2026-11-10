@@ -25,7 +25,7 @@ class Paper extends Model
 
     protected $fillable = [
         'title', 'slug', 'category_id', 'sub_category', 'resource_type',
-        'description', 'long_description', 'featured_image',
+        'description', 'long_description', 'html_content', 'featured_image',
         'file_path', 'external_url', 'cta_label',
         'meta_title', 'meta_description', 'meta_keywords',
         'is_active', 'is_featured', 'sort_order',
@@ -217,6 +217,99 @@ class Paper extends Model
     public function seoDescription(): string
     {
         return filled($this->meta_description) ? $this->meta_description : $this->plain_summary;
+    }
+
+    // ── HTML version (full text) ───────────────────────────────────────────
+    //
+    // A document resource may carry its full text as HTML (html_content). When
+    // it does, the paper is also published as an ordinary web page at
+    // /agile-hardware-papers-and-presentations/{slug}/read (route papers.read).
+
+    /** True when this document has a full-text web version to read online. */
+    public function getHasHtmlVersionAttribute(): bool
+    {
+        return $this->is_document && $this->htmlPlainText() !== '';
+    }
+
+    /** Full text for the reading page; any <h1> is demoted so the page keeps one H1. */
+    public function getHtmlContentHtmlAttribute(): string
+    {
+        return preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', $this->htmlWithoutRepeatedTitle());
+    }
+
+    /**
+     * A paper pasted from Word usually opens with its own title. The reading
+     * page already prints the title as its H1, so an opening heading that
+     * merely repeats it is dropped rather than shown twice.
+     */
+    private function htmlWithoutRepeatedTitle(): string
+    {
+        $html = ltrim((string) $this->html_content);
+
+        if (preg_match('#^<(h[1-6])\b[^>]*>(.*?)</\1>#is', $html, $m)) {
+            $normalize = fn (string $t) => mb_strtolower(trim(preg_replace('/\s+/u', ' ',
+                str_replace("\u{00A0}", ' ', html_entity_decode(strip_tags($t), ENT_QUOTES | ENT_HTML5)))));
+
+            if ($normalize($m[2]) === $normalize((string) $this->title)) {
+                $html = ltrim(substr($html, strlen($m[0])));
+            }
+        }
+
+        return $html;
+    }
+
+    public function getHtmlWordCountAttribute(): int
+    {
+        return str_word_count($this->htmlPlainText());
+    }
+
+    public function getHtmlReadMinutesAttribute(): int
+    {
+        return max(1, (int) ceil($this->html_word_count / 200));
+    }
+
+    /** URL of the reading page, or null when there is no HTML version. */
+    public function getReadUrlAttribute(): ?string
+    {
+        return $this->has_html_version ? route('papers.read', $this->slug) : null;
+    }
+
+    private function htmlPlainText(): string
+    {
+        // Tags are replaced by a space so adjacent blocks don't fuse into one word.
+        $text = strip_tags(preg_replace('/<[^>]+>/', ' $0', $html = $this->htmlWithoutRepeatedTitle()) ?? $html);
+
+        $text = str_replace("\u{00A0}", ' ', html_entity_decode($text, ENT_QUOTES | ENT_HTML5));
+
+        // A failed preg (invalid UTF-8) must not make a real paper look empty.
+        return trim(preg_replace('/\s+/u', ' ', $text) ?? $text);
+    }
+
+    /**
+     * <title> for the reading page. Deliberately different from the summary
+     * page's title so the two URLs never compete with identical titles.
+     */
+    public function readSeoTitle(): string
+    {
+        $base  = (filled($this->meta_title) ? $this->meta_title : $this->title) . ' — Full Text';
+        $brand = ' | Kevin Thompson, Ph.D.';
+
+        return (! str_contains($base, 'Kevin Thompson') && mb_strlen($base . $brand) <= 60)
+            ? $base . $brand
+            : $base;
+    }
+
+    /**
+     * Meta description for the reading page: the opening of the paper itself,
+     * so it differs from the summary page's description.
+     */
+    public function readSeoDescription(): string
+    {
+        $lead = Str::limit($this->htmlPlainText(), 155, '', preserveWords: true);
+
+        return (mb_strlen($lead) < 50 || $lead === $this->seoDescription())
+            ? Str::limit('Full text: ' . $this->plain_summary, 155, '')
+            : $lead;
     }
 
     public static function uniqueSlug(string $title, ?int $ignoreId = null): string

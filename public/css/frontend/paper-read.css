@@ -1,0 +1,122 @@
+/* ─────────────────────────────────────────
+   RESOURCE LIBRARY — FULL-TEXT READING PAGE
+   Loaded after blog-view.css, which supplies the article layout.
+   Only the differences live here.
+───────────────────────────────────────── */
+
+/* Breadcrumb can be longer than the blog's — let it wrap, keep it centred */
+.article-header .breadcrumb { flex-wrap: wrap; justify-content: center; row-gap: .4rem; }
+
+/* Pasted Word content: wide tables scroll inside the column instead of
+   breaking the page on phones; images never overflow. */
+.rich-content table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.rich-content img { max-width: 100%; height: auto; }
+.rich-content figure { margin: 2rem 0; }
+.rich-content figcaption { font-size: .85rem; color: var(--a11y-muted, #5b6472); text-align: center; margin-top: .6rem; }
+.rich-content h2, .rich-content h3, .rich-content h4 { scroll-margin-top: 6rem; }
+
+.author-bio-text a { color: var(--a11y-copper, #8a531b); font-weight: 600; white-space: nowrap; }
+.author-bio-text a:hover { color: var(--slate); }
+
+/* Footer links: back to summary / download / library */
+.read-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    justify-content: space-between;
+    padding: 1.75rem 0;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--ivory3);
+    border-bottom: 1px solid var(--ivory3);
+}
+.read-back {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--a11y-copper, #8a531b);
+    text-decoration: none;
+    transition: color .3s;
+}
+.read-back:hover { color: var(--slate); }
+
+/* Related resources */
+.read-related { background: var(--ivory); padding: 0 2rem 6rem; }
+.read-related-wrap { max-width: 1180px; margin: 0 auto; }
+.read-related h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--slate);
+    margin-bottom: 2rem;
+}
+.read-related h2 em { font-style: italic; color: var(--copper); }
+.read-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.read-related-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border: 1px solid var(--ivory3);
+    border-radius: 6px;
+    padding: 1.75rem;
+    text-decoration: none;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+.read-related-card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(26,35,50,.1); border-color: rgba(181,114,42,.25); }
+.read-related-meta {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--a11y-copper, #8a531b);
+    margin-bottom: .75rem;
+}
+.read-related-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--slate);
+    margin-bottom: .75rem;
+}
+.read-related-card p { font-size: .95rem; line-height: 1.6; color: var(--a11y-muted, #5b6472); margin-bottom: 1.25rem; }
+.read-related-cta {
+    margin-top: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--a11y-copper, #8a531b);
+}
+
+@media (max-width: 960px) {
+    .read-related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .read-related { padding: 0 1.25rem 4rem; }
+    .read-related-grid { grid-template-columns: 1fr; }
+    .read-footer-links { flex-direction: column; }
+}
+
+/* Papers get printed — give them a clean sheet */
+@media print {
+    #nav, .drawer, footer, #cookieConsent, .reading-progress-container,
+    .share-bottom, .pdf-attachment, .read-related, .read-footer-links, .meta-avatar { display: none !important; }
+    .article-header { background: none !important; padding: 0 0 1rem !important; text-align: left; }
+    .article-header::before { display: none !important; }
+    .article-header .breadcrumb { display: none; }
+    .page-title, .meta-info strong, .meta-details { color: #000 !important; }
+    .article-section { padding: 0 !important; background: none !important; }
+    .article-wrap { max-width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: 0 !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .rich-content table { display: table; overflow: visible; }
+    .rich-content h2, .rich-content h3 { break-after: avoid; }
+    .rich-content tr, .rich-content img { break-inside: avoid; }
+    .rich-content a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; word-break: break-all; }
+}

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Paper;
 use App\Models\Category;
+use App\Support\WordHtmlCleaner;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -15,7 +16,9 @@ use Livewire\Attributes\Layout;
  *
  * Each row is a Paper: a downloadable document, a book sold externally, or a
  * plain link. Every resource has its own public page, so the modal carries the
- * long description + SEO fields alongside the card summary.
+ * long description + SEO fields alongside the card summary. Document resources
+ * can also carry an optional full-text HTML version (html_content), published
+ * at /{slug}/read and edited in the "Full Text (HTML)" tab.
  */
 #[Layout('layouts.admin')]
 class ManagePapers extends Component
@@ -36,6 +39,8 @@ class ManagePapers extends Component
 
     // ── Resource page ────────────────────────────────────────────────────
     public $long_description;
+    public $html_content; // optional full-text HTML version (document resources only)
+    public $has_saved_html = false; // the saved record already has a live reading page
     public $featured_image, $existing_featured_image;
     public $remove_featured_image = false;
 
@@ -70,6 +75,7 @@ class ManagePapers extends Component
             'resource_type'     => 'required|in:' . implode(',', array_keys(Paper::TYPES)),
             'description'       => 'required|string|max:2000',
             'long_description'  => 'nullable|string',
+            'html_content'      => 'nullable|string|max:2000000',
             'file'              => 'nullable|file|mimes:pdf,ppt,pptx,doc,docx|max:30720', // 30MB
             'external_url'      => 'nullable|url|max:2048|required_if:resource_type,' . Paper::TYPE_BOOK . ',' . Paper::TYPE_LINK,
             'cta_label'         => 'nullable|string|max:60',
@@ -181,6 +187,8 @@ class ManagePapers extends Component
         $this->resource_type      = $paper->resource_type ?: Paper::TYPE_DOCUMENT;
         $this->description        = $paper->description;
         $this->long_description   = $paper->long_description;
+        $this->html_content       = $paper->html_content;
+        $this->has_saved_html     = $paper->is_active && $paper->has_html_version;
         $this->existing_file      = $paper->file_url;
         $this->existing_file_name = $paper->file_path ? basename($paper->file_path) : null;
         $this->external_url       = $paper->external_url;
@@ -200,7 +208,7 @@ class ManagePapers extends Component
     {
         $this->reset([
             'paperId', 'title', 'slug', 'category_id', 'new_category_name', 'sub_category',
-            'description', 'long_description', 'file', 'existing_file', 'existing_file_name',
+            'description', 'long_description', 'html_content', 'has_saved_html', 'file', 'existing_file', 'existing_file_name',
             'external_url', 'cta_label', 'featured_image', 'existing_featured_image',
             'remove_featured_image', 'meta_title', 'meta_description', 'meta_keywords',
         ]);
@@ -245,6 +253,8 @@ class ManagePapers extends Component
             'resource_type'    => $this->resource_type,
             'description'      => $this->description,
             'long_description' => $this->long_description,
+            // Full text is a document-only feature; Word paste clutter is stripped here.
+            'html_content'     => $isDocument ? WordHtmlCleaner::clean($this->html_content) : null,
             'external_url'     => $isDocument ? null : $this->external_url,
             'cta_label'        => $this->cta_label ?: null,
             'meta_title'       => $this->meta_title ?: null,

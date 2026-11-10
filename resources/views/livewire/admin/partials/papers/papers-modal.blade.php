@@ -15,6 +15,12 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                     View live page
                 </a>
+                @if($has_saved_html && $resource_type === 'document')
+                    <a href="{{ route('papers.read', $slug) }}" target="_blank" rel="noopener" class="rl-modal-live" style="margin-left: 1rem;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        View HTML version
+                    </a>
+                @endif
             @endif
 
             {{-- Tabs --}}
@@ -29,6 +35,13 @@
                     Resource Page
                     @if($errors->hasAny(['long_description','featured_image']))<span class="rl-tab-err"></span>@endif
                 </button>
+                @if($resource_type === 'document')
+                    <button type="button" role="tab" class="rl-tab" :class="{ active: tab === 'html' }" x-on:click="tab = 'html'">
+                        Full Text (HTML)
+                        @if(filled(strip_tags((string) $html_content)))<span class="rl-tab-ok" title="An HTML version is published"></span>@endif
+                        @error('html_content')<span class="rl-tab-err"></span>@enderror
+                    </button>
+                @endif
                 <button type="button" role="tab" class="rl-tab" :class="{ active: tab === 'seo' }" x-on:click="tab = 'seo'">
                     SEO
                     @if($errors->hasAny(['meta_title','meta_description','meta_keywords']))<span class="rl-tab-err"></span>@endif
@@ -242,6 +255,70 @@
                                 <button type="button" wire:click="$set('remove_featured_image', true)" style="background:none; border:none; color:#ef4444; font-weight:700; font-size:.8rem; cursor:pointer;">Remove image</button>
                             </div>
                         @endif
+                    </div>
+                </div>
+
+                {{-- ══════════════ TAB: FULL TEXT (HTML) ══════════════ --}}
+                <div x-show="tab === 'html'" x-cloak>
+                    <p class="rl-intro">Optional. Paste the full paper here (straight from Word, as you do for blog posts) to publish it as a web page that search and AI answer engines can read. When this is filled in, the resource page shows a <strong>View</strong> button that opens the web version; <strong>Download</strong> still serves the file. Leave it empty for presentations or anything that should stay file-only.</p>
+
+                    <div class="form-group">
+                        <label>Full Text <span class="rl-opt">(the page title is added automatically — start with the first paragraph or a Heading 2)</span></label>
+                        <div wire:ignore>
+                            <textarea x-data="{ inited: false }" x-effect="
+                                if (tab === 'html' && !inited) {
+                                    inited = true;
+                                    $nextTick(() => {
+                                        if (typeof tinymce === 'undefined') { console.error('TinyMCE failed to load.'); return; }
+                                        tinymce.init({
+                                            target: $el,
+                                            menubar: true,
+                                            height: 560,
+                                            plugins: 'lists link image media table code wordcount',
+                                            block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4',
+                                            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link image table | code',
+                                            relative_urls: false,
+                                            remove_script_host: true,
+                                            image_title: true,
+                                            automatic_uploads: true,
+                                            paste_data_images: true,
+                                            paste_merge_formats: true,
+                                            paste_webkit_styles: 'none',
+                                            paste_remove_styles_if_webkit: true,
+                                            invalid_elements: 'script,style,meta,link',
+                                            images_upload_handler: function (blobInfo, progress) {
+                                                return new Promise((resolve, reject) => {
+                                                    const xhr = new XMLHttpRequest();
+                                                    xhr.open('POST', '{{ route('admin.tinymce.upload') }}');
+                                                    xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                                                    xhr.upload.onprogress = (e) => progress(e.loaded / e.total * 100);
+                                                    xhr.onload = () => {
+                                                        if (xhr.status < 200 || xhr.status >= 300) { reject('HTTP Error: ' + xhr.status); return; }
+                                                        const json = JSON.parse(xhr.responseText);
+                                                        if (!json || typeof json.location != 'string') { reject('Invalid JSON: ' + xhr.responseText); return; }
+                                                        resolve(json.location);
+                                                    };
+                                                    xhr.onerror = () => reject('Image upload failed.');
+                                                    const formData = new FormData();
+                                                    formData.append('file', blobInfo.blob(), blobInfo.filename());
+                                                    xhr.send(formData);
+                                                });
+                                            },
+                                            setup: function (editor) {
+                                                editor.on('blur change', function () {
+                                                    $wire.set('html_content', editor.getContent(), false);
+                                                });
+                                                editor.on('init', function () {
+                                                    editor.setContent($wire.get('html_content') || '');
+                                                });
+                                            }
+                                        });
+                                    });
+                                }
+                            "></textarea>
+                        </div>
+                        <span class="rl-help">Any Heading 1 is converted to Heading 2 on the public page so it keeps a single main heading. Word formatting clutter is removed when you save. The word count is shown at the bottom right of the editor.</span>
+                        @error('html_content')<span class="error-msg">{{$message}}</span>@enderror
                     </div>
                 </div>
 

@@ -89,6 +89,7 @@
                         <div class="rl-row-title">
                             {{ $paper->title }}
                             <span class="rl-type rl-type-{{ $paper->resource_type }}">{{ $paper->is_book ? 'Book' : ($paper->is_link ? 'Link' : ($paper->file_extension ? strtoupper($paper->file_extension) : 'No file')) }}</span>
+                            @if($paper->has_html_version)<span class="rl-type rl-type-html" title="Has a full-text web version">HTML</span>@endif
                         </div>
                         <div class="rl-row-sub">
                             {{ $paper->category?->name ?? 'Uncategorized' }}
@@ -110,6 +111,11 @@
                             <a href="{{ route('papers.show', $paper->slug) }}" target="_blank" rel="noopener" class="icon-btn" title="View live page">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </a>
+                            @if($paper->has_html_version)
+                                <a href="{{ route('papers.read', $paper->slug) }}" target="_blank" rel="noopener" class="icon-btn" title="View HTML version">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                </a>
+                            @endif
                         @endif
                         <button wire:click="edit({{ $paper->id }})" class="icon-btn" title="Edit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                         <button x-on:click="Swal.fire({title:'Delete this resource?', text:'Its public page will stop existing. This cannot be undone.', icon:'warning', showCancelButton:true, confirmButtonColor:'#ef4444', confirmButtonText:'Delete'}).then((r)=>{if(r.isConfirmed) $wire.deletePaper({{$paper->id}})})" class="icon-btn delete" title="Delete"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>

@@ -117,6 +117,16 @@ tab; falls back to All Documents when nothing is featured). Every entry has its 
 straight to the PDF. Model is still `App\Models\Paper` (`papers` table); `resource_type` is
 `document` (uploaded file), `book` (Amazon link) or `link` (website). Slugs auto-generate on
 create; renaming a slug changes a public URL. Detail pages are in `sitemap.xml` and `llms.txt`.
+
+**HTML versions.** A `document` resource may carry its full text in `html_content`, edited in
+the modal's **Full Text (HTML)** tab (pasted from Word; cleaned by `App\Support\WordHtmlCleaner`
+on save). When filled, the paper is also served as a normal web page at
+`/agile-hardware-papers-and-presentations/{slug}/read` (route `papers.read`, view
+`paper-read.blade.php`, `ScholarlyArticle` schema mirroring the blog `Article`), and the summary
+page's "View PDF" button becomes "View" pointing there — "Download PDF" is unchanged. The route
+404s when the field is empty, so never link to it without checking `$paper->has_html_version`.
+Reading pages are in `sitemap.xml` and `llms.txt`.
+
 Design notes: [tasks/2026-09-10-resource-library.md](tasks/2026-09-10-resource-library.md).
 
 ## Admin panel conventions
