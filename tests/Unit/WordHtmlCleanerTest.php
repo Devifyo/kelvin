@@ -42,12 +42,50 @@ class WordHtmlCleanerTest extends TestCase
         }
     }
 
+    /**
+     * A Word table of contents + numbered headings, as pasted from a real
+     * paper: hidden page numbers, tab-stop spacer spans, bookmarks and blank
+     * cover-page paragraphs. The links must keep working and the clutter go.
+     */
+    public function test_word_table_of_contents_and_numbered_headings_come_through_clean(): void
+    {
+        $word = '<p style="text-align: right" align="right"><span style="font-size: 36.0pt; color: #a4451d">&nbsp;</span></p>'
+            . '<p><span>&nbsp;</span></p>'
+            . '<p><a href="#_Toc239231744"><span>4</span><span style="color: windowtext; text-decoration: none; text-underline: none"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span>The Compounding Effect</span>'
+            . '<span style="color: windowtext; display: none; text-decoration: none; text-underline: none"><span>. </span></span>'
+            . '<span style="color: windowtext; display: none; text-decoration: none; text-underline: none">12</span></a></p>'
+            . '<h2><a name="_Ref238809230"></a><a name="_Toc239231744"></a><span><span>4<span style="font: 7.0pt \'Times New Roman\'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span>The Compounding Effect</h2>'
+            . '<p>Cost grows as <span style="font-size: 12.0pt; position: relative; top: 3.0pt"><img src="/storage/eq.png" width="82" height="19"></span>, which grows as the square of <em>N</em>.</p>'
+            . '<p><img src="/storage/figure.jpg" width="624" height="375"></p>';
+
+        $clean = WordHtmlCleaner::clean($word);
+
+        $this->assertSame(
+            '<p><a href="#_Toc239231744">4 The Compounding Effect</a></p>'
+            . '<h2><a id="_Ref238809230"></a><a id="_Toc239231744"></a>4 The Compounding Effect</h2>'
+            . '<p>Cost grows as <span style="font-size: 12.0pt; position: relative; top: 3.0pt"><img class="inline-image" src="/storage/eq.png" width="82" height="19"></span>, which grows as the square of <em>N</em>.</p>'
+            . '<p><img src="/storage/figure.jpg" width="624" height="375"></p>',
+            $clean
+        );
+    }
+
+    public function test_hidden_spans_are_removed_with_their_nested_content_and_nothing_else(): void
+    {
+        $clean = WordHtmlCleaner::clean(
+            '<p>Keep <span style="color: red">red <span>plain</span> text</span>'
+            . '<span style="display: none">gone <span style="color: blue">nested gone</span> too</span> end.</p>'
+        );
+
+        $this->assertSame('<p>Keep <span style="color: red">red plain text</span> end.</p>', $clean);
+    }
+
     public function test_effectively_empty_input_becomes_null(): void
     {
         $this->assertNull(WordHtmlCleaner::clean(null));
         $this->assertNull(WordHtmlCleaner::clean(''));
         $this->assertNull(WordHtmlCleaner::clean('   '));
         $this->assertNull(WordHtmlCleaner::clean('<p>&nbsp;</p>'));
+        $this->assertNull(WordHtmlCleaner::clean('<p><span style="font-size: 36.0pt">&nbsp;</span></p>'));
         $this->assertNull(WordHtmlCleaner::clean('<p class="MsoNormal"><o:p>&nbsp;</o:p></p><p><br></p>'));
     }
 

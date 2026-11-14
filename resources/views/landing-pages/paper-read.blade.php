@@ -93,7 +93,9 @@
 </section>
 
 <section class="article-section">
-    <article class="article-wrap reveal rv1">
+    {{-- No scroll-reveal here: a full paper is many screens tall, so the 10% visibility
+         threshold the reveal observer uses is never met and the text stays invisible. --}}
+    <article class="article-wrap">
 
         @if($paper->featured_image_url)
             <img src="{{ $paper->featured_image_url }}" alt="{{ $paper->title }}" class="article-cover" width="1200" height="630" loading="eager" fetchpriority="high" decoding="async">
@@ -191,7 +193,7 @@
 
 @if($related->isNotEmpty())
 <section class="read-related">
-    <div class="read-related-wrap reveal rv1">
+    <div class="read-related-wrap">
         <h2>More from the <em>Resource Library</em></h2>
         <div class="read-related-grid">
             @foreach($related as $item)

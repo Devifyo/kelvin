@@ -14,6 +14,15 @@
 .rich-content figure { margin: 2rem 0; }
 .rich-content figcaption { font-size: .85rem; color: var(--a11y-muted, #5b6472); text-align: center; margin-top: .6rem; }
 .rich-content h2, .rich-content h3, .rich-content h4 { scroll-margin-top: 6rem; }
+/* Word bookmarks (TOC "#_Toc…" targets) are empty <a id> tags inside the
+   headings; the fixed nav must not cover the heading they jump to. */
+.rich-content a[id] { scroll-margin-top: 6rem; }
+/* Small images pasted mid-sentence (equations, symbols) stay inline. */
+.rich-content img.inline-image { display: inline; margin: 0 .15em; vertical-align: middle; border-radius: 0; }
+/* Word's TOC: one link per paragraph — tighten it into a list. */
+.rich-content p:has(> a[href^="#_Toc"]:only-child) { margin-bottom: .35rem; }
+.rich-content a[href^="#_Toc"] { text-decoration: none; }
+.rich-content a[href^="#_Toc"]:hover { text-decoration: underline; }
 
 .author-bio-text a { color: var(--a11y-copper, #8a531b); font-weight: 600; white-space: nowrap; }
 .author-bio-text a:hover { color: var(--slate); }

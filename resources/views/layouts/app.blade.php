@@ -351,7 +351,21 @@
           });
         }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-        document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+        // Elements taller than the viewport can never reach the 10% threshold
+        // (only a sliver fits on screen at once), so they would stay hidden
+        // forever. Reveal those as soon as any part of them is visible.
+        const tallObs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              tallObs.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0 });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+          (el.offsetHeight > window.innerHeight * 0.8 ? tallObs : revealObs).observe(el);
+        });
     </script>
     
     @stack('scripts')

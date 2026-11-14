@@ -138,6 +138,24 @@ class ResourceHtmlVersionTest extends TestCase
         $this->assertStringContainsString('href="' . route('papers') . '"', $html);
     }
 
+    /**
+     * Regression: the article used to carry the sitewide scroll-reveal class. A
+     * full paper is many screens tall, so the observer's 10% visibility
+     * threshold was never met and the text stayed at opacity 0 — a blank page
+     * with a long scrollbar. The full text must never depend on an animation.
+     */
+    public function test_reading_page_article_is_not_hidden_behind_the_scroll_reveal_animation(): void
+    {
+        $paper = $this->makePaper(['html_content' => self::BODY]);
+
+        $html = $this->get(route('papers.read', $paper->slug))->assertOk()->getContent();
+
+        preg_match('#<article\b[^>]*class="([^"]*)"#', $html, $m);
+        $this->assertNotEmpty($m, 'Reading page must render an <article> wrapper');
+        $this->assertStringNotContainsString('reveal', $m[1], 'The full-text article must not use the scroll-reveal class');
+        $this->assertDoesNotMatchRegularExpression('#<div class="read-related-wrap[^"]*reveal#', $html);
+    }
+
     public function test_reading_page_404s_when_there_is_no_html_version(): void
     {
         $none   = $this->makePaper(['slug' => 'no-html']);
