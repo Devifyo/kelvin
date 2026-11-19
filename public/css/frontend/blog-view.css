@@ -503,3 +503,58 @@
     .article-actions { flex-direction: column; align-items: flex-start; gap: 2rem; }
     .author-bio-box { flex-direction: column; }
 }
+
+/* ── Content imported from Word (admin "Import from Word", App\Support\DocxToHtml) ── */
+.rich-content [id] { scroll-margin-top: 6rem; } /* contents / cross-reference targets clear the fixed nav */
+.rich-content h5, .rich-content h6 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; color: var(--slate); margin: 2rem 0 .75rem; line-height: 1.4; }
+.rich-content h5 { font-size: 1rem; }
+.rich-content h6 { font-size: .95rem; font-style: italic; }
+
+/* Cover page lines Word sized by hand */
+.rich-content p.doc-cover-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2.1rem; line-height: 1.2; color: var(--copper); margin-bottom: .75rem; }
+.rich-content p.doc-cover-subtitle,
+.rich-content p.doc-subtitle { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; color: #5b6472; margin-bottom: 2rem; }
+.rich-content > p.doc-cover-title:first-child { margin-top: 0; }
+
+/* Table of contents / table of figures */
+.rich-content p.doc-toc { margin-bottom: .3rem; line-height: 1.5; font-size: 1rem; }
+.rich-content p.doc-toc a { text-decoration: none; }
+.rich-content p.doc-toc a:hover { text-decoration: underline; }
+.rich-content p.doc-toc-1 { font-weight: 600; margin-top: .6rem; }
+.rich-content p.doc-toc-2 { padding-left: 1.25rem; }
+.rich-content p.doc-toc-3 { padding-left: 2.5rem; font-size: .95rem; }
+.rich-content p.doc-toc-4, .rich-content p.doc-toc-5, .rich-content p.doc-toc-6 { padding-left: 3.75rem; font-size: .92rem; }
+.rich-content p.doc-toc + :not(.doc-toc) { margin-top: 2rem; }
+
+/* Figures and captions */
+.rich-content p.doc-figure, .rich-content p:has(> img:only-child) { text-align: center; margin-bottom: .5rem; }
+.rich-content p.doc-caption { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: .85rem; color: #5b6472; text-align: center; margin: 0 0 2.25rem; }
+.rich-content img.inline-image { display: inline; margin: 0 .15em; vertical-align: middle; border-radius: 0; }
+.rich-content .doc-math { font-family: 'Cambria Math', 'STIX Two Math', Georgia, serif; font-style: italic; white-space: nowrap; }
+
+/* Word tables */
+.rich-content table.doc-table { font-size: .95rem; line-height: 1.5; }
+.rich-content table.doc-table td, .rich-content table.doc-table th { vertical-align: top; }
+.rich-content table.doc-table td p, .rich-content table.doc-table th p { margin-bottom: .5rem; }
+.rich-content table.doc-table td p:last-child, .rich-content table.doc-table th p:last-child { margin-bottom: 0; }
+.rich-content table.doc-table ul, .rich-content table.doc-table ol { margin-bottom: 0; }
+
+/* Text boxes and one-cell tables (callouts) */
+.rich-content aside.doc-textbox { margin: 2rem 0; padding: 1.25rem 1.5rem; background: var(--ivory); border-left: 3px solid var(--copper); font-size: .98rem; }
+.rich-content aside.doc-textbox > :last-child { margin-bottom: 0; }
+
+/* Word list styles that set their own numbering */
+.rich-content ol[type="a"] { list-style-type: lower-alpha; }
+.rich-content ol[type="A"] { list-style-type: upper-alpha; }
+.rich-content ol[type="i"] { list-style-type: lower-roman; }
+.rich-content ol[type="I"] { list-style-type: upper-roman; }
+
+/* Footnotes and endnotes */
+.rich-content .doc-notes { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--ivory3); font-size: .9rem; }
+.rich-content .doc-notes li { margin-bottom: .5rem; }
+.rich-content .doc-notes li p { margin-bottom: .25rem; }
+.rich-content .doc-note-back { text-decoration: none; margin-left: .25rem; }
+.rich-content sup a { text-decoration: none; font-size: .8em; }
+
+/* Picture that could not be imported — visible so it gets fixed */
+.rich-content p.doc-import-missing { padding: .75rem 1rem; border: 1px dashed #ef4444; color: #b91c1c; font-size: .9rem; }

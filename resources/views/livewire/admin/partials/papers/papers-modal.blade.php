@@ -260,10 +260,11 @@
 
                 {{-- ══════════════ TAB: FULL TEXT (HTML) ══════════════ --}}
                 <div x-show="tab === 'html'" x-cloak>
-                    <p class="rl-intro">Optional. Paste the full paper here (straight from Word, as you do for blog posts) to publish it as a web page that search and AI answer engines can read. When this is filled in, the resource page shows a <strong>View</strong> button that opens the web version; <strong>Download</strong> still serves the file. Leave it empty for presentations or anything that should stay file-only.</p>
+                    <p class="rl-intro">Optional. Import the paper with <strong>Import from Word</strong> (text and pictures in one step) or paste it here to publish it as a web page that search and AI answer engines can read. When this is filled in, the resource page shows a <strong>View</strong> button that opens the web version; <strong>Download</strong> still serves the file. Leave it empty for presentations or anything that should stay file-only.</p>
 
-                    <div class="form-group">
+                    <div class="form-group" data-word-import-scope>
                         <label>Full Text <span class="rl-opt">(the page title is added automatically — start with the first paragraph or a Heading 2)</span></label>
+                        @include('livewire.admin.partials.word-import-button')
                         <div wire:ignore>
                             <textarea x-data="{ inited: false }" x-effect="
                                 if (tab === 'html' && !inited) {
@@ -274,6 +275,8 @@
                                             target: $el,
                                             menubar: true,
                                             height: 560,
+                                            content_css: '{{ asset('css/admin/editor-content.css') }}?v={{ @filemtime(public_path('css/admin/editor-content.css')) }}',
+                                            extended_valid_elements: 'aside[class|id],section[class|id]',
                                             plugins: 'lists link image media table code wordcount',
                                             block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3; Heading 4=h4',
                                             toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link image table | code',

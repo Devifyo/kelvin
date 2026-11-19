@@ -235,6 +235,7 @@
         .dropdown-divider { height: 1px; background: var(--ivory3); margin: 0.25rem 0; }
     </style>
     <link rel="stylesheet" href="/css/admin/app-settings.css">
+    <link rel="stylesheet" href="{{ asset('css/admin/word-import.css') }}?v={{ @filemtime(public_path('css/admin/word-import.css')) }}">
     @livewireStyles
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     @stack('styles')
@@ -293,6 +294,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tiny.cloud/1/{{ config('app.tinymce_api_key', 'no-api-key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="{{ asset('js/admin/word-import.js') }}?v={{ @filemtime(public_path('js/admin/word-import.js')) }}" defer></script>
 
     <script>
         // Show fade hint when sidebar nav can scroll

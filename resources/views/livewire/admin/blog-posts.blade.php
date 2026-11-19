@@ -183,8 +183,9 @@
                         </div>
                         
                         <div class="form-divider">Blog Content</div>
-                        <div class="form-group">
+                        <div class="form-group" data-word-import-scope>
                             <label>Main Body (Rich Text) <span style="color:#ef4444;">*</span></label>
+                            @include('livewire.admin.partials.word-import-button')
                             <div wire:ignore>
                                 <textarea x-data x-init="
                                     let editorInstance = null;
@@ -194,6 +195,8 @@
                                                 target: $el,
                                                 menubar: true,
                                                 plugins: 'lists link image media code table',
+                                            content_css: '{{ asset('css/admin/editor-content.css') }}?v={{ @filemtime(public_path('css/admin/editor-content.css')) }}',
+                                            extended_valid_elements: 'aside[class|id],section[class|id]',
                                                 toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image media | code',
                                                 image_title: true,
                                                 automatic_uploads: true,

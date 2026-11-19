@@ -1,0 +1,11 @@
+/* ── Import from Word (wim-) — shared by Resource Library and Blog editors ── */
+.wim-bar { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; margin: 0 0 .75rem; }
+.wim-btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .6rem 1.1rem; border: 1.5px solid var(--copper, #b5722a); border-radius: 10px;
+    background: #fff; color: var(--copper, #b5722a);
+    font-size: .8rem; font-weight: 700; letter-spacing: .02em; cursor: pointer;
+    transition: background .2s, color .2s;
+}
+.wim-btn:hover, .wim-btn:focus-visible { background: var(--copper, #b5722a); color: #fff; outline: none; }
+.wim-hint { font-size: .74rem; color: var(--muted, #6b7280); line-height: 1.5; flex: 1 1 260px; }

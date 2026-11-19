@@ -234,7 +234,7 @@ class Paper extends Model
     /** Full text for the reading page; any <h1> is demoted so the page keeps one H1. */
     public function getHtmlContentHtmlAttribute(): string
     {
-        return preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', $this->htmlWithoutRepeatedTitle());
+        return preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', \App\Support\DocxToHtml::withoutImportNotes($this->htmlWithoutRepeatedTitle()));
     }
 
     /**
@@ -246,11 +246,14 @@ class Paper extends Model
     {
         $html = ltrim((string) $this->html_content);
 
-        if (preg_match('#^<(h[1-6])\b[^>]*>(.*?)</\1>#is', $html, $m)) {
+        // An opening heading, or the cover title "Import from Word" produces
+        // (<p class="doc-cover-title">), that repeats the page's H1.
+        if (preg_match('#^<(h[1-6]|p)\b([^>]*)>(.*?)</\1>#is', $html, $m)
+            && ($m[1] !== 'p' || str_contains($m[2], 'doc-cover-title'))) {
             $normalize = fn (string $t) => mb_strtolower(trim(preg_replace('/\s+/u', ' ',
                 str_replace("\u{00A0}", ' ', html_entity_decode(strip_tags($t), ENT_QUOTES | ENT_HTML5)))));
 
-            if ($normalize($m[2]) === $normalize((string) $this->title)) {
+            if ($normalize($m[3]) === $normalize((string) $this->title)) {
                 $html = ltrim(substr($html, strlen($m[0])));
             }
         }

@@ -64,7 +64,16 @@ Route::get('/faqs', Faqs::class)->name('faqs.index');
 Route::get('/visitors', VisitorAnalytics::class)->name('visitors');
 
 
+// Import from Word: .docx → HTML (+ its pictures) for the admin editors.
+Route::post('/word-import', \App\Http\Controllers\Admin\WordImportController::class)->name('word-import');
+
 Route::post('/tinymce-upload', function (Request $request) {
+    // Editor images only (pasted, inserted, or brought in by "Import from
+    // Word"). SVG is excluded: it can carry script.
+    $request->validate([
+        'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp|max:20480', // 20 MB
+    ]);
+
     if ($request->hasFile('file')) {
         $path = $request->file('file')->store('blog/content-images', 'public');
         return response()->json(['location' => Storage::url($path)]);

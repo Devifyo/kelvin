@@ -99,7 +99,7 @@
                  Demote any <h1> inside authored content to <h2> so there is only
                  one H1 on the page (the article title rendered above). --}}
             <div class="rich-content">
-                {!! preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', $post->content) !!}
+                {!! preg_replace('#<(/?)h1(\s[^>]*)?>#i', '<$1h2$2>', \App\Support\DocxToHtml::withoutImportNotes((string) $post->content)) !!}
             </div>
 
             <div class="article-footer">
